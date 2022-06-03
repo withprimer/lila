@@ -29,6 +29,7 @@
   },
   "scripts": {
     "dev": "rollup --config",
-    "prod": "rollup --config --config-prod"
+    "prod": "rollup --config --config-prod",
+    "compile": "tsc"
   }
 }
