@@ -273,6 +273,20 @@ final class Puzzle(
     }
   }
 
+  def embedPuzzle(id: String) = Open { implicit ctx =>
+    OptionFuResult(env.puzzle.api.puzzle find Puz.Id(id)) { puzzle =>
+      renderJson(puzzle, PuzzleTheme.mix, None) zip
+        ctx.me.??(u => env.puzzle.session.getDifficulty(u) dmap some) map { case (json, difficulty) =>
+        EnableSharedArrayBuffer(
+          Ok(
+            views.html.puzzle
+              .direct(puzzle, json, env.puzzle.jsonView.pref(ctx.pref), difficulty)
+          )
+        )
+      }
+    }
+  }
+
   def show(themeOrId: String) = Open { implicit ctx =>
     NoBot {
       PuzzleTheme.find(themeOrId) match {

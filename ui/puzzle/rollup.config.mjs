@@ -16,4 +16,9 @@ export default rollupProject({
     input: 'src/plugins/nvui.ts',
     output: 'puzzle.nvui',
   },
+  direct: {
+    name: 'LichessPuzzleDirect',
+    input: 'src/direct.ts',
+    output: 'puzzle.direct',
+  },
 });
