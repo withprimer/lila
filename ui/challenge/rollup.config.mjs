@@ -6,4 +6,9 @@ export default rollupProject({
     input: 'src/main.ts',
     output: 'challenge',
   },
+  direct: {
+    name: 'LichessChallengeIframeAPI',
+    input: 'src/iframeApi.ts',
+    output: 'challenge.iframe',
+  },
 });
