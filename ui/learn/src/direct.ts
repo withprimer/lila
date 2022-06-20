@@ -6,13 +6,16 @@ import * as ground from "./ground";
 import makeLevel from './level';
 import {Stage} from "./stage/list";
 
+// const DOMAIN = 'http://test-page.local';
+const DOMAIN = 'http://localhost:3000';
+
 export default function (element: Element) {
     const render = (stageId: number, levelId: number, origin: string | null) => {
         const stage = stages.byId[stageId];
         makeLevel(stage.levels[levelId], {
             onComplete: () => {
                 if (origin) {
-                    window.parent.postMessage({type: 'level-done'}, 'http://test-page.local');
+                    window.parent.postMessage({type: 'level-done'}, DOMAIN);
                 }
             },
             onCompleteImmediate: () => {
@@ -45,7 +48,7 @@ export default function (element: Element) {
 
     window.parent.postMessage({
         type: 'page-ready'
-    }, 'http://test-page.local');
+    }, DOMAIN);
 
     return {};
 }

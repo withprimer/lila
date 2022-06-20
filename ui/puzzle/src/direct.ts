@@ -11,6 +11,8 @@ import {renderAnalyse} from "./view/main";
 // import {render as renderKeyboardMove} from 'keyboardMove';
 import * as control from "./control";
 
+// const DOMAIN = 'http://test-page.local';
+const DOMAIN = 'http://localhost:3000';
 
 const patch = init([classModule, attributesModule]);
 
@@ -19,7 +21,7 @@ export default function (opts: PuzzleOpts): void {
     const ctrl = makeCtrl(opts, redraw);
 
     const sendMsg = (msg: any) => {
-        window.parent.postMessage(msg, 'http://test-page.local');
+        window.parent.postMessage(msg, DOMAIN);
     };
 
     const blueprint = renderBoard(ctrl, sendMsg);
