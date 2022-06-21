@@ -11,7 +11,7 @@ import { render as treeView } from './tree';
 import { view as cevalView } from 'ceval';
 import { render as renderKeyboardMove } from 'keyboardMove';
 
-function renderAnalyse(ctrl: Controller): VNode {
+export function renderAnalyse(ctrl: Controller): VNode {
   return h('div.puzzle__moves.areplay', [treeView(ctrl)]);
 }
 
@@ -30,7 +30,7 @@ function jumpButton(icon: string, effect: string, disabled: boolean, glowing = f
   });
 }
 
-function controls(ctrl: Controller): VNode {
+export function controls(ctrl: Controller): VNode {
   const node = ctrl.vm.node;
   const nextNode = node.children[0];
   const goNext = ctrl.vm.mode == 'play' && nextNode && nextNode.puzzle != 'fail';

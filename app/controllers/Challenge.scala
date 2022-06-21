@@ -3,6 +3,7 @@ package controllers
 import cats.data.Validated
 import play.api.libs.json.Json
 import play.api.mvc.Result
+
 import scala.annotation.nowarn
 import scala.concurrent.duration._
 import views.html
@@ -460,4 +461,8 @@ final class Challenge(
         }
       }
     }
+
+  def iframeApi = Open { implicit ctx => {
+    Ok(html.challenge.iframeApi()).fuccess
+  }}
 }

@@ -1,0 +1,66 @@
+@import '../../../common/css/plugin';
+@import '../../../common/css/vendor/chessground/coords';
+@import '../../../common/css/layout/uniboard';
+@import '../../../common/css/component/board-resize';
+@import '../../../common/css/component/color-icon';
+@import '../../../common/css/component/fbt';
+@import '../../../common/css/component/glowing';
+@import '../../../common/css/component/zen-toggle';
+@import '../../../common/css/form/cmn-toggle';
+@import '../../../common/css/base/scrollbar';
+@import '../../../tree/css/tree';
+@import '../../../ceval/css/ceval';
+@import '../../../ceval/css/eval-gauge';
+@import '../../../chess/css/control';
+@import '../../../chess/css/promotion';
+@import '../../../chess/css/blindfold';
+
+//@import '../puzzle';
+$mq-col1: $mq-col1-uniboard;
+$mq-col2-squeeze: $mq-col2-uniboard-squeeze;
+$mq-col2: $mq-col2-uniboard;
+$mq-col3: $mq-col3-uniboard;
+
+body {
+  overflow: hidden !important;
+}
+
+.full-screen-board {
+  &, .cg-wrap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.split-view {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  .puzzle-chess-board {
+    position: relative;
+    aspect-ratio: 1/1;
+    grid-column: 1;
+
+    .cg-wrap {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .puzzle-chess-analysis {
+    grid-column: 2;
+    overflow: auto;
+  }
+}
+
+@import '../side';
+@import '../tools';
+@import '../after';
+@import '../session';
+@import '../zen';

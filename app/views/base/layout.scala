@@ -305,18 +305,18 @@ object layout {
           dataTheme        := ctx.currentBg,
           dataPieceSet     := ctx.currentPieceSet.name,
           dataAnnounce     := AnnounceStore.get.map(a => safeJsonValue(a.json)),
-          style            := zoomable option s"--zoom:${ctx.zoom}"
+//          style            := zoomable option s"--zoom:${ctx.zoom}"
         )(
-          blindModeForm,
-          ctx.pageData.inquiry map { views.html.mod.inquiry(_) },
-          ctx.me ifTrue ctx.userContext.impersonatedBy.isDefined map { views.html.mod.impersonate(_) },
-          netConfig.stageBanner option views.html.base.bits.stage,
-          lila.security.EmailConfirm.cookie
-            .get(ctx.req)
-            .ifTrue(ctx.isAnon)
-            .map(views.html.auth.bits.checkYourEmailBanner(_)),
-          playing option zenToggle,
-          siteHeader(playing),
+//          blindModeForm,
+//          ctx.pageData.inquiry map { views.html.mod.inquiry(_) },
+//          ctx.me ifTrue ctx.userContext.impersonatedBy.isDefined map { views.html.mod.impersonate(_) },
+//          netConfig.stageBanner option views.html.base.bits.stage,
+//          lila.security.EmailConfirm.cookie
+//            .get(ctx.req)
+//            .ifTrue(ctx.isAnon)
+//            .map(views.html.auth.bits.checkYourEmailBanner(_)),
+//          playing option zenToggle,
+//          siteHeader(playing),
           div(
             id := "main-wrap",
             cls := List(
@@ -331,7 +331,7 @@ object layout {
               div(cls := "content list")
             )
           ),
-          a(id := "reconnecting", cls := "link text", dataIcon := "")(trans.reconnecting()),
+//          a(id := "reconnecting", cls := "link text", dataIcon := "")(trans.reconnecting()),
           ctx.pref.agreementNeededSince map { date =>
             div(id := "agreement")(
               div(

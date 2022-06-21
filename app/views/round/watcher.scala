@@ -39,7 +39,7 @@ object watcher {
       title = s"${gameVsText(pov.game, withRatings = ctx.pref.showRatings)} • spectator",
       moreJs = frag(
         roundNvuiTag,
-        roundTag,
+        jsModule("round.direct"),
         embedJsUnsafeLoadThen(s"""LichessRound.boot(${safeJsonValue(
             Json.obj(
               "data" -> data,

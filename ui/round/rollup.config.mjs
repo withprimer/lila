@@ -11,4 +11,9 @@ export default rollupProject({
     input: 'src/plugins/nvui.ts',
     output: 'round.nvui',
   },
+  direct: {
+    name: 'LichessRound',
+    input: 'src/direct.ts',
+    output: 'round.direct',
+  },
 });

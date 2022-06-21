@@ -135,6 +135,7 @@ GET   /training/new                    controllers.Puzzle.mobileBcNew
 GET   /training/$numericalId<\d{6,}>/load      controllers.Puzzle.mobileBcLoad(numericalId: Long)
 POST  /training/$numericalId<\d{6,}>/vote      controllers.Puzzle.mobileBcVote(numericalId: Long)
 GET   /training/:themeOrId             controllers.Puzzle.show(themeOrId: String)
+GET   /training/:id/embed             controllers.Puzzle.embedPuzzle(id: String)
 GET   /training/:theme/$id<\w{5}>      controllers.Puzzle.showWithTheme(theme: String, id: String)
 POST  /training/$numericalId<\d{6,}>/round2    controllers.Puzzle.mobileBcRound(numericalId: Long)
 POST  /training/$id<\w{5}>/vote        controllers.Puzzle.vote(id: String)
@@ -445,6 +446,9 @@ POST  /challenge/$id<\w{8}>/decline    controllers.Challenge.decline(id: String)
 POST  /challenge/$id<\w{8}>/cancel     controllers.Challenge.cancel(id: String)
 POST  /challenge/$id<\w{8}>/to-friend  controllers.Challenge.toFriend(id: String)
 POST  /challenge/rematch-of/$id<\w{8}> controllers.Challenge.offerRematchForGame(id: String)
+
+GET   /challenge/iframe-api            controllers.Challenge.iframeApi
+
 
 # Notify
 GET  /notify                           controllers.Notify.recent(page: Int ?= 1)

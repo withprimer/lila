@@ -48,7 +48,7 @@ object player {
       title = s"${trans.play.txt()} ${if (ctx.pref.isZen) "ZEN" else playerText(pov.opponent)}",
       moreJs = frag(
         roundNvuiTag,
-        roundTag,
+        jsModule("round.direct"),
         embedJsUnsafeLoadThen(s"""LichessRound.boot(${safeJsonValue(
             Json
               .obj(

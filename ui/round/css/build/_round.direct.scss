@@ -1,0 +1,56 @@
+@import '../../../common/css/plugin';
+@import '../../../common/css/vendor/chessground/coords';
+@import '../../../common/css/layout/uniboard';
+@import '../../../common/css/component/board-resize';
+@import '../../../common/css/component/color-icon';
+@import '../../../common/css/component/crosstable';
+@import '../../../common/css/component/fbt';
+@import '../../../common/css/component/glowing';
+@import '../../../common/css/component/bar-glider';
+@import '../../../common/css/component/now-playing';
+@import '../../../common/css/component/context-streamer';
+@import '../../../common/css/component/zen-toggle';
+@import '../../../common/css/form/cmn-toggle';
+@import '../../../common/css/component/modal';
+@import '../../../chess/css/variant-style';
+@import '../../../chess/css/promotion';
+@import '../../../chess/css/blindfold';
+@import '../../../chat/css/chat';
+@import '../../../chat/css/preset';
+//@import '../round';
+
+
+@import '../constants';
+//@import '../layout';
+//@import '../app-layout';
+@import '../zen';
+@import '../side';
+@import '../meta';
+@import '../table';
+@import '../user';
+@import '../clock';
+@import '../material';
+@import '../moves';
+@import '../control';
+@import '../icon';
+@import '../now-playing';
+@import '../forecast-info';
+
+body.fixed-scroll {
+  overflow-y: hidden !important;
+}
+
+.round__side {
+  display: none;
+}
+
+.round__app {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  width: 100%;
+  height: 100%;
+
+  grid-template-columns: 1fr 1fr;
+}
