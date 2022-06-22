@@ -40,15 +40,15 @@ export function main(ctrl: RoundController): VNode {
 
     const table = renderTable(ctrl);
 
-    /* filter out parts of the side table we don't want */
-    const renderTableParts = [];
+    // filter out parts of the side table we don't want
+    /* const renderTableParts = [];
     for (let i = 0; i < table.length - 3; ++i) {
         const component = table[i];
         if (!component) {
             continue;
         }
 
-        /* remove analysis button because that page hasn't been updated */
+        // remove analysis button because that page hasn't been updated
         if (component.sel === 'rm6') {
             const buttons = component.children?.[0] as VNode | null;
             if (buttons && buttons.sel === 'div.buttons') {
@@ -59,7 +59,7 @@ export function main(ctrl: RoundController): VNode {
             }
         }
 
-        /* remove rematch button because it breaks things */
+        // remove rematch button because it breaks things
         if (component.sel === 'div.rcontrols') {
             const firstChild = component?.children?.[0] as VNode;
             if (firstChild?.sel === 'div.follow-up') {
@@ -68,7 +68,7 @@ export function main(ctrl: RoundController): VNode {
         }
 
         renderTableParts.push(component);
-    }
+    } */
 
     return ctrl.nvui
     ? ctrl.nvui.render(ctrl)
@@ -105,6 +105,6 @@ export function main(ctrl: RoundController): VNode {
             materialDiffs[1]
           ])
         ]),
-        h('div.right', renderTableParts),
+        h('div.right', table),
       ]);
 }
