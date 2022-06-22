@@ -52,7 +52,7 @@ object Theme extends ThemeObject {
     new Theme("horsey", "horsey.jpg")
   )
 
-  lazy val default = allByName get "brown" err "Can't find default theme D:"
+  lazy val default = allByName get "blue" err "Can't find default theme D:"
 }
 
 object Theme3d extends ThemeObject {
