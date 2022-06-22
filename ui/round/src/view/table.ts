@@ -10,7 +10,7 @@ import * as renderUser from './user';
 import * as button from './button';
 import RoundController from '../ctrl';
 
-function renderPlayer(ctrl: RoundController, position: Position) {
+export function renderPlayer(ctrl: RoundController, position: Position) {
   const player = ctrl.playerAt(position);
   return ctrl.nvui
     ? undefined
@@ -73,7 +73,7 @@ export const renderTablePlay = (ctrl: RoundController) => {
         ];
   return [
     replay.render(ctrl),
-    h('div.rcontrols', [
+    /* h('div.rcontrols', [
       h(
         'div.ricons',
         {
@@ -82,7 +82,7 @@ export const renderTablePlay = (ctrl: RoundController) => {
         icons
       ),
       ...buttons,
-    ]),
+    ]), */
   ];
 };
 
@@ -110,19 +110,13 @@ function anyClock(ctrl: RoundController, position: Position) {
 }
 
 export const renderTable = (ctrl: RoundController): MaybeVNodes => [
-  h('div.round__app__table'),
-  renderExpiration(ctrl),
-  renderPlayer(ctrl, 'top'),
-  ...(ctrl.data.player.spectator
-    ? renderTableWatch(ctrl)
-    : game.playable(ctrl.data)
-    ? renderTablePlay(ctrl)
-    : renderTableEnd(ctrl)),
-  renderPlayer(ctrl, 'bottom'),
-  /* render clocks after players so they display on top of them in col1,
-   * since they occupy the same grid cell. This is required to avoid
-   * having two columns with min-content, which causes the horizontal moves
-   * to overflow: it couldn't be contained in the parent anymore */
-  anyClock(ctrl, 'top'),
-  anyClock(ctrl, 'bottom'),
+  h('div.round__app__table', [
+    anyClock(ctrl, 'top'),
+    ...(ctrl.data.player.spectator
+      ? renderTableWatch(ctrl)
+      : game.playable(ctrl.data)
+      ? renderTablePlay(ctrl)
+      : renderTableEnd(ctrl)),
+    anyClock(ctrl, 'bottom')
+  ])
 ];
