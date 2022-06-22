@@ -5,7 +5,7 @@ import * as status from 'game/status';
 import { renderClock } from '../clock/clockView';
 import renderCorresClock from '../corresClock/corresClockView';
 import * as replay from './replay';
-import renderExpiration from './expiration';
+// import renderExpiration from './expiration';
 import * as renderUser from './user';
 import * as button from './button';
 import RoundController from '../ctrl';
@@ -39,9 +39,9 @@ export const renderTableWatch = (ctrl: RoundController) =>
   ]);
 
 export const renderTablePlay = (ctrl: RoundController) => {
-  const d = ctrl.data,
+  /* const d = ctrl.data,
     loading = isLoading(ctrl),
-    submit = button.submitMove(ctrl),
+    submit = button.submitMove(ctrl);
     icons =
       loading || submit
         ? []
@@ -70,7 +70,7 @@ export const renderTablePlay = (ctrl: RoundController) => {
           button.answerOpponentDrawOffer(ctrl),
           button.cancelTakebackProposition(ctrl),
           button.answerOpponentTakebackProposition(ctrl),
-        ];
+        ]; */
   return [
     replay.render(ctrl),
     /* h('div.rcontrols', [
