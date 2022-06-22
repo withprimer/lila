@@ -171,14 +171,14 @@ function renderButtons(ctrl: RoundController) {
       ),
     },
     [
-      h('button.fbt.flip', {
+      /* h('button.fbt.flip', {
         class: { active: ctrl.flip },
         attrs: {
           title: ctrl.noarg('flipBoard'),
           'data-act': 'flip',
           'data-icon': '',
         },
-      }),
+      }), */
       ...[
         ['', firstPly],
         ['', ctrl.ply - 1],
@@ -195,7 +195,7 @@ function renderButtons(ctrl: RoundController) {
           },
         });
       }),
-      analysisButton(ctrl) || h('div.noop'),
+      // analysisButton(ctrl) || h('div.noop'),
     ]
   );
 }
@@ -258,7 +258,6 @@ export function render(ctrl: RoundController): VNode | undefined {
   return ctrl.nvui
     ? undefined
     : h(rmovesTag, [
-        renderButtons(ctrl),
         initMessage(ctrl) ||
           (isCol1()
             ? h('div.col1-moves', [
@@ -267,5 +266,6 @@ export function render(ctrl: RoundController): VNode | undefined {
                 col1Button(ctrl, 1, '', ctrl.ply == round.lastPly(d)),
               ])
             : renderMovesOrResult),
+        renderButtons(ctrl)
       ]);
 }

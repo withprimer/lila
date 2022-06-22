@@ -23,9 +23,7 @@ export function app(opts: RoundOpts): RoundApi {
     const ctrl = new RoundController(opts, redraw);
 
     const blueprint = view(ctrl);
-    // opts.element = document.getElementsByTagName('main')[0];
     opts.element.innerHTML = '';
-
     let vnode = patch(opts.element, blueprint);
 
     function redraw() {
