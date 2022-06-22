@@ -2,7 +2,7 @@
   &__table {
     @extend %box-radius-right, %box-shadow;
 
-    // background: $c-bg-box;
+    background: $c-bg-box;
   }
 
   .draw-yes span {
@@ -35,9 +35,4 @@
     font-size: 1rem;
     margin-right: 0.3em;
   }
-}
-
-.user-info {
-  display: flex;
-  justify-content: space-between;
 }

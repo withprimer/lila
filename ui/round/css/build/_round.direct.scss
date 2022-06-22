@@ -54,3 +54,16 @@ body.fixed-scroll {
 
   grid-template-columns: 1fr 1fr;
 }
+
+.round__underchat {
+  display: none;
+}
+
+.user-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.round__app__table {
+  background: transparent;
+}
