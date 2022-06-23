@@ -438,13 +438,12 @@ object Pref {
 
   def create(user: User) = default.copy(
     _id = user.id,
-    bg = if (user.createdAt isAfter darkByDefaultSince) Bg.DARK else Bg.LIGHT,
     agreement = if (user.createdAt isAfter Agreement.changedAt) Agreement.current else 0
   )
 
   lazy val default = Pref(
     _id = "",
-    bg = Bg.DARK,
+    bg = Bg.LIGHT,
     bgImg = none,
     is3d = false,
     theme = Theme.default.name,
