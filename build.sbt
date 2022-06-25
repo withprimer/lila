@@ -1,3 +1,5 @@
+import com.typesafe.sbt.packager.docker._
+
 import com.typesafe.sbt.packager.Keys.scriptClasspath
 
 import BuildSettings._
@@ -429,3 +431,23 @@ lazy val hub = smallModule("hub",
   Seq(common),
   Seq(scaffeine, macwire.util)
 )
+
+
+// docker
+dockerBaseImage := "openjdk:18-jdk"
+dockerExposedPorts += 9663
+dockerPermissionStrategy := DockerPermissionStrategy.None
+
+
+dockerCommands := dockerCommands.value.filterNot {
+
+  // ExecCmd is a case class, and args is a varargs variable, so you need to bind it with @
+  case ExecCmd("ENTRYPOINT", args @ _*) => true
+  case ExecCmd("CMD",args @ _*) => true
+
+  // don't filter the rest; don't filter out anything that doesn't match a pattern
+  case cmd                       => false
+}
+
+dockerCommands += Cmd("RUN","mkdir /opt/docker/logs")
+dockerCommands += Cmd("ENTRYPOINT", "/opt/docker/bin/lila -Dconfig.file=prod.conf")
