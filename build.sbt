@@ -1,4 +1,7 @@
 import com.typesafe.sbt.packager.docker._
+import com.typesafe.sbt.packager.docker.DockerChmodType
+
+import NativePackagerHelper._
 
 import com.typesafe.sbt.packager.Keys.scriptClasspath
 
@@ -433,11 +436,18 @@ lazy val hub = smallModule("hub",
 )
 
 
+// universal file mappings
+Universal / mappings ++= directory("conf")
+Universal / mappings ++= directory("public")
+
 // docker
-dockerBaseImage := "openjdk:18-jdk"
+dockerBaseImage := "openjdk:11-jdk"
 dockerExposedPorts += 9663
 dockerPermissionStrategy := DockerPermissionStrategy.None
-
+dockerChmodType := DockerChmodType.UserGroupWriteExecute
+dockerAdditionalPermissions += (DockerChmodType.UserGroupWriteExecute, "/opt/docker/")
+Docker / daemonUserUid := None
+Docker / daemonUser := "root"
 
 dockerCommands := dockerCommands.value.filterNot {
 
@@ -450,4 +460,4 @@ dockerCommands := dockerCommands.value.filterNot {
 }
 
 dockerCommands += Cmd("RUN","mkdir /opt/docker/logs")
-dockerCommands += Cmd("ENTRYPOINT", "/opt/docker/bin/lila -Dconfig.file=prod.conf")
+dockerCommands += Cmd("ENTRYPOINT", "/opt/docker/bin/lila -Dconfig.file=prod.conf -Dlogger.file=prod-logger.xml -Dapplication.secret=abcdefghijk")
