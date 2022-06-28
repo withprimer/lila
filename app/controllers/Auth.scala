@@ -206,7 +206,8 @@ final class Auth(
                         .make(env.lilaCookie, user, email)(ctx.req)
                   }
                 case Signup.AllSet(user, email) =>
-                  welcome(user, email, sendWelcomeEmail = true) >> redirectNewUser(user)
+                  welcome(user, email, sendWelcomeEmail = true) >> authenticateUser(user)
+                  //welcome(user, email, sendWelcomeEmail = true) >> redirectNewUser(user)
               },
             api = apiVersion =>
               env.security.signup
