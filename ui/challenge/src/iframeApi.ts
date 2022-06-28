@@ -1,8 +1,8 @@
 import LichessChat from 'chat';
-import {Chessground} from 'chessground';
+import { Chessground } from 'chessground';
 
 export function setup() {
-  window.addEventListener('message', (msg) => {
+  window.addEventListener('message', msg => {
     // challenge-setup
     if (msg.data.type === 'challenge-setup') {
       const formData = new FormData();
@@ -26,9 +26,15 @@ export function setup() {
       (async () => {
         try {
           const challengeId = await setupChallenge(formData, msg.data.player);
-          window.parent.postMessage({ type: 'challenge-setup-result', result: 'success', challengeId }, msg.origin);
+          window.parent.postMessage(
+            { type: 'challenge-setup-result', result: 'success', challengeId, player: msg.data.player },
+            msg.origin
+          );
         } catch (e) {
-          window.parent.postMessage({ type: 'challenge-setup-result', result: 'error' }, msg.origin);
+          window.parent.postMessage(
+            { type: 'challenge-setup-result', result: 'error', player: msg.data.player },
+            msg.origin
+          );
         }
       })();
 
@@ -67,11 +73,14 @@ export function setup() {
 
               /* flag that challenge should redirect means that challenge has strated */
               if (text.indexOf('id="challenge-redirect"') !== -1) {
-                window.parent.postMessage({
-                  type: 'challenge-event',
-                  eventType: 'challenge-started',
-                  challengeId: msg.data.challengeId,
-                }, msg.origin);
+                window.parent.postMessage(
+                  {
+                    type: 'challenge-event',
+                    eventType: 'challenge-started',
+                    challengeId: msg.data.challengeId,
+                  },
+                  msg.origin
+                );
               }
             })();
           },
