@@ -22,6 +22,28 @@ import { trapFocus } from 'common/modal';
 exportLichessGlobals();
 lichess.info = info;
 
+
+// add listener!
+export function postMessageSetup() {
+  console.log("running postMessageSetup()")
+  window.addEventListener('message', (msg) => {
+    if (msg.data.type === 'login') {
+      const cookie = msg.data.cookie;
+      console.log("!!! here is the sent cookie before", cookie)
+      console.log("!!! here is what the cookies are right now", document.cookie)
+
+      document.cookie = cookie
+      console.log("!!! here is the sent cookie after", document.cookie)
+
+      // send a response
+      window.parent.postMessage({ type: 'login-result', result: 'success', }, msg.origin);
+      return;
+    }
+
+    console.log(`lichess iframe at /: received an unknown message from parent ${msg.origin}`, { msg })
+  });
+}
+
 lichess.load.then(() => {
   $('#user_tag').removeAttr('href');
 
@@ -157,6 +179,8 @@ lichess.load.then(() => {
     agreement();
 
     serviceWorker();
+
+    postMessageSetup();
 
     // socket default receive handlers
     pubsub.on('socket.in.redirect', (d: RedirectTo) => {
