@@ -1,6 +1,7 @@
 package controllers
 
 import views._
+import play.api.libs.json._
 
 import lila.app._
 import lila.oauth.{ AccessToken, OAuthTokenForm }
@@ -38,8 +39,30 @@ final class OAuthToken(env: Env) extends LilaController(env) {
         )
     }
 
+  def createApplyPrimer =
+    AuthBody { implicit ctx => me =>
+      implicit val req = ctx.body
+      OAuthTokenForm.create
+        .bindFromRequest()
+        .fold(
+          err => BadRequest(html.oAuth.token.create(err, me)).fuccess,
+          setup =>
+            JsonOk {
+              tokenApi.create(setup, me, env.clas.studentCache.isStudent(me.id)) map { token => 
+                Json.obj(
+                  "description"    -> token.description,
+                  "token"          -> token.id.value,
+                  "secret"         -> token.plain.secret
+                )
+              }
+            }
+        )
+    }
+
+
   def delete(id: String) =
     Auth { _ => me =>
       tokenApi.revokeById(AccessToken.Id(id), me) inject Redirect(routes.OAuthToken.index).flashSuccess
     }
 }
+
