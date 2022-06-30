@@ -1,6 +1,5 @@
 import com.typesafe.sbt.packager.docker._
 import com.typesafe.sbt.packager.docker.DockerChmodType
-
 import NativePackagerHelper._
 
 import com.typesafe.sbt.packager.Keys.scriptClasspath
@@ -436,28 +435,29 @@ lazy val hub = smallModule("hub",
 )
 
 
-// universal file mappings
+// Ensure conf & public are included in universal builds (for docker image)
 Universal / mappings ++= directory("conf")
 Universal / mappings ++= directory("public")
 
-// docker
+/* DOCKER OVERRIDES */
+
+// pin to java version 11
 dockerBaseImage := "openjdk:11-jdk"
 dockerExposedPorts += 9663
-dockerPermissionStrategy := DockerPermissionStrategy.None
-dockerChmodType := DockerChmodType.UserGroupWriteExecute
-dockerAdditionalPermissions += (DockerChmodType.UserGroupWriteExecute, "/opt/docker/")
+
+// use root as docker user (this is Docker's default)
 Docker / daemonUserUid := None
 Docker / daemonUser := "root"
 
+// filter out docker entry points so we can define them manually below
 dockerCommands := dockerCommands.value.filterNot {
-
-  // ExecCmd is a case class, and args is a varargs variable, so you need to bind it with @
   case ExecCmd("ENTRYPOINT", args @ _*) => true
   case ExecCmd("CMD",args @ _*) => true
-
-  // don't filter the rest; don't filter out anything that doesn't match a pattern
-  case cmd                       => false
+  case cmd => false
 }
 
+// create folder to store logs (TODO: )
 dockerCommands += Cmd("RUN","mkdir /opt/docker/logs")
-dockerCommands += Cmd("ENTRYPOINT", "/opt/docker/bin/lila -Dconfig.file=conf/prod.conf -Dlogger.file=conf/prod-logger.xml -Dapplication.secret=abcdefghijk")
+
+// start JVM with extra mem + prod config files
+dockerCommands += Cmd("ENTRYPOINT", "/opt/docker/bin/lila -J-Xms256M -J-Xmx2048M -Dconfig.file=conf/prod.conf -Dlogger.file=conf/prod-logger.xml")
