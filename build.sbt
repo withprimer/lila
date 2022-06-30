@@ -460,4 +460,4 @@ dockerCommands := dockerCommands.value.filterNot {
 }
 
 dockerCommands += Cmd("RUN","mkdir /opt/docker/logs")
-dockerCommands += Cmd("ENTRYPOINT", "/opt/docker/bin/lila -Dconfig.file=prod.conf -Dlogger.file=prod-logger.xml -Dapplication.secret=abcdefghijk")
+dockerCommands += Cmd("ENTRYPOINT", "/opt/docker/bin/lila -Dconfig.file=conf/prod.conf -Dlogger.file=conf/prod-logger.xml -Dapplication.secret=abcdefghijk")
