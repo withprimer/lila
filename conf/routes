@@ -470,6 +470,7 @@ GET   /logout                          controllers.Auth.logoutGet
 POST  /logout                          controllers.Auth.logout
 GET   /signup                          controllers.Auth.signup
 POST  /signup                          controllers.Auth.signupPost
+POST  /primer-internal-signup          controllers.Auth.primerSignup
 GET   /signup/check-your-email         controllers.Auth.checkYourEmail
 POST  /signup/fix-email                controllers.Auth.fixEmail
 GET   /signup/confirm/:token           controllers.Auth.signupConfirmEmail(token: String)
@@ -781,7 +782,6 @@ DELETE /api/token                      controllers.OAuth.tokenRevoke
 GET    /account/oauth/token            controllers.OAuthToken.index
 GET    /account/oauth/token/create     controllers.OAuthToken.create
 POST   /account/oauth/token/create     controllers.OAuthToken.createApply
-POST   /account/oauth/token/create-primer     controllers.OAuthToken.createApplyPrimer
 POST   /account/oauth/token/:id/delete controllers.OAuthToken.delete(id: String)
 POST   /api/token/admin-challenge      controllers.OAuth.challengeTokens
 POST   /api/token/test                 controllers.OAuth.testTokens
