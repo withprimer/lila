@@ -67,12 +67,12 @@ final class Auth(
                 )
               ).fuccess
             }
-
           }
         case Signup.Bad(err) => BadRequest(err.toString).fuccess
         case _               => BadRequest("Failed to signup. Try again later.").fuccess
       }
     }
+
   private def createPrimerAccessToken(user: UserModel): Fu[AccessToken] = {
     implicit val form = OAuthTokenForm.create
       .fill(
@@ -253,7 +253,7 @@ final class Auth(
                   }
                 case Signup.AllSet(user, email) =>
                   welcome(user, email, sendWelcomeEmail = true) >> authenticateUser(user)
-                  //welcome(user, email, sendWelcomeEmail = true) >> redirectNewUser(user)
+                // welcome(user, email, sendWelcomeEmail = true) >> redirectNewUser(user)
               },
             api = apiVersion =>
               env.security.signup
