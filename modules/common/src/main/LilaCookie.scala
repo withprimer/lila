@@ -20,6 +20,9 @@ final class LilaCookie(domain: NetDomain, baker: SessionCookieBaker) {
 
   def newSession(implicit req: RequestHeader): Cookie = withSession(_ => Session.emptyCookie)
 
+  def genPrimerCookie(op: Session => Session)(implicit req: RequestHeader): String =
+    baker.encode(baker.serialize(op(req.session)))
+
   def withSession(op: Session => Session)(implicit req: RequestHeader): Cookie =
     cookie(
       baker.COOKIE_NAME,
