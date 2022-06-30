@@ -38,3 +38,13 @@ jobs:
           yarn build-direct
       - name: Build Docker
         run: sbt -mem 3000 docker:publishLocal
+      - name: Push Docker Image to ECR
+        run: |
+          export AWS_REGION='us-east-1'
+          export AWS_ACCOUNT_ID='270576285979'
+          export DOCKER_FILE='lila'
+          export DOCKER_FILE_VERSION='3.2'
+          (aws ecr create-repository --repository-name $DOCKER_FILE) || true
+          docker tag $DOCKER_FILE:$DOCKER_FILE_VERSION $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_FILE:$DOCKER_FILE_VERSION
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_FILE:$DOCKER_FILE_VERSION
