@@ -1,6 +1,7 @@
 /modules
 /app
 /project
+/target/
 
 /public/css
 /public/piece-css

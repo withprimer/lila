@@ -2,46 +2,47 @@ import * as keyboard from '../keyboard';
 import * as util from '../util';
 import RoundController from '../ctrl';
 import stepwiseScroll from 'common/wheel';
-import {h, VNode} from 'snabbdom';
-import {plyStep} from '../round';
-import {read as readFen} from 'chessground/fen';
-import {render as renderGround} from '../ground';
-import {renderTable, renderPlayer} from './table';
-import {renderMaterialDiffs} from 'game/view/material';
+import { h, VNode } from 'snabbdom';
+import { plyStep } from '../round';
+import { read as readFen } from 'chessground/fen';
+import { render as renderGround } from '../ground';
+import { renderTable, renderPlayer } from './table';
+import { renderMaterialDiffs } from 'game/view/material';
 
 export function main(ctrl: RoundController): VNode {
-    const d = ctrl.data;
-    const cgState = ctrl.chessground && ctrl.chessground.state;
-    const pieces = cgState ? cgState.pieces : readFen(plyStep(ctrl.data, ctrl.ply).fen);
-    const materialDiffs = renderMaterialDiffs(
-        ctrl.data.pref.showCaptured,
-        ctrl.flip ? ctrl.data.opponent.color : ctrl.data.player.color,
-        pieces,
-        !!(ctrl.data.player.checks || ctrl.data.opponent.checks), // showChecks
-        ctrl.data.steps,
-        ctrl.ply);
+  const d = ctrl.data;
+  const cgState = ctrl.chessground && ctrl.chessground.state;
+  const pieces = cgState ? cgState.pieces : readFen(plyStep(ctrl.data, ctrl.ply).fen);
+  const materialDiffs = renderMaterialDiffs(
+    ctrl.data.pref.showCaptured,
+    ctrl.flip ? ctrl.data.opponent.color : ctrl.data.player.color,
+    pieces,
+    !!(ctrl.data.player.checks || ctrl.data.opponent.checks), // showChecks
+    ctrl.data.steps,
+    ctrl.ply
+  );
 
-    if (window.parent !== window && cgState) {
-        const msg = {
-            type: 'chess-round-state',
-            turnColor: cgState.turnColor,
-            orientation: cgState.orientation,
-            opponent: {
-                color: ctrl.data.opponent?.color,
-            },
-            player: {
-                color: ctrl.data.player?.color,
-            },
-            playNumber: ctrl.ply,
-        };
+  if (window.parent !== window && cgState) {
+    const msg = {
+      type: 'chess-round-state',
+      turnColor: cgState.turnColor,
+      orientation: cgState.orientation,
+      opponent: {
+        color: ctrl.data.opponent?.color,
+      },
+      player: {
+        color: ctrl.data.player?.color,
+      },
+      playNumber: ctrl.ply,
+    };
 
-        window.parent.postMessage(msg, '*');
-    }
+    window.parent.postMessage(msg, '*');
+  }
 
-    const table = renderTable(ctrl);
+  const table = renderTable(ctrl);
 
-    // filter out parts of the side table we don't want
-    /* const renderTableParts = [];
+  // filter out parts of the side table we don't want
+  /* const renderTableParts = [];
     for (let i = 0; i < table.length - 3; ++i) {
         const component = table[i];
         if (!component) {
@@ -70,14 +71,11 @@ export function main(ctrl: RoundController): VNode {
         renderTableParts.push(component);
     } */
 
-    return ctrl.nvui
+  return ctrl.nvui
     ? ctrl.nvui.render(ctrl)
     : h('div.round__app.variant-' + d.game.variant.key, [
         h('div.left', [
-          h('div.user-info.user-info-top', [
-            renderPlayer(ctrl, 'top'),
-            materialDiffs[0]
-          ]),
+          h('div.user-info.user-info-top', [renderPlayer(ctrl, 'top'), materialDiffs[0]]),
           h(
             'div.round__app__board.main-board' + (ctrl.data.pref.blindfold ? '.blindfold' : ''),
             {
@@ -100,10 +98,7 @@ export function main(ctrl: RoundController): VNode {
             },
             [renderGround(ctrl), ctrl.promotion.view(ctrl.data.game.variant.key === 'antichess')]
           ),
-          h('div.user-info.user-info-bottom', [
-            renderPlayer(ctrl, 'bottom'),
-            materialDiffs[1]
-          ])
+          h('div.user-info.user-info-bottom', [renderPlayer(ctrl, 'bottom'), materialDiffs[1]]),
         ]),
         h('div.right', table),
       ]);

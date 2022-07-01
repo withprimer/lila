@@ -9,37 +9,37 @@ import { main as view } from './view/directMain';
 import { RoundOpts } from './interfaces';
 
 export interface RoundApi {
-    socketReceive(typ: string, data: any): boolean;
-    moveOn: MoveOn;
+  socketReceive(typ: string, data: any): boolean;
+  moveOn: MoveOn;
 }
 
 export interface RoundMain {
-    app: (opts: RoundOpts) => RoundApi;
+  app: (opts: RoundOpts) => RoundApi;
 }
 
 const patch = init([classModule, attributesModule]);
 
 export function app(opts: RoundOpts): RoundApi {
-    const ctrl = new RoundController(opts, redraw);
+  const ctrl = new RoundController(opts, redraw);
 
-    const blueprint = view(ctrl);
-    opts.element.innerHTML = '';
-    let vnode = patch(opts.element, blueprint);
+  const blueprint = view(ctrl);
+  opts.element.innerHTML = '';
+  let vnode = patch(opts.element, blueprint);
 
-    function redraw() {
-        vnode = patch(vnode, view(ctrl));
-    }
+  function redraw() {
+    vnode = patch(vnode, view(ctrl));
+  }
 
-    window.addEventListener('resize', redraw); // col1 / col2+ transition
+  window.addEventListener('resize', redraw); // col1 / col2+ transition
 
-    if (ctrl.isPlaying()) menuHover();
+  if (ctrl.isPlaying()) menuHover();
 
-    lichess.sound.preloadBoardSounds();
+  lichess.sound.preloadBoardSounds();
 
-    return {
-        socketReceive: ctrl.socket.receive,
-        moveOn: ctrl.moveOn,
-    };
+  return {
+    socketReceive: ctrl.socket.receive,
+    moveOn: ctrl.moveOn,
+  };
 }
 
 export { boot };
