@@ -1,6 +1,7 @@
 package controllers
 
 import views._
+import play.api.libs.json._
 
 import lila.app._
 import lila.oauth.{ AccessToken, OAuthTokenForm }
@@ -43,3 +44,4 @@ final class OAuthToken(env: Env) extends LilaController(env) {
       tokenApi.revokeById(AccessToken.Id(id), me) inject Redirect(routes.OAuthToken.index).flashSuccess
     }
 }
+

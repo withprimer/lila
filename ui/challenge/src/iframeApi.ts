@@ -1,21 +1,20 @@
 import LichessChat from 'chat';
-import {Chessground} from 'chessground';
+import { Chessground } from 'chessground';
 
 export function setup() {
-  window.addEventListener('message', (msg) => {
+  window.addEventListener('message', msg => {
     if (msg.data.type === 'login') {
       const cookie = msg.data.cookie;
-      console.log("!!! here is the sent cookie before", cookie)
-      console.log("!!! here is what the cookies are right now", document.cookie)
+      console.log('!!! here is the sent cookie before', cookie);
+      console.log('!!! here is what the cookies are right now', document.cookie);
 
-      document.cookie = cookie
-      console.log("!!! here is the sent cookie after", document.cookie)
+      document.cookie = cookie;
+      console.log('!!! here is the sent cookie after', document.cookie);
 
       // send a response
-      window.parent.postMessage({ type: 'login-result', result: 'success', }, msg.origin);
+      window.parent.postMessage({ type: 'login-result', result: 'success' }, msg.origin);
       return;
     }
-
 
     // challenge-setup
     if (msg.data.type === 'challenge-setup') {
@@ -81,11 +80,14 @@ export function setup() {
 
               /* flag that challenge should redirect means that challenge has strated */
               if (text.indexOf('id="challenge-redirect"') !== -1) {
-                window.parent.postMessage({
-                  type: 'challenge-event',
-                  eventType: 'challenge-started',
-                  challengeId: msg.data.challengeId,
-                }, msg.origin);
+                window.parent.postMessage(
+                  {
+                    type: 'challenge-event',
+                    eventType: 'challenge-started',
+                    challengeId: msg.data.challengeId,
+                  },
+                  msg.origin
+                );
               }
             })();
           },
@@ -95,7 +97,7 @@ export function setup() {
       return;
     }
 
-    console.log(`lichess iframe: received an unknown message from parent ${msg.origin}`, { msg })
+    console.log(`lichess iframe: received an unknown message from parent ${msg.origin}`, { msg });
   });
 }
 

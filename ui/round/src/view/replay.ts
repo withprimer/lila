@@ -266,6 +266,6 @@ export function render(ctrl: RoundController): VNode | undefined {
                 col1Button(ctrl, 1, '', ctrl.ply == round.lastPly(d)),
               ])
             : renderMovesOrResult),
-        renderButtons(ctrl)
+        renderButtons(ctrl),
       ]);
 }

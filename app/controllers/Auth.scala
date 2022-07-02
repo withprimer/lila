@@ -16,6 +16,8 @@ import lila.security.SecurityForm.{ MagicLink, PasswordReset }
 import lila.security.{ FingerPrint, Signup }
 import lila.user.User.ClearPassword
 import lila.user.{ PasswordHasher, User => UserModel }
+import lila.oauth.OAuthTokenForm
+import lila.oauth.AccessToken
 
 final class Auth(
     env: Env,
@@ -39,6 +41,50 @@ final class Auth(
     get("referrer").flatMap(env.api.referrerRedirect.valid) orElse
       ctxReq.session.get(api.AccessUri) getOrElse
       routes.Lobby.home.url
+
+  def primerSignup =
+    OpenBody { implicit ctx =>
+      implicit val req = ctx.body
+      forms.preloadEmailDns >> env.security.signup.primer().flatMap {
+        case Signup.AllSet(user, email) =>
+          api.saveAuthentication(user.id, ctx.mobileApiVersion) flatMap { sessionId =>
+            implicit val cookie = env.lilaCookie.genPrimerCookie {
+              _ + (api.sessionIdKey -> sessionId) - api.AccessUri - lila.security.EmailConfirm.cookie.name
+            }
+
+            createPrimerAccessToken(user).flatMap { token =>
+              JsonOk(
+                Json.obj(
+                  "success"  -> true,
+                  "username" -> user.username,
+                  "email"    -> email.value,
+                  "cookie"   -> cookie,
+                  "token" -> Json.obj(
+                    "description" -> token.description,
+                    "token"       -> token.id.value,
+                    "secret"      -> token.plain.secret
+                  )
+                )
+              ).fuccess
+            }
+          }
+        case Signup.Bad(err) => BadRequest(err.toString).fuccess
+        case _               => BadRequest("Failed to signup. Try again later.").fuccess
+      }
+    }
+
+  private def createPrimerAccessToken(user: UserModel): Fu[AccessToken] = {
+    implicit val form = OAuthTokenForm.create
+      .fill(
+        OAuthTokenForm.Data(
+          description = "Primer access token",
+          scopes = List("preference:read", "preference:write")
+        )
+      )
+      .get
+
+    env.oAuth.tokenApi.create(form, user, env.clas.studentCache.isStudent(user.id))
+  }
 
   def authenticateUser(u: UserModel, result: Option[String => Result] = None)(implicit
       ctx: Context
@@ -206,7 +252,8 @@ final class Auth(
                         .make(env.lilaCookie, user, email)(ctx.req)
                   }
                 case Signup.AllSet(user, email) =>
-                  welcome(user, email, sendWelcomeEmail = true) >> redirectNewUser(user)
+                  welcome(user, email, sendWelcomeEmail = true) >> authenticateUser(user)
+                // welcome(user, email, sendWelcomeEmail = true) >> redirectNewUser(user)
               },
             api = apiVersion =>
               env.security.signup
