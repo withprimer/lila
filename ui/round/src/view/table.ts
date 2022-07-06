@@ -15,7 +15,7 @@ export function renderPlayer(ctrl: RoundController, position: Position) {
   return ctrl.nvui
     ? undefined
     : player.ai
-    ? h('div.user-link.online.ruser.ruser-' + position, [h('i.line'), h('name', renderUser.aiName(ctrl, player.ai))])
+    ? h('div.user-link.online.ruser.ruser-' + position, [h('name', renderUser.aiName(ctrl, player.ai))])
     : renderUser.userHtml(ctrl, player, position);
 }
 

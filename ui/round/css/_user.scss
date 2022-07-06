@@ -13,6 +13,7 @@
   a {
     @extend %ellipsis;
 
+    font-weight: 700;
     color: $c-font;
   }
 
@@ -23,7 +24,7 @@
   rating {
     flex: 0 0 auto;
     margin: 0 0.25em 0 0.3em;
-    color: $c-font-dim;
+    color: $c-font;
     letter-spacing: -0.5px;
   }
 

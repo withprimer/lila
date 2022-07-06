@@ -1,5 +1,9 @@
 @import '../abstract/functions';
 
+/* Primer colors */
+
+$c-primer-text-primary: #1c212e;
+
 /* Colors */
 
 @function c-dimmer($color, $weight: 17%) {
@@ -24,7 +28,7 @@ $c-bg-zebra2: hsl($c-site-hue, 12%, 92%);
 
 $c-body-gradient: hsl($c-site-hue, 12%, 84%);
 
-$c-font: hsl(0, 0%, 30%);
+$c-font: $c-primer-text-primary;
 $c-font-dim: c-light($c-font, 47%);
 $c-font-dimmer: c-light($c-font, 70%);
 $c-font-clear: c-light($c-font, 12%);

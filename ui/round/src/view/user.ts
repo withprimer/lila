@@ -27,11 +27,6 @@ export function userHtml(ctrl: RoundController, player: Player, position: Positi
         },
       },
       [
-        h('i.line' + (user.patron ? '.patron' : ''), {
-          attrs: {
-            title: connecting ? 'Connecting to the game' : player.onGame ? 'Joined the game' : 'Left the game',
-          },
-        }),
         h(
           'a.text.ulpt',
           {
@@ -72,14 +67,7 @@ export function userHtml(ctrl: RoundController, player: Player, position: Positi
         connecting,
       },
     },
-    [
-      h('i.line', {
-        attrs: {
-          title: connecting ? 'Connecting to the game' : player.onGame ? 'Joined the game' : 'Left the game',
-        },
-      }),
-      h('name', player.name || ctrl.noarg('anonymous')),
-    ]
+    [h('name', player.name || ctrl.noarg('anonymous'))]
   );
 }
 
