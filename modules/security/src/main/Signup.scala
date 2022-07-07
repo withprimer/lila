@@ -62,6 +62,36 @@ final class Signup(
     }
   }
 
+  def primer()(implicit req: Request[_], lang: Lang, formBinding: FormBinding): Fu[Signup.Result] =
+    forms.signup.website flatMap {
+      _.form
+        .bindFromRequest()
+        .fold[Fu[Signup.Result]](
+          err =>
+            fuccess {
+              Signup.Bad(err tap signupErrLog)
+            },
+          data => {
+            lila.mon.user.register.count(none)
+            val passwordHash = authenticator passEnc User.ClearPassword(data.password)
+            // note: we trust that the email given from primer is valid
+            userRepo
+              .create(
+                data.username,
+                passwordHash,
+                data.realEmail,
+                false,
+                none,
+                false
+              )
+              .orFail(s"No user could be created for ${data.username}")
+              .flatMap { user =>
+                fuccess(Signup.AllSet(user, data.realEmail))
+              }
+          }
+        )
+    }
+
   def website(
       blind: Boolean
   )(implicit req: Request[_], lang: Lang, formBinding: FormBinding): Fu[Signup.Result] =

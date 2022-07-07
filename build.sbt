@@ -1,3 +1,7 @@
+import com.typesafe.sbt.packager.docker._
+import com.typesafe.sbt.packager.docker.DockerChmodType
+import NativePackagerHelper._
+
 import com.typesafe.sbt.packager.Keys.scriptClasspath
 
 import BuildSettings._
@@ -429,3 +433,31 @@ lazy val hub = smallModule("hub",
   Seq(common),
   Seq(scaffeine, macwire.util)
 )
+
+
+// Ensure conf & public are included in universal builds (for docker image)
+Universal / mappings ++= directory("conf")
+Universal / mappings ++= directory("public")
+
+/* DOCKER OVERRIDES */
+
+// pin to java version 11
+dockerBaseImage := "openjdk:11-jdk"
+dockerExposedPorts += 9663
+
+// use root as docker user (this is Docker's default)
+Docker / daemonUserUid := None
+Docker / daemonUser := "root"
+
+// filter out docker entry points so we can define them manually below
+dockerCommands := dockerCommands.value.filterNot {
+  case ExecCmd("ENTRYPOINT", args @ _*) => true
+  case ExecCmd("CMD",args @ _*) => true
+  case cmd => false
+}
+
+// create folder to store logs (TODO: )
+dockerCommands += Cmd("RUN","mkdir /opt/docker/logs")
+
+// start JVM with extra mem + prod config files
+dockerCommands += Cmd("ENTRYPOINT", "/opt/docker/bin/lila -J-Xms256M -J-Xmx2048M -Dconfig.file=conf/prod.conf -Dlogger.file=conf/prod-logger.xml")

@@ -117,6 +117,6 @@ export const renderTable = (ctrl: RoundController): MaybeVNodes => [
       : game.playable(ctrl.data)
       ? renderTablePlay(ctrl)
       : renderTableEnd(ctrl)),
-    anyClock(ctrl, 'bottom')
-  ])
+    anyClock(ctrl, 'bottom'),
+  ]),
 ];

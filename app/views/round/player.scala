@@ -70,16 +70,6 @@ object player {
           chatOption.map(_ => chat.frag)
         ),
         bits.roundAppPreload(pov, controls = true),
-        div(cls := "round__underboard")(
-          bits.crosstable(cross, pov.game),
-          (playing.nonEmpty || simul.exists(_ isHost ctx.me)) option
-            div(
-              cls := List(
-                "round__now-playing" -> true,
-                "blindfold"          -> ctx.pref.isBlindfold
-              )
-            )(bits.others(playing, simul.filter(_ isHost ctx.me)))
-        ),
         div(cls := "round__underchat")(bits underchat pov.game)
       )
     )
