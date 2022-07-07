@@ -3,6 +3,7 @@ import { Chessground } from 'chessground';
 
 export function setup() {
   window.addEventListener('message', msg => {
+    // challenge-setup
     if (msg.data.type === 'challenge-setup') {
       const formData = new FormData();
 
@@ -24,10 +25,16 @@ export function setup() {
 
       (async () => {
         try {
-          const challengeId = await setupChallenge(formData);
-          window.parent.postMessage({ type: 'challenge-setup-result', result: 'success', challengeId }, msg.origin);
+          const challengeId = await setupChallenge(formData, msg.data.player);
+          window.parent.postMessage(
+            { type: 'challenge-setup-result', result: 'success', challengeId, player: msg.data.player },
+            msg.origin
+          );
         } catch (e) {
-          window.parent.postMessage({ type: 'challenge-setup-result', result: 'error' }, msg.origin);
+          window.parent.postMessage(
+            { type: 'challenge-setup-result', result: 'error', player: msg.data.player },
+            msg.origin
+          );
         }
       })();
 
@@ -100,8 +107,8 @@ const acceptChallenge = async (challengeId: string) => {
   throw new Error('failed to accept challenge');
 };
 
-const setupChallenge = async (formData: FormData) => {
-  const res = await fetch('/setup/friend', {
+const setupChallenge = async (formData: FormData, player: 'ai' | 'friend') => {
+  const res = await fetch(`/setup/${player}`, {
     method: 'POST',
     body: formData,
   });
