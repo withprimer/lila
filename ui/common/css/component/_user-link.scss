@@ -16,6 +16,10 @@
     }
   }
 
+  .text {
+    font-weight: 700;
+  }
+
   .line {
     @extend %data-icon;
 

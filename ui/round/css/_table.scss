@@ -1,6 +1,6 @@
 .round__app {
   &__table {
-    @extend %box-radius-right, %box-shadow;
+    @extend %box-radius-right;
 
     background: $c-bg-box;
   }

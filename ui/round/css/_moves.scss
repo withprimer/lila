@@ -14,8 +14,6 @@
   @extend %flex-column, %double-tap;
 
   .buttons {
-    @extend %box-shadow;
-
     flex: 0 0 auto;
     display: flex;
     justify-content: stretch;

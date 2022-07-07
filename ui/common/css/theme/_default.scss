@@ -2,6 +2,7 @@
 
 /* Primer colors */
 
+$c-primer-primary: #773ff0;
 $c-primer-text-primary: #1c212e;
 
 /* Colors */
@@ -14,7 +15,7 @@ $c-primer-text-primary: #1c212e;
   @return mix(#000, $color, $weight);
 }
 
-$c-site-hue: 37;
+$c-site-hue: 259;
 
 $c-bg-page: hsl($c-site-hue, 10%, 92%);
 
@@ -37,7 +38,7 @@ $c-shade: c-dimmer($c-font, 80%);
 $c-font-page: c-light($c-font, 37%);
 
 /* Primary: blue */
-$c-primary: hsl(209, 77%, 46%);
+$c-primary: $c-primer-primary;
 $c-primary-dim: c-dimmer($c-primary);
 $c-primary-clear: c-clearer($c-primary);
 $c-primary-over: #fff;
@@ -45,7 +46,7 @@ $c-primary-over: #fff;
 /* text over primary background */
 
 /* Secondary: green */
-$c-secondary: hsl(88, 62%, 37%);
+$c-secondary: $c-primer-primary;
 $c-secondary-dim: c-dimmer($c-secondary);
 $c-secondary-dimmer: c-dimmer($c-secondary, 40%);
 $c-secondary-over: #fff;
