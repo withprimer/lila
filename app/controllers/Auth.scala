@@ -49,7 +49,8 @@ final class Auth(
         case Signup.AllSet(user, email) =>
           api.saveAuthentication(user.id, ctx.mobileApiVersion) flatMap { sessionId =>
             implicit val cookie = env.lilaCookie.genPrimerCookie {
-              _ + (api.sessionIdKey -> sessionId) - api.AccessUri - lila.security.EmailConfirm.cookie.name
+              _ + (api.sessionIdKey -> sessionId) + ("sid" -> env.lilaCookie
+                .generateSessionId()) - api.AccessUri - lila.security.EmailConfirm.cookie.name
             }
 
             createPrimerAccessToken(user).flatMap { token =>
