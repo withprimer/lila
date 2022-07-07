@@ -39,14 +39,10 @@ export function setup() {
       (async () => {
         try {
           const challengeId = await setupChallenge(formData, msg.data.player);
-<<<<<<< HEAD
-          window.parent.postMessage({ type: 'challenge-setup-result', result: 'success', challengeId }, msg.origin);
-=======
           window.parent.postMessage(
             { type: 'challenge-setup-result', result: 'success', challengeId, player: msg.data.player },
             msg.origin
           );
->>>>>>> master
         } catch (e) {
           window.parent.postMessage(
             { type: 'challenge-setup-result', result: 'error', player: msg.data.player },
