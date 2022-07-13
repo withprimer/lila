@@ -1,10 +1,5 @@
 @import '../abstract/functions';
 
-/* Primer colors */
-
-$c-primer-primary: #773ff0;
-$c-primer-text-primary: #1c212e;
-
 /* Colors */
 
 @function c-dimmer($color, $weight: 17%) {
@@ -14,6 +9,12 @@ $c-primer-text-primary: #1c212e;
 @function c-clearer($color, $weight: 17%) {
   @return mix(#000, $color, $weight);
 }
+
+/* Primer colors */
+
+$c-primer-primary: #773ff0;
+$c-primer-text-primary: #1c212e;
+$c-primer-stroke: rgba(28, 33, 46, 0.16);
 
 $c-site-hue: 259;
 
