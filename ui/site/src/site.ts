@@ -28,12 +28,10 @@ export function postMessageSetup() {
   window.addEventListener('message', msg => {
     if (msg.data.type === 'login') {
       const cookie = msg.data.cookie;
-      console.log('!!! here is the sent cookie before', cookie);
-      console.log('!!! here is what the cookies are right now', document.cookie);
-
+      console.log('!!! cookie sent to lichess iframe', cookie);
+      console.log('!!! lichess cookies before', document.cookie);
       document.cookie = cookie;
-      console.log('!!! here is the sent cookie after', document.cookie);
-
+      console.log('!!! lichess cookies after', document.cookie);
       // send a response
       window.parent.postMessage({ type: 'login-result', result: 'success' }, msg.origin);
       return;
