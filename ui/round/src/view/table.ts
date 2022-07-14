@@ -39,9 +39,9 @@ export const renderTableWatch = (ctrl: RoundController) =>
   ]);
 
 export const renderTablePlay = (ctrl: RoundController) => {
-  /* const d = ctrl.data,
+  const d = ctrl.data,
     loading = isLoading(ctrl),
-    submit = button.submitMove(ctrl);
+    submit = button.submitMove(ctrl),
     icons =
       loading || submit
         ? []
@@ -54,6 +54,7 @@ export const renderTablePlay = (ctrl: RoundController) => {
               : ctrl.data.game.threefold
               ? button.claimThreefold(ctrl)
               : button.standard(ctrl, ctrl.canOfferDraw, '2', 'offerDraw', 'draw-yes', () => ctrl.offerDraw(true)),
+            button.standard(ctrl, game.moretimeable, '', 'moreTime', 'moretime', () => ctrl.socket.moreTime()),
             ctrl.resignConfirm
               ? button.resignConfirm(ctrl)
               : button.standard(ctrl, game.resignable, '', 'resign', 'resign', () => ctrl.resign(true)),
@@ -70,10 +71,11 @@ export const renderTablePlay = (ctrl: RoundController) => {
           button.answerOpponentDrawOffer(ctrl),
           button.cancelTakebackProposition(ctrl),
           button.answerOpponentTakebackProposition(ctrl),
-        ]; */
+        ];
+
   return [
     replay.render(ctrl),
-    /* h('div.rcontrols', [
+    h('div.rcontrols', [
       h(
         'div.ricons',
         {
@@ -82,7 +84,7 @@ export const renderTablePlay = (ctrl: RoundController) => {
         icons
       ),
       ...buttons,
-    ]), */
+    ]),
   ];
 };
 

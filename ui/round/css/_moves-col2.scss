@@ -42,14 +42,13 @@
     font-family: 'Inter', sans-serif;
 
     &:hover {
-      background: $c-primary;
-      color: #fff;
+      background: $c-primer-background-secondary;
     }
 
     &.#{$active-class} {
-      font-weight: bold;
-      background: mix($c-primary, $c-bg-box, 20%);
-      color: $c-font-clear;
+      background: $c-primer-primary-hover-1;
+      color: $c-primer-primary;
+      font-weight: 600;
     }
   }
 
