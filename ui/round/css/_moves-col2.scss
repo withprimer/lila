@@ -52,17 +52,17 @@
     }
   }
 
-  .message {
-    display: flex;
-    align-items: center;
-    margin: 1em;
+  // .message {
+  //   display: flex;
+  //   align-items: center;
+  //   margin: 1em;
 
-    &::before {
-      color: $c-font-dim;
-      font-size: 3em;
-      margin-right: 12px;
-    }
-  }
+  //   &::before {
+  //     color: $c-font-dim;
+  //     font-size: 3em;
+  //     margin-right: 12px;
+  //   }
+  // }
 
   .result-wrap {
     width: 100%;
@@ -70,15 +70,13 @@
   }
 
   .result {
-    border-top: $border;
     font-weight: bold;
     font-size: 1.2em;
-    padding: 5px 0 3px 0;
     margin: 0;
   }
 
   .status {
-    font-style: italic;
-    margin-bottom: 0.5em;
+    margin-bottom: 0;
+    font-size: 16px;
   }
 }

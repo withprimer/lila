@@ -8,30 +8,32 @@ import { RoundData, MaybeVNodes } from '../interfaces';
 import { ClockData } from '../clock/clockCtrl';
 import RoundController from '../ctrl';
 
-function analysisBoardOrientation(data: RoundData) {
-  return data.game.variant.key === 'racingKings' ? 'white' : data.player.color;
-}
+// function analysisBoardOrientation(data: RoundData) {
+//   return data.game.variant.key === 'racingKings' ? 'white' : data.player.color;
+// }
 
 function poolUrl(clock: ClockData, blocking?: game.PlayerUser) {
   return '/#pool/' + clock.initial / 60 + '+' + clock.increment + (blocking ? '/' + blocking.id : '');
 }
 
-function analysisButton(ctrl: RoundController): VNode | null {
-  const d = ctrl.data,
-    url = gameRoute(d, analysisBoardOrientation(d)) + '#' + ctrl.ply;
-  return game.replayable(d)
-    ? h(
-        'a.fbt',
-        {
-          attrs: { href: url },
-          hook: util.bind('click', _ => {
-            // force page load in case the URL is the same
-            if (location.pathname === url.split('#')[0]) location.reload();
-          }),
-        },
-        ctrl.noarg('analysis')
-      )
-    : null;
+// TEMPORARY PRIMER DISABLED ANALYSIS BUTTON - not styled yet
+function analysisButton(_: RoundController): VNode | null {
+  return null;
+  // const d = ctrl.data,
+  //   url = gameRoute(d, analysisBoardOrientation(d)) + '#' + ctrl.ply;
+  // return game.replayable(d)
+  //   ? h(
+  //       'a.fbt',
+  //       {
+  //         attrs: { href: url },
+  //         hook: util.bind('click', _ => {
+  //           // force page load in case the URL is the same
+  //           if (location.pathname === url.split('#')[0]) location.reload();
+  //         }),
+  //       },
+  //       ctrl.noarg('analysis')
+  //     )
+  //   : null;
 }
 
 function rematchButtons(ctrl: RoundController): MaybeVNodes {
@@ -55,7 +57,7 @@ function rematchButtons(ctrl: RoundController): MaybeVNodes {
         )
       : null,
     h(
-      'button.fbt.rematch.white',
+      'span.rematch.white',
       {
         class: {
           me,

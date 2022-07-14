@@ -28,10 +28,8 @@ const renderTableWith = (ctrl: RoundController, buttons: MaybeVNodes) => [
   buttons.find(x => !!x) ? h('div.rcontrols', buttons) : null,
 ];
 
-export const renderTableEnd = (ctrl: RoundController) =>
-  renderTableWith(ctrl, [
-    isLoading(ctrl) ? loader() : button.backToTournament(ctrl) || button.backToSwiss(ctrl) || button.followUp(ctrl),
-  ]);
+// note: we folded in the rematch/follow up logic inside of the table due to the styling restrictions
+export const renderTableEnd = (ctrl: RoundController) => [replay.render(ctrl)];
 
 export const renderTableWatch = (ctrl: RoundController) =>
   renderTableWith(ctrl, [
@@ -49,16 +47,13 @@ export const renderTablePlay = (ctrl: RoundController) => {
             game.abortable(d)
               ? button.standard(ctrl, undefined, '', 'abortGame', 'abort')
               : button.standard(ctrl, game.takebackable, '', 'proposeATakeback', 'takeback-yes', ctrl.takebackYes),
-            ctrl.drawConfirm
-              ? button.drawConfirm(ctrl)
-              : ctrl.data.game.threefold
+            ctrl.data.game.threefold
               ? button.claimThreefold(ctrl)
-              : button.standard(ctrl, ctrl.canOfferDraw, '2', 'offerDraw', 'draw-yes', () => ctrl.offerDraw(true)),
-            button.standard(ctrl, game.moretimeable, '', 'moreTime', 'moretime', () => ctrl.socket.moreTime()),
-            ctrl.resignConfirm
-              ? button.resignConfirm(ctrl)
-              : button.standard(ctrl, game.resignable, '', 'resign', 'resign', () => ctrl.resign(true)),
-            replay.analysisButton(ctrl),
+              : button.standard(ctrl, ctrl.canOfferDraw, '2', 'offerDraw', 'draw-yes', () =>
+                  ctrl.offerDraw(true, true)
+                ),
+            button.standard(ctrl, game.moretimeable, '', 'giveMoreTime', 'moretime', () => ctrl.socket.moreTime()),
+            button.standard(ctrl, game.resignable, '', 'resign', 'resign', () => ctrl.resign(true, true)),
           ],
     buttons: MaybeVNodes = loading
       ? [loader()]

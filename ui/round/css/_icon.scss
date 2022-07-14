@@ -2,9 +2,18 @@
   display: flex;
   justify-content: center;
 
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 24px;
+  border-top: 1px solid $c-primer-stroke;
+  padding: 11px 0;
+
   .fbt {
     font-size: 1.4em;
-    padding: 0.1em 1em;
+    height: 32px;
+    width: 32px;
+    border-radius: 10px;
   }
 
   &.confirm > button {

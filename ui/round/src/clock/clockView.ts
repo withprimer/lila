@@ -30,12 +30,12 @@ export function renderClock(ctrl: RoundController, player: game.Player, position
     {
       class: {
         outoftime: millis <= 0,
-        running: isRunning,
         emerg: millis < clock.emergMs,
       },
     },
     clock.opts.nvui
       ? [
+          h('div.running-indicator'),
           h('div.time', {
             attrs: { role: 'timer' },
             hook: timeHook,
@@ -43,6 +43,11 @@ export function renderClock(ctrl: RoundController, player: game.Player, position
         ]
       : [
           clock.showBar && game.bothPlayersHavePlayed(ctrl.data) ? showBar(ctrl, player.color) : undefined,
+          h('div.running-indicator', {
+            class: {
+              running: isRunning,
+            },
+          }),
           h('div.time', {
             class: {
               hour: millis > 3600 * 1000,

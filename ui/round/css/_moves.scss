@@ -20,6 +20,7 @@
   @extend %flex-column, %double-tap;
 
   height: 100%;
+  position: relative;
 
   .buttons {
     flex: 0 0 auto;

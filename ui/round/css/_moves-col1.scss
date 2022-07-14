@@ -81,29 +81,29 @@
     font-size: 1.1em;
   }
 
-  .message {
-    flex: 0 0 $col1-moves-height;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.2;
+  // .message {
+  //   flex: 0 0 $col1-moves-height;
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: center;
+  //   line-height: 1.2;
 
-    br {
-      display: none;
-    }
+  //   br {
+  //     display: none;
+  //   }
 
-    strong {
-      margin-left: 0.5em;
-    }
+  //   strong {
+  //     margin-left: 0.5em;
+  //   }
 
-    &::before {
-      margin-right: 0.3em;
-    }
+  //   &::before {
+  //     margin-right: 0.3em;
+  //   }
 
-    body.playing.zen & {
-      visibility: hidden;
-    }
-  }
+  //   body.playing.zen & {
+  //     visibility: hidden;
+  //   }
+  // }
 
   .status {
     display: none;
