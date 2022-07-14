@@ -442,7 +442,7 @@ Universal / mappings ++= directory("public")
 /* DOCKER OVERRIDES */
 
 // pin to java version 11
-dockerBaseImage := "openjdk:11-jdk"
+dockerBaseImage := "openjdk:11-jre-slim-buster"
 dockerExposedPorts += 9663
 
 // use root as docker user (this is Docker's default)
