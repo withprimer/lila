@@ -1,0 +1,21 @@
+/* Note @lucas8: This file is used for custom primer-related code that needs to go into the build step. */
+
+body.fixed-scroll {
+  overflow-y: hidden !important;
+}
+
+.round__side {
+  display: none !important;
+}
+
+.round__underchat {
+  display: none !important;
+}
+
+.user-info {
+  display: flex;
+}
+
+cg-board {
+  box-shadow: none;
+}

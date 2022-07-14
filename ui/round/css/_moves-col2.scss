@@ -27,7 +27,10 @@
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    background: $c-bg-zebra;
+    background: $c-primer-background-secondary;
+    color: $c-primer-text-primary;
+    font-family: 'Inter', sans-serif;
+    border-right: 1px solid $c-primer-stroke;
   }
 
   #{$move-tag} {
@@ -35,6 +38,8 @@
     flex: 0 0 41.666%;
     padding-left: 0.7em;
     cursor: pointer;
+
+    font-family: 'Inter', sans-serif;
 
     &:hover {
       background: $c-primary;

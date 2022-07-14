@@ -17,6 +17,13 @@
   src: local-font('Inter-Bold.woff2') format('woff2'), local-font('Inter-Bold.woff') format('woff');
 }
 
+@font-face {
+  font-family: 'Ginto Nord';
+  font-style: normal;
+  font-weight: 400;
+  src: local-font('ABCGintoNord-Regular.woff2') format('woff2'), local-font('ABCGintoNord-Regular.woff') format('woff');
+}
+
 /* Icon fonts */
 
 @font-face {

@@ -1,12 +1,10 @@
 .round__app {
-  grid-gap: 26px;
-
-  .right {
-    border-left: 1px solid $c-primer-stroke;
-  }
-
   &__table {
     @extend %box-radius-right;
+
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 
     background: $c-bg-box;
   }
