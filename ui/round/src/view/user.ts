@@ -28,14 +28,7 @@ export function userHtml(ctrl: RoundController, player: Player, position: Positi
       },
       [
         h(
-          'a.text.ulpt',
-          {
-            attrs: {
-              'data-pt-pos': 's',
-              href: '/@/' + user.username,
-              ...(ctrl.isPlaying() ? { target: '_blank', rel: 'noopener' } : {}),
-            },
-          },
+          'span.text.ulpt',
           user.title
             ? [
                 h('span.utitle', user.title == 'BOT' ? { attrs: { 'data-bot': true } } : {}, user.title),
