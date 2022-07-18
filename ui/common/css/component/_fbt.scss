@@ -1,6 +1,8 @@
 .fbt {
   @extend %button-none;
 
+  color: $c-primer-primary;
+
   text-transform: uppercase;
   line-height: 1.5;
 
@@ -8,14 +10,14 @@
 
   @media (hover: hover) {
     &:hover:not(.disabled):not([disabled]) {
-      background: mix($c-secondary, $c-bg-box, 75%);
-      color: #fff;
+      background: $c-primer-primary-hover-1;
+      color: $c-primer-primary;
     }
   }
 
   &.active {
-    background: $c-secondary !important;
-    color: #fff;
+    background: $c-primer-primary-hover-1 !important;
+    color: $c-primer-primary;
   }
 
   &.disabled,

@@ -15,7 +15,7 @@ export function renderPlayer(ctrl: RoundController, position: Position) {
   return ctrl.nvui
     ? undefined
     : player.ai
-    ? h('div.user-link.online.ruser.ruser-' + position, [h('i.line'), h('name', renderUser.aiName(ctrl, player.ai))])
+    ? h('div.user-link.online.ruser.ruser-' + position, [h('name', renderUser.aiName(ctrl, player.ai))])
     : renderUser.userHtml(ctrl, player, position);
 }
 
@@ -28,10 +28,8 @@ const renderTableWith = (ctrl: RoundController, buttons: MaybeVNodes) => [
   buttons.find(x => !!x) ? h('div.rcontrols', buttons) : null,
 ];
 
-export const renderTableEnd = (ctrl: RoundController) =>
-  renderTableWith(ctrl, [
-    isLoading(ctrl) ? loader() : button.backToTournament(ctrl) || button.backToSwiss(ctrl) || button.followUp(ctrl),
-  ]);
+// note: we folded in the rematch/follow up logic inside of the table due to the styling restrictions
+export const renderTableEnd = (ctrl: RoundController) => [replay.render(ctrl)];
 
 export const renderTableWatch = (ctrl: RoundController) =>
   renderTableWith(ctrl, [
@@ -39,9 +37,9 @@ export const renderTableWatch = (ctrl: RoundController) =>
   ]);
 
 export const renderTablePlay = (ctrl: RoundController) => {
-  /* const d = ctrl.data,
+  const d = ctrl.data,
     loading = isLoading(ctrl),
-    submit = button.submitMove(ctrl);
+    submit = button.submitMove(ctrl),
     icons =
       loading || submit
         ? []
@@ -49,15 +47,13 @@ export const renderTablePlay = (ctrl: RoundController) => {
             game.abortable(d)
               ? button.standard(ctrl, undefined, '', 'abortGame', 'abort')
               : button.standard(ctrl, game.takebackable, '', 'proposeATakeback', 'takeback-yes', ctrl.takebackYes),
-            ctrl.drawConfirm
-              ? button.drawConfirm(ctrl)
-              : ctrl.data.game.threefold
+            ctrl.data.game.threefold
               ? button.claimThreefold(ctrl)
-              : button.standard(ctrl, ctrl.canOfferDraw, '2', 'offerDraw', 'draw-yes', () => ctrl.offerDraw(true)),
-            ctrl.resignConfirm
-              ? button.resignConfirm(ctrl)
-              : button.standard(ctrl, game.resignable, '', 'resign', 'resign', () => ctrl.resign(true)),
-            replay.analysisButton(ctrl),
+              : button.standard(ctrl, ctrl.canOfferDraw, '2', 'offerDraw', 'draw-yes', () =>
+                  ctrl.offerDraw(true, true)
+                ),
+            button.standard(ctrl, game.moretimeable, '', 'giveMoreTime', 'moretime', () => ctrl.socket.moreTime()),
+            button.standard(ctrl, game.resignable, '', 'resign', 'resign', () => ctrl.resign(true, true)),
           ],
     buttons: MaybeVNodes = loading
       ? [loader()]
@@ -70,10 +66,11 @@ export const renderTablePlay = (ctrl: RoundController) => {
           button.answerOpponentDrawOffer(ctrl),
           button.cancelTakebackProposition(ctrl),
           button.answerOpponentTakebackProposition(ctrl),
-        ]; */
+        ];
+
   return [
     replay.render(ctrl),
-    /* h('div.rcontrols', [
+    h('div.rcontrols', [
       h(
         'div.ricons',
         {
@@ -82,7 +79,7 @@ export const renderTablePlay = (ctrl: RoundController) => {
         icons
       ),
       ...buttons,
-    ]), */
+    ]),
   ];
 };
 

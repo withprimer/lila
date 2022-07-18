@@ -1,19 +1,33 @@
 .rclock {
   position: relative;
   display: flex;
-  justify-content: flex-end;
   user-select: none;
+
+  justify-content: center;
+  align-items: center;
+  min-height: 88px;
+  width: 100%;
+
+  &-top {
+    border-bottom: 1px solid $c-primer-stroke;
+  }
+
+  &-bottom {
+    border-top: 1px solid $c-primer-stroke;
+  }
+
+  /* hack we do to hide the more time button from the primer iframe */
+  .moretime {
+    display: none !important;
+  }
 
   @include breakpoint($mq-col1) {
     /* that weird shit is required so the clock goes above the player since they share the same grid cell */
-    justify-self: flex-end;
     z-index: 1;
   }
 
   /* overflow: hidden; is not possible because of clock bars and shadows */
   @include breakpoint($mq-col2) {
-    justify-content: space-between;
-
     &-bottom {
       /* over the table shadow */
       z-index: 0;
@@ -49,7 +63,8 @@
 
   @include breakpoint($mq-col2) {
     .bar {
-      display: block;
+      display: none;
+      // display: block;
       position: absolute;
       width: 100%;
       height: 4px;
@@ -71,7 +86,7 @@
   }
 
   .time {
-    @extend %roboto, %box-shadow;
+    font-family: 'Ginto Nord', 'Inter', sans-serif;
 
     background: $c-bg-box;
     min-width: 3em;
@@ -83,7 +98,6 @@
 
     /* ensure updates don't redraw other parts of the document */
     will-change: transform;
-    z-index: -1;
     display: flex;
 
     &.hour {

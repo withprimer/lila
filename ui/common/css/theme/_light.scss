@@ -6,7 +6,7 @@ $theme-light: true;
 $theme-dark: false;
 
 @mixin metal-bg {
-  background: linear-gradient(to bottom, hsl(0, 0, 96) 0%, hsl(0, 0, 93) 100%);
+  background: #fff;
 }
 
 @mixin metal {

@@ -1,6 +1,10 @@
 .round__app {
   &__table {
-    @extend %box-radius-right, %box-shadow;
+    @extend %box-radius-right;
+
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 
     background: $c-bg-box;
   }

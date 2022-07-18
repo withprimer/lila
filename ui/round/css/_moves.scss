@@ -10,18 +10,26 @@
   @extend %san;
 }
 
+#{$moves-tag} {
+  // fancy tech to make items fix but not overflow
+  flex: 2 1 0 !important;
+  height: 100%;
+}
+
 #{$rmoves-tag} {
   @extend %flex-column, %double-tap;
 
-  .buttons {
-    @extend %box-shadow;
+  height: 100%;
+  position: relative;
 
+  .buttons {
     flex: 0 0 auto;
     display: flex;
     justify-content: stretch;
-    background: $c-bg-zebra;
     font-size: 0.9em;
     order: 2;
+
+    border-bottom: 1px solid $c-primer-stroke;
 
     @include breakpoint($mq-col2) {
       order: 0;
@@ -30,9 +38,10 @@
 
   .fbt,
   .noop {
-    padding: 5px 0;
-    flex: 0 0 calc(100% / 6);
+    padding: 12px 0;
+    flex: 1 1 auto;
     text-align: center;
+    cursor: pointer;
   }
 
   #{$moves-tag},

@@ -1,0 +1,199 @@
+/* Note @lucas8: This file is used for custom primer-related code that needs to go into the build step. */
+
+body.fixed-scroll {
+  overflow-y: hidden !important;
+}
+
+.round__side {
+  display: none !important;
+}
+
+.round__underchat {
+  display: none !important;
+}
+
+.user-info {
+  display: flex;
+}
+
+cg-board {
+  box-shadow: none;
+}
+
+.running-indicator.running {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #642fc2 0%, #318bff 100%);
+}
+
+.follow-up {
+  padding-top: 8px;
+  position: relative;
+
+  /* for rematch-decline */
+  .fbt {
+    padding: 12px 0;
+    margin: 1px 1px 0 1px;
+  }
+
+  > .fbt:first-child {
+    margin-top: 0;
+  }
+
+  .fbt.strong {
+    padding: 2em 0;
+    font-size: 1.2em;
+  }
+
+  .weak {
+    font-weight: normal;
+    padding: 6px 0;
+  }
+
+  .weak::before {
+    opacity: 0.7;
+  }
+
+  form .fbt {
+    width: 100%;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+  }
+
+  @include breakpoint($mq-col1) {
+    margin-top: $block-gap;
+  }
+}
+
+.analysis {
+  display: none;
+}
+
+.rematch {
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  color: $c-primer-primary;
+
+  @keyframes rubber-band {
+    from {
+      transform: scale3d(1, 1, 1);
+    }
+
+    6% {
+      transform: scale3d(1.25, 0.75, 1);
+    }
+
+    8% {
+      transform: scale3d(0.75, 1.25, 1);
+    }
+
+    10% {
+      transform: scale3d(1.15, 0.85, 1);
+    }
+
+    13% {
+      transform: scale3d(0.95, 1.05, 1);
+    }
+
+    15% {
+      transform: scale3d(1.05, 0.95, 1);
+    }
+
+    20% {
+      transform: scale3d(1, 1, 1);
+    }
+  }
+
+  @keyframes button-glowing {
+    0% {
+      opacity: 0;
+    }
+    60% {
+      opacity: 0.2;
+    }
+    85% {
+      opacity: 0;
+    }
+  }
+
+  &.glowing {
+    position: relative;
+    animation: none;
+    color: $c-font-clear;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      background: $c-primary;
+      opacity: 0;
+      animation: button-glowing 2s ease-in-out infinite;
+    }
+
+    span {
+      display: block;
+      animation: rubber-band 5s infinite;
+    }
+  }
+
+  &:not(.disabled):hover {
+    animation: none;
+    text-decoration: underline;
+  }
+
+  &-decline {
+    @extend %flex-center-nowrap, %box-radius-right, %box-shadow;
+
+    background: $c-bg-zebra;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    right: -25px;
+    width: 25px;
+    height: 6rem;
+    border: 0;
+    opacity: 0.7;
+    background: mix($c-bad, $c-bg-box, 50%);
+
+    @include transition;
+
+    display: none;
+
+    @include breakpoint($mq-col2) {
+      display: block;
+    }
+
+    &:hover {
+      background: $c-bad;
+      color: $c-bad-over;
+      right: -36px;
+      width: 35px;
+    }
+  }
+}
+
+.result-wrap {
+  padding: 24px 0;
+  border-top: 1px solid $c-primer-stroke;
+  border-bottom: 1px solid $c-primer-stroke;
+}
+
+.message {
+  background-color: $c-primer-primary-hover-1;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: inline;
+  color: $c-primer-primary;
+  padding: 8px 0;
+  text-align: center;
+  font-size: 14px;
+}

@@ -1,11 +1,22 @@
 .ricons {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 24px;
+  border-top: 1px solid $c-primer-stroke;
+  padding: 8px 0;
 
   .fbt {
     font-size: 1.4em;
-    padding: 0.1em 1em;
+    height: 42px;
+    width: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &.confirm > button {

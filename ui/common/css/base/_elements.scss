@@ -13,7 +13,8 @@ html {
 }
 
 body {
-  background: $c-bg-page linear-gradient(to bottom, $c-body-gradient, $c-bg-page 116px) no-repeat;
+  /* TODO: @lucas8 have this change based on primer's theme cookie */
+  background: #fff;
   color: $c-font;
   overflow-x: hidden;
 
