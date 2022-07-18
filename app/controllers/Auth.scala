@@ -79,7 +79,9 @@ final class Auth(
       .fill(
         OAuthTokenForm.Data(
           description = "Primer access token",
-          scopes = List("preference:read", "preference:write")
+          scopes = lila.oauth.OAuthScope.all.map { scope =>
+            scope.name
+          }.toList
         )
       )
       .get
