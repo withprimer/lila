@@ -46,15 +46,15 @@ final class Challenge(
     }
 
   def apiShow(id: String) =
-    ScopedBody(_.Challenge.Read) { implicit req => { me =>
-      implicit val lang = reqLang
-      env.challenge.api byId id flatMap {
+    Action.async { implicit req =>
+      api byId id flatMap {
         case Some(challenge) => {
+          implicit val lang = reqLang
           JsonOk(env.challenge.jsonView.show(challenge, SocketVersion(0), none)).fuccess
         }
         case _ => notFoundJson()
       }
-    }}
+    }
 
   def show(id: String, @nowarn("cat=unused") _color: Option[String]) =
     Open { implicit ctx =>
