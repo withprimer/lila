@@ -80,7 +80,7 @@ final class Auth(
         OAuthTokenForm.Data(
           description = "Primer access token",
           scopes = lila.oauth.OAuthScope.all.map { scope =>
-            scope.name
+            scope.key
           }.toList
         )
       )
