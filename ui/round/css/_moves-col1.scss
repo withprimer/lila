@@ -25,12 +25,6 @@
     overflow-x: scroll;
     color: $c-font-page;
 
-    @if $theme-light {
-      box-shadow: 0 4px 4px c-light($c-bg-page, 78%) inset;
-    } @else {
-      box-shadow: 0 4px 12px #000 inset;
-    }
-
     &::-webkit-scrollbar {
       height: 0px;
     }
