@@ -62,7 +62,6 @@ cg-board {
 }
 
 .follow-up {
-  padding-top: 8px;
   position: relative;
 
   /* for rematch-decline */
@@ -96,10 +95,6 @@ cg-board {
   .spinner {
     width: 40px;
     height: 40px;
-  }
-
-  @include breakpoint($mq-col1) {
-    margin-top: $block-gap;
   }
 }
 
