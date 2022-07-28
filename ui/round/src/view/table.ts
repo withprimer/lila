@@ -98,7 +98,7 @@ function whosTurn(ctrl: RoundController, color: Color, position: Position) {
   ]);
 }
 
-function anyClock(ctrl: RoundController, position: Position) {
+export function anyClock(ctrl: RoundController, position: Position) {
   const player = ctrl.playerAt(position);
   if (ctrl.clock) return renderClock(ctrl, player, position);
   else if (ctrl.data.correspondence && ctrl.data.game.turns > 1)

@@ -6,7 +6,7 @@ import { h, VNode } from 'snabbdom';
 import { plyStep } from '../round';
 import { read as readFen } from 'chessground/fen';
 import { render as renderGround } from '../ground';
-import { renderTable, renderPlayer } from './table';
+import { renderTable, renderPlayer, anyClock } from './table';
 import { renderMaterialDiffs } from 'game/view/material';
 
 export function main(ctrl: RoundController): VNode {
@@ -98,7 +98,10 @@ export function main(ctrl: RoundController): VNode {
             },
             [renderGround(ctrl), ctrl.promotion.view(ctrl.data.game.variant.key === 'antichess')]
           ),
-          h('div.user-info.user-info-bottom', [renderPlayer(ctrl, 'bottom'), materialDiffs[1]]),
+          h('div.user-info.user-info-bottom', [
+            h('div.user-info-header', [renderPlayer(ctrl, 'bottom'), materialDiffs[1]]),
+            anyClock(ctrl, 'bottom'),
+          ]),
         ]),
         h('div.right', table),
       ]);

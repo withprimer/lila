@@ -1,7 +1,6 @@
 @import '../../common/css/component/material';
 
 .material {
-  align-self: center;
   height: 40px;
   line-height: 0;
   white-space: nowrap;
@@ -31,7 +30,6 @@
 
   @include breakpoint($mq-col1) {
     height: $col1-mat-height;
-    margin-left: 3vmin;
 
     div {
       margin-left: 8px;
