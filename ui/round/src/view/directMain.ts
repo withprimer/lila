@@ -75,7 +75,10 @@ export function main(ctrl: RoundController): VNode {
     ? ctrl.nvui.render(ctrl)
     : h('div.round__app.variant-' + d.game.variant.key, [
         h('div.left', [
-          h('div.user-info.user-info-top', [renderPlayer(ctrl, 'top'), materialDiffs[0]]),
+          h('div.user-info.user-info-top', [
+            h('div.user-info-header', [renderPlayer(ctrl, 'top'), materialDiffs[0]]),
+            anyClock(ctrl, 'top'),
+          ]),
           h(
             'div.round__app__board.main-board' + (ctrl.data.pref.blindfold ? '.blindfold' : ''),
             {

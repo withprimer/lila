@@ -15,11 +15,25 @@ body.fixed-scroll {
 .user-info {
   display: flex;
   justify-content: space-between;
+  padding: 14px 0;
 
   .user-info-header {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+  }
+
+  .rclock {
+    display: flex !important;
+    justify-content: flex-end;
+    align-items: flex-start;
+    border-top: 0;
+    border-bottom: 0;
+    min-height: 0;
+
+    .running-indicator {
+      align-self: center;
+    }
   }
 
   @include breakpoint($mq-col2) {
