@@ -77,7 +77,7 @@ export function main(ctrl: RoundController): VNode {
         h('div.left', [
           h('div.user-info.user-info-top', [
             h('div.user-info-header', [renderPlayer(ctrl, 'top'), materialDiffs[0]]),
-            anyClock(ctrl, 'top'),
+            ctrl.isInitialMobile ? anyClock(ctrl, 'top') : undefined,
           ]),
           h(
             'div.round__app__board.main-board' + (ctrl.data.pref.blindfold ? '.blindfold' : ''),
@@ -103,7 +103,7 @@ export function main(ctrl: RoundController): VNode {
           ),
           h('div.user-info.user-info-bottom', [
             h('div.user-info-header', [renderPlayer(ctrl, 'bottom'), materialDiffs[1]]),
-            anyClock(ctrl, 'bottom'),
+            ctrl.isInitialMobile ? anyClock(ctrl, 'bottom') : undefined,
           ]),
         ]),
         h('div.right', table),
