@@ -325,12 +325,6 @@ object layout {
               "is3d"    -> ctx.pref.is3d
             )
           )(body),
-          ctx.me.exists(_.enabled) option div(id := "friend_box")(
-            div(cls := "friend_box_title")(trans.nbFriendsOnline.plural(0, iconTag(""))),
-            div(cls   := "content_wrap none")(
-              div(cls := "content list")
-            )
-          ),
 //          a(id := "reconnecting", cls := "link text", dataIcon := "")(trans.reconnecting()),
           ctx.pref.agreementNeededSince map { date =>
             div(id := "agreement")(
