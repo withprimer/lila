@@ -20,6 +20,7 @@ final private class TournamentScheduler(
   import Schedule.Plan
   import chess.variant._
 
+  /*
   ResilientScheduler(every = Every(5 minutes), timeout = AtMost(1 minute), initialDelay = 1 minute) {
     tournamentRepo.scheduledUnfinished flatMap { dbScheds =>
       try {
@@ -33,6 +34,7 @@ final private class TournamentScheduler(
       }
     }
   }
+   */
 
   /* Month plan:
    * First week: Shield standard tournaments
