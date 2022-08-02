@@ -23,6 +23,7 @@ final class TournamentRepo(val coll: Coll, playerCollName: CollName)(implicit
   private[tournament] val finishedSelect       = $doc("status" -> Status.Finished.id)
   private val unfinishedSelect                 = $doc("status" $ne Status.Finished.id)
   private[tournament] val scheduledSelect      = $doc("schedule" $exists true)
+
   private def forTeamSelect(id: TeamID)        = $doc("forTeams" -> id)
   private def forTeamsSelect(ids: Seq[TeamID]) = $doc("forTeams" $in ids)
   private def sinceSelect(date: DateTime)      = $doc("startsAt" $gt date)
@@ -67,7 +68,7 @@ final class TournamentRepo(val coll: Coll, playerCollName: CollName)(implicit
 
   private[tournament] def notableFinished(limit: Int): Fu[List[Tournament]] =
     coll
-      .find(finishedSelect ++ scheduledSelect)
+      .find(finishedSelect)
       .sort($sort desc "startsAt")
       .cursor[Tournament]()
       .list(limit)
@@ -204,10 +205,10 @@ final class TournamentRepo(val coll: Coll, playerCollName: CollName)(implicit
       $doc("startsAt" $lt (DateTime.now plusMinutes aheadMinutes))
 
   def scheduledCreated(aheadMinutes: Int): Fu[List[Tournament]] =
-    coll.list[Tournament](startingSoonSelect(aheadMinutes) ++ scheduledSelect)
+    coll.list[Tournament](startingSoonSelect(aheadMinutes))
 
   def scheduledStarted: Fu[List[Tournament]] =
-    coll.list[Tournament](startedSelect ++ scheduledSelect)
+    coll.list[Tournament](startedSelect)
 
   def visibleForTeams(teamIds: Seq[TeamID], aheadMinutes: Int) =
     coll.list[Tournament](
@@ -232,7 +233,7 @@ final class TournamentRepo(val coll: Coll, playerCollName: CollName)(implicit
       .list(5)
 
   private def scheduledStillWorthEntering: Fu[List[Tournament]] =
-    coll.list[Tournament](startedSelect ++ scheduledSelect) dmap {
+    coll.list[Tournament](startedSelect) dmap {
       _.filter(_.isStillWorthEntering)
     }
 
