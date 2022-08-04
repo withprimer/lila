@@ -1,12 +1,17 @@
 .rclock {
   position: relative;
-  display: flex;
   user-select: none;
 
   justify-content: center;
   align-items: center;
   min-height: 88px;
   width: 100%;
+
+  display: none;
+
+  @include breakpoint($mq-col2) {
+    display: flex;
+  }
 
   &-top {
     border-bottom: 1px solid $c-primer-stroke;

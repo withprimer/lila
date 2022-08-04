@@ -98,7 +98,7 @@ function whosTurn(ctrl: RoundController, color: Color, position: Position) {
   ]);
 }
 
-function anyClock(ctrl: RoundController, position: Position) {
+export function anyClock(ctrl: RoundController, position: Position) {
   const player = ctrl.playerAt(position);
   if (ctrl.clock) return renderClock(ctrl, player, position);
   else if (ctrl.data.correspondence && ctrl.data.game.turns > 1)
@@ -108,12 +108,12 @@ function anyClock(ctrl: RoundController, position: Position) {
 
 export const renderTable = (ctrl: RoundController): MaybeVNodes => [
   h('div.round__app__table', [
-    anyClock(ctrl, 'top'),
+    !ctrl.isInitialMobile ? anyClock(ctrl, 'top') : undefined,
     ...(ctrl.data.player.spectator
       ? renderTableWatch(ctrl)
       : game.playable(ctrl.data)
       ? renderTablePlay(ctrl)
       : renderTableEnd(ctrl)),
-    anyClock(ctrl, 'bottom'),
+    !ctrl.isInitialMobile ? anyClock(ctrl, 'bottom') : undefined,
   ]),
 ];

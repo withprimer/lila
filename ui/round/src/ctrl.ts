@@ -62,6 +62,9 @@ export default class RoundController {
   moveOn: MoveOn;
   promotion: PromotionCtrl;
 
+  // we use this helper to determine which clock to render
+  isInitialMobile: boolean;
+
   ply: number;
   firstSeconds = true;
   flip = false;
@@ -95,6 +98,8 @@ export default class RoundController {
     this.ply = round.lastPly(d);
     this.goneBerserk[d.player.color] = d.player.berserk;
     this.goneBerserk[d.opponent.color] = d.opponent.berserk;
+
+    this.isInitialMobile = window.innerWidth < 960;
 
     setTimeout(() => {
       this.firstSeconds = false;

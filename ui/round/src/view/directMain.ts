@@ -6,7 +6,7 @@ import { h, VNode } from 'snabbdom';
 import { plyStep } from '../round';
 import { read as readFen } from 'chessground/fen';
 import { render as renderGround } from '../ground';
-import { renderTable, renderPlayer } from './table';
+import { renderTable, renderPlayer, anyClock } from './table';
 import { renderMaterialDiffs } from 'game/view/material';
 
 export function main(ctrl: RoundController): VNode {
@@ -75,7 +75,10 @@ export function main(ctrl: RoundController): VNode {
     ? ctrl.nvui.render(ctrl)
     : h('div.round__app.variant-' + d.game.variant.key, [
         h('div.left', [
-          h('div.user-info.user-info-top', [renderPlayer(ctrl, 'top'), materialDiffs[0]]),
+          h('div.user-info.user-info-top', [
+            h('div.user-info-header', [renderPlayer(ctrl, 'top'), materialDiffs[0]]),
+            ctrl.isInitialMobile ? anyClock(ctrl, 'top') : undefined,
+          ]),
           h(
             'div.round__app__board.main-board' + (ctrl.data.pref.blindfold ? '.blindfold' : ''),
             {
@@ -98,7 +101,10 @@ export function main(ctrl: RoundController): VNode {
             },
             [renderGround(ctrl), ctrl.promotion.view(ctrl.data.game.variant.key === 'antichess')]
           ),
-          h('div.user-info.user-info-bottom', [renderPlayer(ctrl, 'bottom'), materialDiffs[1]]),
+          h('div.user-info.user-info-bottom', [
+            h('div.user-info-header', [renderPlayer(ctrl, 'bottom'), materialDiffs[1]]),
+            ctrl.isInitialMobile ? anyClock(ctrl, 'bottom') : undefined,
+          ]),
         ]),
         h('div.right', table),
       ]);
