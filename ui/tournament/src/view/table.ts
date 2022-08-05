@@ -12,7 +12,7 @@ function featuredPlayer(game: FeaturedGame, color: Color, opts: TournamentOpts) 
   const player = game[color];
   return h('span.mini-game__player', [
     h('span.mini-game__user', [
-      h('strong', '#' + player.rank),
+      // h('strong', '#' + player.rank),
       renderPlayer(player, true, opts.showRatings, false),
       player.berserk
         ? h('i', {
@@ -45,13 +45,13 @@ function featured(game: FeaturedGame, opts: TournamentOpts): VNode {
       hook: onInsert(lichess.powertip.manualUserIn),
     },
     [
-      featuredPlayer(game, opposite(game.orientation), opts),
+      featuredPlayer(game, opposite(game.orientation), { ...opts, showRatings: false }),
       h('a.cg-wrap', {
         attrs: {
           href: `/${game.id}/${game.orientation}`,
         },
       }),
-      featuredPlayer(game, game.orientation, opts),
+      featuredPlayer(game, game.orientation, { ...opts, showRatings: false }),
     ]
   );
 }
