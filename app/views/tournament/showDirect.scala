@@ -12,7 +12,7 @@ import lila.user.User
 
 import controllers.routes
 
-object show {
+object showDirect {
 
   def apply(
       tour: Tournament,
@@ -25,7 +25,7 @@ object show {
     views.html.base.layout(
       title = s"${tour.name()} #${tour.id}",
       moreJs = frag(
-        jsModule("tournament"),
+        jsModule("tournament.direct"),
         embedJsUnsafeLoadThen(s"""LichessTournament(${safeJsonValue(
             Json.obj(
               "data"   -> data,

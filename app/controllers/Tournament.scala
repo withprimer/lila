@@ -155,6 +155,75 @@ final class Tournament(
       }
     }
 
+  def showDirect(id: String) =
+    Open { implicit ctx =>
+      val page = getInt("page")
+      cachedTour(id) flatMap { tourOption =>
+        def loadChat(tour: Tour, json: JsObject) =
+          canHaveChat(tour, json.some) ?? env.chat.api.userChat.cached
+            .findMine(lila.chat.Chat.Id(tour.id), ctx.me)
+            .flatMap { c =>
+              env.user.lightUserApi.preloadMany(c.chat.userIds) inject c.some
+            }
+        negotiate(
+          html = tourOption
+            .fold(tournamentNotFound.fuccess) { tour =>
+              for {
+                myInfo   <- ctx.me.?? { jsonView.fetchMyInfo(tour, _) }
+                verdicts <- api.getVerdicts(tour, ctx.me, getUserTeamIds, myInfo.isDefined)
+                version  <- env.tournament.version(tour.id)
+                json <- jsonView(
+                  tour = tour,
+                  page = page,
+                  me = ctx.me,
+                  getUserTeamIds = getUserTeamIds,
+                  getTeamName = env.team.getTeamName,
+                  playerInfoExt = none,
+                  socketVersion = version.some,
+                  partial = false,
+                  withScores = true,
+                  myInfo = Preload(myInfo)
+                ).map(jsonView.addReloadEndpoint(_, tour, env.tournament.lilaHttp.handles))
+                chat <- loadChat(tour, json)
+                _ <- tour.teamBattle ?? { b =>
+                  env.team.cached.preloadSet(b.teams)
+                }
+                streamers   <- streamerCache get tour.id
+                shieldOwner <- env.tournament.shieldApi currentOwner tour
+              } yield {
+                env.tournament.lilaHttp.hit(tour)
+                Ok(html.tournament.showDirect(tour, verdicts, json, chat, streamers, shieldOwner))
+              }
+            }
+            .monSuccess(_.tournament.apiShowPartial(partial = false, HTTPRequest clientName ctx.req)),
+          api = _ =>
+            tourOption
+              .fold(notFoundJson("No such tournament")) { tour =>
+                for {
+                  playerInfoExt <- get("playerInfo").?? { api.playerInfo(tour, _) }
+                  socketVersion <- getBool("socketVersion").??(env.tournament version tour.id dmap some)
+                  partial = getBool("partial")
+                  json <- jsonView(
+                    tour = tour,
+                    page = page,
+                    me = ctx.me,
+                    getUserTeamIds = getUserTeamIds,
+                    getTeamName = env.team.getTeamName,
+                    playerInfoExt = playerInfoExt,
+                    socketVersion = socketVersion,
+                    partial = partial,
+                    withScores = getBoolOpt("scores") | true
+                  )
+                  chat <- !partial ?? loadChat(tour, json)
+                } yield Ok(json.add("chat" -> chat.map { c =>
+                  lila.chat.JsonView.mobile(chat = c.chat)
+                }))
+              }
+              .monSuccess(_.tournament.apiShowPartial(getBool("partial"), HTTPRequest clientName ctx.req))
+        ) dmap NoCache
+      }
+    }
+
   def standing(id: String, page: Int) =
     Open { implicit ctx =>
       OptionFuResult(cachedTour(id)) { tour =>
