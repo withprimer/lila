@@ -17,6 +17,10 @@ body.fixed-scroll {
   justify-content: space-between;
   padding: 14px 0;
 
+  @include breakpoint($mq-col2) {
+    padding: 0px;
+  }
+
   .user-info-header {
     display: flex;
     flex-direction: column;

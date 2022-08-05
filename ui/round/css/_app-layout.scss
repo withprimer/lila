@@ -58,7 +58,7 @@
   @include breakpoint($mq-col2) {
     display: grid;
     // 500 (board) + 24 * 2 (padding)
-    grid-template-columns: 548px 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .right {
