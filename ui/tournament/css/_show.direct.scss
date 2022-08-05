@@ -15,6 +15,10 @@ $mq-col3: $mq-col3-uniboard;
 @import 'player-info';
 @import 'team-info';
 
+body {
+  overflow-y: hidden !important;
+}
+
 .tour {
   .pull-quote {
     margin-top: 30px;
