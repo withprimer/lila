@@ -1,9 +1,11 @@
 import { h, VNode } from 'snabbdom';
 import { opposite } from 'chessground/util';
-import { bind, onInsert } from 'common/snabbdom';
+// import { bind, onInsert } from 'common/snabbdom';
+import { onInsert } from 'common/snabbdom';
 import { player as renderPlayer } from './util';
-import { Duel, DuelPlayer, FeaturedGame, TournamentOpts } from '../interfaces';
-import { teamName } from './battle';
+import { FeaturedGame, TournamentOpts } from '../interfaces';
+// import { Duel, DuelPlayer, FeaturedGame, TournamentOpts } from '../interfaces';
+// import { teamName } from './battle';
 import TournamentController from '../ctrl';
 
 function featuredPlayer(game: FeaturedGame, color: Color, opts: TournamentOpts) {
@@ -54,34 +56,34 @@ function featured(game: FeaturedGame, opts: TournamentOpts): VNode {
   );
 }
 
-const duelPlayerMeta = (p: DuelPlayer, ctrl: TournamentController) => [
-  h('em.rank', '#' + p.k),
-  p.t ? h('em.utitle', p.t) : null,
-  ctrl.opts.showRatings ? h('em.rating', '' + p.r) : undefined,
-];
+// const duelPlayerMeta = (p: DuelPlayer, ctrl: TournamentController) => [
+//   h('em.rank', '#' + p.k),
+//   p.t ? h('em.utitle', p.t) : null,
+//   ctrl.opts.showRatings ? h('em.rating', '' + p.r) : undefined,
+// ];
 
-function renderDuel(ctrl: TournamentController) {
-  const battle = ctrl.data.teamBattle,
-    duelTeams = ctrl.data.duelTeams;
-  return (d: Duel) =>
-    h(
-      'a.glpt',
-      {
-        key: d.id,
-        attrs: { href: '/' + d.id },
-      },
-      [
-        battle && duelTeams
-          ? h(
-              'line.t',
-              [0, 1].map(i => teamName(battle, duelTeams[d.p[i].n.toLowerCase()]))
-            )
-          : undefined,
-        h('line.a', [h('strong', d.p[0].n), h('span', duelPlayerMeta(d.p[1], ctrl).reverse())]),
-        h('line.b', [h('span', duelPlayerMeta(d.p[0], ctrl)), h('strong', d.p[1].n)]),
-      ]
-    );
-}
+// function renderDuel(ctrl: TournamentController) {
+//   const battle = ctrl.data.teamBattle,
+//     duelTeams = ctrl.data.duelTeams;
+//   return (d: Duel) =>
+//     h(
+//       'a.glpt',
+//       {
+//         key: d.id,
+//         attrs: { href: '/' + d.id },
+//       },
+//       [
+//         battle && duelTeams
+//           ? h(
+//               'line.t',
+//               [0, 1].map(i => teamName(battle, duelTeams[d.p[i].n.toLowerCase()]))
+//             )
+//           : undefined,
+//         h('line.a', [h('strong', d.p[0].n), h('span', duelPlayerMeta(d.p[1], ctrl).reverse())]),
+//         h('line.b', [h('span', duelPlayerMeta(d.p[0], ctrl)), h('strong', d.p[1].n)]),
+//       ]
+//     );
+// }
 
 const initMiniGame = (node: VNode) => lichess.miniGame.initAll(node.elm as HTMLElement);
 
@@ -94,17 +96,6 @@ export default function (ctrl: TournamentController): VNode {
         postpatch: initMiniGame,
       },
     },
-    [
-      ctrl.data.featured ? featured(ctrl.data.featured, ctrl.opts) : null,
-      ctrl.data.duels.length
-        ? h(
-            'section.tour__duels',
-            {
-              hook: bind('click', _ => !ctrl.disableClicks),
-            },
-            [h('h2', 'Top games')].concat(ctrl.data.duels.map(renderDuel(ctrl)))
-          )
-        : null,
-    ]
+    [ctrl.data.featured ? featured(ctrl.data.featured, ctrl.opts) : null]
   );
 }
