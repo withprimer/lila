@@ -47,7 +47,7 @@ object showDirect {
       ),
       moreCss = cssTag {
         if (tour.isTeamBattle) "tournament.show.team-battle"
-        else "tournament.show"
+        else "tournament.show.direct"
       },
       chessground = false,
       openGraph = lila.app.ui
