@@ -6,4 +6,9 @@ export default rollupProject({
     input: 'src/main.ts',
     output: 'tournament',
   },
+  direct: {
+    name: 'LichessTournament',
+    input: 'src/direct.ts',
+    output: 'tournament.direct',
+  },
 });
