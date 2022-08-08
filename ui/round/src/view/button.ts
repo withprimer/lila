@@ -348,10 +348,9 @@ export function followUp(ctrl: RoundController): VNode {
       !d.simul &&
       !d.swiss &&
       !d.game.boosted,
-    newable = (status.finished(d) || status.aborted(d)) && (d.game.source === 'lobby' || d.game.source === 'pool'),
-    rematchZone = rematchable || d.game.rematch ? rematchButtons(ctrl) : [];
+    newable = (status.finished(d) || status.aborted(d)) && (d.game.source === 'lobby' || d.game.source === 'pool');
   return h('div.follow-up', [
-    ...rematchZone,
+    // ...rematchZone,
     d.tournament
       ? h(
           'a.fbt',
