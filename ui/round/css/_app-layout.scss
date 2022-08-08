@@ -47,7 +47,8 @@
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  flex: 1 1 0;
+  align-items: stretch;
+  // flex: 1 1 0;
 
   position: absolute;
   top: 0;
@@ -56,19 +57,24 @@
   height: 100%;
 
   @include breakpoint($mq-col2) {
-    display: grid;
-    // 500 (board) + 24 * 2 (padding)
-    grid-template-columns: 1fr 1fr;
+    flex-direction: row;
   }
 
   .right {
+    flex: 1 1 0%;
     border-left: 1px solid $c-primer-stroke;
   }
 
   .left {
+    width: 100%;
+    border-left: 1px solid $c-primer-stroke;
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: 0 24px;
+
+    @include breakpoint($mq-col2) {
+      max-width: 90vh;
+    }
   }
 }
