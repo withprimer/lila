@@ -27,6 +27,12 @@ body.fixed-scroll {
     justify-content: flex-start;
   }
 
+  &-top {
+    .user-info-header {
+      flex-direction: column-reverse;
+    }
+  }
+
   .rclock {
     display: flex !important;
     justify-content: flex-end;
