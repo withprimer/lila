@@ -19,6 +19,10 @@ body {
   overflow-y: hidden !important;
 }
 
+#announce {
+  display: none !important;
+}
+
 .tour {
   .pull-quote {
     margin-top: 30px;

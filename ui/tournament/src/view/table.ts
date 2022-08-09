@@ -45,13 +45,14 @@ function featured(game: FeaturedGame, opts: TournamentOpts): VNode {
       hook: onInsert(lichess.powertip.manualUserIn),
     },
     [
-      featuredPlayer(game, opposite(game.orientation), { ...opts, showRatings: false }),
-      h('a.cg-wrap', {
+      // featuredPlayer(game, opposite(game.orientation), { ...opts, showRatings: false }),
+      // h('a.cg-wrap', {
+      h('div.cg-wrap', {
         attrs: {
-          href: `/${game.id}/${game.orientation}`,
+          // href: `/${game.id}/${game.orientation}`,
         },
       }),
-      featuredPlayer(game, game.orientation, { ...opts, showRatings: false }),
+      // featuredPlayer(game, game.orientation, { ...opts, showRatings: false }),
     ]
   );
 }
