@@ -99,7 +99,7 @@ export default class RoundController {
     this.goneBerserk[d.player.color] = d.player.berserk;
     this.goneBerserk[d.opponent.color] = d.opponent.berserk;
 
-    this.isInitialMobile = window.innerWidth < 960;
+    this.isInitialMobile = window.innerWidth < 580;
 
     setTimeout(() => {
       this.firstSeconds = false;
