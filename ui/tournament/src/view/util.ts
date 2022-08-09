@@ -10,21 +10,21 @@ export const playerName = (p: { title?: string; name: string }) =>
 
 export const player = (p: SimplePlayer, asLink: boolean, withRating: boolean, defender = false, leader = false) =>
   h(
-    'a.ulpt.user-link' + (((p.title || '') + p.name).length > 15 ? '.long' : ''),
-    {
-      attrs: asLink || 'ontouchstart' in window ? { href: '/@/' + p.name } : { 'data-href': '/@/' + p.name },
-      hook: {
-        destroy: vnode => $.powerTip.destroy(vnode.elm as HTMLElement),
-      },
-    },
-    [
-      h(
-        'span.name' + (defender ? '.defender' : leader ? '.leader' : ''),
-        defender ? { attrs: dataIcon('') } : leader ? { attrs: dataIcon('') } : {},
-        playerName(p)
-      ),
-      withRating ? h('span.rating', ' ' + p.rating + (p.provisional ? '?' : '')) : null,
-    ]
+    // 'a.ulpt.user-link' + (((p.title || '') + p.name).length > 15 ? '.long' : ''),
+    // {
+    //   attrs: asLink || 'ontouchstart' in window ? { href: '/@/' + p.name } : { 'data-href': '/@/' + p.name },
+    //   hook: {
+    //     destroy: vnode => $.powerTip.destroy(vnode.elm as HTMLElement),
+    //   },
+    // },
+    // [
+    // h(
+    'span.name' + (defender ? '.defender' : leader ? '.leader' : ''),
+    defender ? { attrs: dataIcon('') } : leader ? { attrs: dataIcon('') } : {},
+    playerName(p)
+    // )
+    //   withRating ? h('span.rating', ' ' + p.rating + (p.provisional ? '?' : '')) : null,
+    // ]
   );
 
 export function numberRow(name: string, value: number): VNode;
