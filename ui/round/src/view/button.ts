@@ -1,10 +1,8 @@
 import { h, VNode, Hooks } from 'snabbdom';
-import { spinnerVdom as spinner } from 'common/spinner';
 import * as util from '../util';
 import * as game from 'game';
 import * as status from 'game/status';
-import { game as gameRoute } from 'game/router';
-import { RoundData, MaybeVNodes } from '../interfaces';
+import { RoundData } from '../interfaces';
 import { ClockData } from '../clock/clockCtrl';
 import RoundController from '../ctrl';
 
@@ -34,59 +32,6 @@ function analysisButton(_: RoundController): VNode | null {
   //       ctrl.noarg('analysis')
   //     )
   //   : null;
-}
-
-function rematchButtons(ctrl: RoundController): MaybeVNodes {
-  const d = ctrl.data,
-    me = !!d.player.offeringRematch,
-    disabled = !me && !d.opponent.onGame && (!!d.clock || !d.player.user || !d.opponent.user),
-    them = !!d.opponent.offeringRematch && !disabled,
-    noarg = ctrl.noarg;
-  return [
-    them
-      ? h(
-          'button.rematch-decline',
-          {
-            attrs: {
-              'data-icon': '',
-              title: noarg('decline'),
-            },
-            hook: util.bind('click', () => ctrl.socket.send('rematch-no')),
-          },
-          ctrl.nvui ? noarg('decline') : ''
-        )
-      : null,
-    h(
-      'span.rematch.white',
-      {
-        class: {
-          me,
-          glowing: them,
-          disabled,
-        },
-        attrs: {
-          title: them ? noarg('yourOpponentWantsToPlayANewGameWithYou') : me ? noarg('rematchOfferSent') : '',
-        },
-        hook: util.bind(
-          'click',
-          () => {
-            const d = ctrl.data;
-            if (d.game.rematch) location.href = gameRoute(d.game.rematch, d.opponent.color);
-            else if (d.player.offeringRematch) {
-              d.player.offeringRematch = false;
-              ctrl.socket.send('rematch-no');
-            } else if (d.opponent.onGame || !d.clock) {
-              d.player.offeringRematch = true;
-              ctrl.socket.send('rematch-yes');
-              if (!disabled && !d.opponent.onGame) ctrl.challengeRematch();
-            }
-          },
-          ctrl.redraw
-        ),
-      },
-      [me ? spinner() : h('span', noarg('rematch'))]
-    ),
-  ];
 }
 
 export function standard(
@@ -341,17 +286,9 @@ export function moretime(ctrl: RoundController) {
 
 export function followUp(ctrl: RoundController): VNode {
   const d = ctrl.data,
-    rematchable =
-      !d.game.rematch &&
-      (status.finished(d) || (status.aborted(d) && (!d.game.rated || !['lobby', 'pool'].includes(d.game.source)))) &&
-      !d.tournament &&
-      !d.simul &&
-      !d.swiss &&
-      !d.game.boosted,
-    newable = (status.finished(d) || status.aborted(d)) && (d.game.source === 'lobby' || d.game.source === 'pool'),
-    rematchZone = rematchable || d.game.rematch ? rematchButtons(ctrl) : [];
+    newable = (status.finished(d) || status.aborted(d)) && (d.game.source === 'lobby' || d.game.source === 'pool');
   return h('div.follow-up', [
-    ...rematchZone,
+    // ...rematchZone,
     d.tournament
       ? h(
           'a.fbt',

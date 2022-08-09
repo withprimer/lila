@@ -6,13 +6,7 @@ import RoundController from '../ctrl';
 export const aiName = (ctrl: RoundController, level: number) => ctrl.trans('aiNameLevelAiLevel', 'Stockfish', level);
 
 export function userHtml(ctrl: RoundController, player: Player, position: Position) {
-  const d = ctrl.data,
-    user = player.user,
-    perf = (user?.perfs || {})[d.game.perf],
-    rating = player.rating || perf?.rating,
-    rd = player.ratingDiff,
-    ratingDiff =
-      rd === 0 ? h('span', '±0') : rd && rd > 0 ? h('good', '+' + rd) : rd && rd < 0 ? h('bad', '−' + -rd) : undefined;
+  const user = player.user;
 
   if (user) {
     const connecting = !player.onGame && ctrl.firstSeconds && user.online;
@@ -37,8 +31,6 @@ export function userHtml(ctrl: RoundController, player: Player, position: Positi
               ]
             : [user.username]
         ),
-        rating ? h('rating', rating + (player.provisional ? '?' : '')) : null,
-        rating ? ratingDiff : null,
         player.engine
           ? h('span', {
               attrs: {

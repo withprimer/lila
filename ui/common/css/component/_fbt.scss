@@ -10,13 +10,11 @@
 
   @media (hover: hover) {
     &:hover:not(.disabled):not([disabled]) {
-      background: $c-primer-primary-hover-1;
       color: $c-primer-primary;
     }
   }
 
   &.active {
-    background: $c-primer-primary-hover-1 !important;
     color: $c-primer-primary;
   }
 

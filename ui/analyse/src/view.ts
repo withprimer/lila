@@ -257,17 +257,17 @@ function controls(ctrl: AnalyseCtrl) {
                   }),
                 ]
               : [
-                  h('button.fbt', {
-                    attrs: {
-                      title: noarg('openingExplorerAndTablebase'),
-                      'data-act': 'explorer',
-                      'data-icon': '',
-                    },
-                    class: {
-                      hidden: menuIsOpen || !ctrl.explorer.allowed() || !!ctrl.retro,
-                      active: ctrl.explorer.enabled(),
-                    },
-                  }),
+                  // h('button.fbt', {
+                  //   attrs: {
+                  //     title: noarg('openingExplorerAndTablebase'),
+                  //     'data-act': 'explorer',
+                  //     'data-icon': '',
+                  //   },
+                  //   class: {
+                  //     hidden: menuIsOpen || !ctrl.explorer.allowed() || !!ctrl.retro,
+                  //     active: ctrl.explorer.enabled(),
+                  //   },
+                  // }),
                   ctrl.ceval.possible && ctrl.ceval.allowed() && !ctrl.isGamebook()
                     ? h('button.fbt', {
                         attrs: {
@@ -289,16 +289,6 @@ function controls(ctrl: AnalyseCtrl) {
         jumpButton('', 'next', canJumpNext),
         jumpButton('', 'last', canJumpNext),
       ]),
-      ctrl.studyPractice
-        ? h('div.noop')
-        : h('button.fbt', {
-            class: { active: menuIsOpen },
-            attrs: {
-              title: noarg('menu'),
-              'data-act': 'menu',
-              'data-icon': '',
-            },
-          }),
     ]
   );
 }
@@ -385,15 +375,6 @@ export default function (ctrl: AnalyseCtrl): VNode {
               ctrl.redraw();
             });
           }
-          if (ctrl.opts.chat) {
-            const chatEl = document.createElement('section');
-            chatEl.classList.add('mchat');
-            elm.appendChild(chatEl);
-            const chatOpts = ctrl.opts.chat;
-            chatOpts.instance?.then(c => c.destroy());
-            chatOpts.parseMoves = true;
-            chatOpts.instance = lichess.makeChat(chatOpts);
-          }
           gridHacks.start(elm);
         },
         update(_, _2) {
@@ -447,75 +428,26 @@ export default function (ctrl: AnalyseCtrl): VNode {
           ]
         ),
       gaugeOn && !tour ? cevalView.renderGauge(ctrl) : null,
-      menuIsOpen || tour ? null : crazyView(ctrl, ctrl.topColor(), 'top'),
-      gamebookPlayView ||
-        (tour
-          ? null
-          : h(addChapterId(study, 'div.analyse__tools'), [
-              ...(menuIsOpen
-                ? [actionMenu(ctrl)]
-                : [
-                    ctrl.showComputer() ? cevalView.renderCeval(ctrl) : analysisDisabled(ctrl),
-                    showCevalPvs ? cevalView.renderPvs(ctrl) : null,
-                    renderAnalyse(ctrl, concealOf),
-                    gamebookEditView || forkView(ctrl, concealOf),
-                    retroView(ctrl) || practiceView(ctrl) || explorerView(ctrl),
-                  ]),
-            ])),
-      menuIsOpen || tour ? null : crazyView(ctrl, ctrl.bottomColor(), 'bottom'),
-      gamebookPlayView || tour ? null : controls(ctrl),
-      ctrl.embed || tour
-        ? null
-        : h(
-            'div.analyse__underboard',
-            {
-              hook:
-                ctrl.synthetic || playable(ctrl.data) ? undefined : onInsert(elm => serverSideUnderboard(elm, ctrl)),
-            },
-            study ? studyView.underboard(ctrl) : [inputs(ctrl)]
-          ),
-      tour ? null : acplView(ctrl),
-      ctrl.embed
-        ? null
-        : ctrl.studyPractice
-        ? studyPracticeView.side(study!)
-        : h(
-            'aside.analyse__side',
-            {
-              hook: onInsert(elm => {
-                ctrl.opts.$side && ctrl.opts.$side.length && $(elm).replaceWith(ctrl.opts.$side);
-                $(elm).append($('.context-streamers').clone().removeClass('none'));
-              }),
-            },
-            ctrl.studyPractice
-              ? [studyPracticeView.side(study!)]
-              : study
-              ? [studyView.side(study)]
-              : [
-                  ctrl.forecast ? forecastView(ctrl, ctrl.forecast) : null,
-                  !ctrl.synthetic && playable(ctrl.data)
-                    ? h(
-                        'div.back-to-game',
-                        h(
-                          'a.button.button-empty.text',
-                          {
-                            attrs: {
-                              href: router.game(ctrl.data, ctrl.data.player.color),
-                              'data-icon': '',
-                            },
-                          },
-                          ctrl.trans.noarg('backToGame')
-                        )
-                      )
-                    : null,
-                ]
-          ),
+      h('div.analyse__table', [
+        menuIsOpen || tour ? null : crazyView(ctrl, ctrl.topColor(), 'top'),
+        gamebookPlayView ||
+          (tour
+            ? null
+            : h(addChapterId(study, 'div.analyse__tools'), [
+                ...(menuIsOpen
+                  ? [actionMenu(ctrl)]
+                  : [
+                      ctrl.showComputer() ? cevalView.renderCeval(ctrl) : analysisDisabled(ctrl),
+                      showCevalPvs ? cevalView.renderPvs(ctrl) : null,
+                      renderAnalyse(ctrl, concealOf),
+                      gamebookEditView || forkView(ctrl, concealOf),
+                      retroView(ctrl) || practiceView(ctrl) || explorerView(ctrl),
+                    ]),
+              ])),
+        menuIsOpen || tour ? null : crazyView(ctrl, ctrl.bottomColor(), 'bottom'),
+        gamebookPlayView || tour ? null : controls(ctrl),
+      ]),
       study && study.relay && relayManager(study.relay),
-      ctrl.embed
-        ? null
-        : h('div.chat__members.none', {
-            hook: onInsert(lichess.watchers),
-          }),
     ]
   );
 }

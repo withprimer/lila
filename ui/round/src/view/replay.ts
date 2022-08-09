@@ -2,7 +2,6 @@ import * as game from 'game';
 import * as round from '../round';
 import * as status from 'game/status';
 import * as util from '../util';
-import * as button from './button';
 import isCol1 from 'common/isCol1';
 import RoundController from '../ctrl';
 import throttle from 'common/throttle';
@@ -93,9 +92,6 @@ export function renderResult(ctrl: RoundController): VNode | undefined {
         },
         [viewStatus(ctrl), winner ? ' • ' + ctrl.noarg(winner + 'IsVictorious') : '']
       ),
-      !ctrl.data.player.spectator && !game.playable(ctrl.data)
-        ? button.backToTournament(ctrl) || button.backToSwiss(ctrl) || button.followUp(ctrl)
-        : null,
     ]);
   }
   return;
