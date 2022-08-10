@@ -102,19 +102,6 @@
       grid-area: 4 / 2 / 10 / 3;
     }
 
-    .expiration-top {
-      display: flex;
-    }
-
-    #{$rmoves-tag} {
-      margin-bottom: 1px;
-    }
-
-    #{$moves-tag} {
-      display: none;
-      background: none;
-    }
-
     .keyboard-move {
       margin-top: $block-gap;
     }
