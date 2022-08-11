@@ -37,7 +37,7 @@
     "format": "prettier --write .",
     "check-format": "prettier --check .",
     "lint": "eslint . --ext .ts",
-    "build-direct": "yarn workspace puzzle dev --config-all && yarn workspace challenge dev --config-all && yarn workspace round dev --config-all"
+    "build-direct": "yarn workspace puzzle dev --config-all && yarn workspace challenge dev --config-all && yarn workspace round dev --config-all && yarn workspace tournament dev --config-all"
   },
   "workspaces": [
     "ui",
