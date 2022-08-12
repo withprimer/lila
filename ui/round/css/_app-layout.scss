@@ -45,6 +45,8 @@
 
 .round__app {
   display: grid;
+  grid-template-columns: $col2-uniboard-squeeze-width 1fr;
+  grid-template-rows: auto;
 
   position: absolute;
   top: 0;
@@ -57,71 +59,15 @@
   }
 
   .left {
-    // a this is a bit hacky, but because the board is a square - we can assume
-    // that the width cannot exceed the full height minus names/padding
-    max-height: 90vh;
-    min-width: 300px;
-    padding: 0 24px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    height: 100%;
+    padding: 0 24px;
   }
 
   @include breakpoint($mq-col1) {
-    grid-template-rows: auto auto $col1-user-height $col1-mat-height auto auto $col1-mat-height $col1-user-height auto;
-    grid-template-areas: 'moves' 'pocket-top' 'user-top' 'mat-top' 'board' 'expi-bot' 'mat-bot' 'user-bot' 'pocket-bot' 'kb-move' 'controls';
-
-    // Put clocks and players in the same grid cell.
-    // This allows having a single cell column, instead of
-    // columns: auto min-content;
-    // This is required to display the overflowable horizontal move list,
-    // so that it can be contain within the grid parent.
-    .rclock-top {
-      grid-area: 3 / 1 / 5 / 2;
-    }
-
-    .rclock-bottom {
-      grid-area: 7 / 1 / 9 / 2;
-    }
-
-    cg-board {
-      box-shadow: none;
-    }
-
-    .expiration-top {
-      display: none;
-    }
-
-    &__table {
-      display: none;
-    }
-  }
-
-  @include breakpoint($mq-col2) {
-    grid-template-columns: $col2-uniboard-width 1fr;
-    grid-template-areas: 'board table';
-
-    &__table {
-      grid-area: 4 / 2 / 10 / 3;
-    }
-
-    .keyboard-move {
-      margin-top: $block-gap;
-    }
-
-    @include breakpoint($mq-short) {
-      #{$moves-tag} {
-        display: flex;
-      }
-    }
-  }
-
-  @include breakpoint($mq-col2-uniboard-squeeze) {
-    grid-template-columns: $col2-uniboard-squeeze-width $col2-uniboard-squeeze-table;
-    grid-column-gap: #{$block-gap * 3 / 2};
-  }
-
-  &__board {
-    grid-area: board;
+    grid-template-columns: 1fr;
   }
 }
