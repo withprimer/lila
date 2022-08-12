@@ -57,6 +57,9 @@
   }
 
   .left {
+    // a this is a bit hacky, but because the board is a square - we can assume
+    // that the width cannot exceed the full height minus names/padding
+    max-height: 90vh;
     min-width: 300px;
     padding: 0 24px;
     display: flex;
