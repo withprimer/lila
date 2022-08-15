@@ -201,8 +201,8 @@ final class TournamentRepo(val coll: Coll, playerCollName: CollName)(implicit
   def featuredGameId(tourId: Tournament.ID) = coll.primitiveOne[Game.ID]($id(tourId), "featured")
 
   private def startingSoonSelect(aheadMinutes: Int) =
-    createdSelect ++
-      $doc("startsAt" $lt (DateTime.now plusMinutes aheadMinutes))
+    createdSelect // ++
+      // $doc("startsAt" $lt (DateTime.now plusMinutes aheadMinutes))
 
   def scheduledCreated(aheadMinutes: Int): Fu[List[Tournament]] =
     coll.list[Tournament](startingSoonSelect(aheadMinutes))
