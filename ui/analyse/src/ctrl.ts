@@ -9,7 +9,16 @@ import debounce from 'common/debounce';
 import GamebookPlayCtrl from './study/gamebook/gamebookPlayCtrl';
 import makeStudy from './study/studyCtrl';
 import throttle from 'common/throttle';
-import { AnalyseOpts, AnalyseData, ServerEvalData, Key, JustCaptured, NvuiPlugin, Redraw } from './interfaces';
+import {
+  AnalyseOpts,
+  AnalyseData,
+  ServerEvalData,
+  Key,
+  JustCaptured,
+  NvuiPlugin,
+  Redraw,
+  RoundPosition,
+} from './interfaces';
 import { Api as ChessgroundApi } from 'chessground/api';
 import { Autoplay, AutoplayDelay } from './autoplay';
 import { build as makeTree, path as treePath, ops as treeOps, TreeWrapper } from 'tree';
@@ -84,6 +93,7 @@ export default class AnalyseCtrl {
   ongoing: boolean; // true if real game is ongoing
 
   // display flags
+  firstSeconds = true;
   flipped = false;
   embed: boolean;
   showComments = true; // whether to display comments in the move tree
@@ -121,6 +131,11 @@ export default class AnalyseCtrl {
     this.trans = opts.trans;
     this.treeView = treeViewCtrl(opts.embed ? 'inline' : 'column');
     this.promotion = new PromotionCtrl(this.withCg, () => this.withCg(g => g.set(this.cgConfig)), this.redraw);
+
+    setTimeout(() => {
+      this.firstSeconds = false;
+      this.redraw();
+    }, 3000);
 
     if (this.data.forecast) this.forecast = makeForecast(this.data.forecast, this.data, redraw);
     if (this.opts.wiki) this.wiki = wikiTheory();
@@ -210,6 +225,9 @@ export default class AnalyseCtrl {
     this.wiki = v ? wikiTheory() : undefined;
     if (this.wiki) this.wiki(this.nodeList);
   };
+
+  playerAt = (position: RoundPosition) =>
+    (this.flip as any) ^ ((position === 'top') as any) ? this.data.opponent : this.data.player;
 
   private setPath = (path: Tree.Path): void => {
     this.path = path;

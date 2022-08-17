@@ -3,56 +3,33 @@
 $clock-height: 20px;
 
 .analyse__player_strip {
-  position: absolute;
-  right: 0;
   display: flex;
-
-  &.top {
-    top: #{-$clock-height};
-
-    .is3d & {
-      top: #{-$clock-height - 35px};
-    }
-  }
-
-  &.bottom {
-    top: var(--cg-height, 100%);
-    z-index: 1; // over the board coords
-
-    .is3d & {
-      top: calc(var(--cg-height, 100%) + 15px);
-    }
-  }
-
-  /* Where to put them in col1 layout? It moves the entire board and controls down for little benefit */
-  @include breakpoint($mq-col1) {
-    display: none;
-  }
+  height: $clock-height;
+  font-family: 'Ginto Nord', 'Inter', sans-serif;
 }
 
 .analyse__clock {
-  @extend %metal, %box-shadow;
+  @extend %metal;
+
+  display: flex;
+  align-items: center;
 
   padding: 0 0.5em;
-  margin-left: 12px;
-  height: $clock-height;
+  margin-left: 8px;
+  font-size: 1.2em;
+  // height: $clock-height;
   font-weight: bold;
   text-align: center;
 
-  &.top {
-    @extend %box-radius-top;
-
-    .is3d & {
-      @extend %box-radius;
-    }
-  }
-
-  &.bottom {
-    @extend %box-radius-bottom;
-  }
-
   &.active {
-    background: mix($c-primary, $c-bg-box, 30%);
+    &::before {
+      content: '';
+      margin-right: 8px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #642fc2 0%, #318bff 100%);
+    }
   }
 
   tenths {

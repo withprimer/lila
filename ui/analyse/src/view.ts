@@ -11,34 +11,29 @@ import {
   onInsert,
   dataIcon,
 } from 'common/snabbdom';
-import { getPlayer, playable } from 'game';
-import * as router from 'game/router';
+import { getPlayer } from 'game';
 import * as materialView from 'game/view/material';
 import statusView from 'game/view/status';
 import { h, VNode } from 'snabbdom';
 import { ops as treeOps, path as treePath } from 'tree';
-import { render as acplView } from './acpl';
 import { view as actionMenu } from './actionMenu';
 import renderClocks from './clocks';
 import * as control from './control';
 import crazyView from './crazy/crazyView';
 import AnalyseCtrl from './ctrl';
 import explorerView from './explorer/explorerView';
-import forecastView from './forecast/forecastView';
 import { view as forkView } from './fork';
 import * as gridHacks from './gridHacks';
 import * as chessground from './ground';
-import { ConcealOf } from './interfaces';
+import { ConcealOf, RoundPosition } from './interfaces';
 import { view as keyboardView } from './keyboard';
 import * as pgnExport from './pgnExport';
 import practiceView from './practice/practiceView';
 import retroView from './retrospect/retroView';
-import serverSideUnderboard from './serverSideUnderboard';
 import * as gbEdit from './study/gamebook/gamebookEdit';
 import * as gbPlay from './study/gamebook/gamebookPlayView';
 import { StudyCtrl } from './study/interfaces';
 import renderPlayerBars from './study/playerBars';
-import * as studyPracticeView from './study/practice/studyPracticeView';
 import relayManager from './study/relay/relayManagerView';
 import relayTour from './study/relay/relayTourView';
 import { findTag } from './study/studyChapters';
@@ -46,6 +41,7 @@ import * as studyView from './study/studyView';
 import { render as renderTreeView } from './treeView/treeView';
 import { spinnerVdom as spinner } from 'common/spinner';
 import stepwiseScroll from 'common/wheel';
+import * as renderUser from './user';
 
 function renderResult(ctrl: AnalyseCtrl): VNode[] {
   const render = (result: string, status: MaybeVNodes) => [h('div.result', result), h('div.status', status)];
@@ -121,75 +117,6 @@ const renderAnalyse = (ctrl: AnalyseCtrl, concealOf?: ConcealOf) =>
     !ctrl.practice && !gbEdit.running(ctrl) ? renderNextChapter(ctrl) : null,
   ]);
 
-function inputs(ctrl: AnalyseCtrl): VNode | undefined {
-  if (ctrl.ongoing || !ctrl.data.userAnalysis) return;
-  if (ctrl.redirecting) return spinner();
-  return h('div.copyables', [
-    h('div.pair', [
-      h('label.name', 'FEN'),
-      h('input.copyable.autoselect.analyse__underboard__fen', {
-        attrs: { spellCheck: false },
-        hook: {
-          insert: vnode => {
-            const el = vnode.elm as HTMLInputElement;
-            el.value = defined(ctrl.fenInput) ? ctrl.fenInput : ctrl.node.fen;
-            el.addEventListener('change', _ => {
-              if (el.value !== ctrl.node.fen && el.reportValidity()) ctrl.changeFen(el.value.trim());
-            });
-            el.addEventListener('input', _ => {
-              ctrl.fenInput = el.value;
-              el.setCustomValidity(parseFen(el.value.trim()).isOk ? '' : 'Invalid FEN');
-            });
-          },
-          postpatch: (_, vnode) => {
-            const el = vnode.elm as HTMLInputElement;
-            if (!defined(ctrl.fenInput)) {
-              el.value = ctrl.node.fen;
-              el.setCustomValidity('');
-            } else if (el.value != ctrl.fenInput) el.value = ctrl.fenInput;
-          },
-        },
-      }),
-    ]),
-    h('div.pgn', [
-      h('div.pair', [
-        h('label.name', 'PGN'),
-        h('textarea.copyable.autoselect', {
-          attrs: { spellCheck: false },
-          hook: {
-            ...onInsert(el => {
-              (el as HTMLTextAreaElement).value = defined(ctrl.pgnInput)
-                ? ctrl.pgnInput
-                : pgnExport.renderFullTxt(ctrl);
-              el.addEventListener('input', e => (ctrl.pgnInput = (e.target as HTMLTextAreaElement).value));
-            }),
-            postpatch: (_, vnode) => {
-              (vnode.elm as HTMLTextAreaElement).value = defined(ctrl.pgnInput)
-                ? ctrl.pgnInput
-                : pgnExport.renderFullTxt(ctrl);
-            },
-          },
-        }),
-        h(
-          'button.button.button-thin.action.text',
-          {
-            attrs: dataIcon(''),
-            hook: bind(
-              'click',
-              _ => {
-                const pgn = $('.copyables .pgn textarea').val() as string;
-                if (pgn !== pgnExport.renderFullTxt(ctrl)) ctrl.changePgn(pgn);
-              },
-              ctrl.redraw
-            ),
-          },
-          ctrl.trans.noarg('importPgn')
-        ),
-      ]),
-    ]),
-  ]);
-}
-
 const jumpButton = (icon: string, effect: string, enabled: boolean): VNode =>
   h('button.fbt', {
     class: { disabled: !enabled },
@@ -242,47 +169,47 @@ function controls(ctrl: AnalyseCtrl) {
       }),
     },
     [
-      ctrl.embed
-        ? null
-        : h(
-            'div.features',
-            ctrl.studyPractice
-              ? [
-                  h('button.fbt', {
-                    attrs: {
-                      title: noarg('analysis'),
-                      'data-act': 'analysis',
-                      'data-icon': '',
-                    },
-                  }),
-                ]
-              : [
-                  // h('button.fbt', {
-                  //   attrs: {
-                  //     title: noarg('openingExplorerAndTablebase'),
-                  //     'data-act': 'explorer',
-                  //     'data-icon': '',
-                  //   },
-                  //   class: {
-                  //     hidden: menuIsOpen || !ctrl.explorer.allowed() || !!ctrl.retro,
-                  //     active: ctrl.explorer.enabled(),
-                  //   },
-                  // }),
-                  ctrl.ceval.possible && ctrl.ceval.allowed() && !ctrl.isGamebook()
-                    ? h('button.fbt', {
-                        attrs: {
-                          title: noarg('practiceWithComputer'),
-                          'data-act': 'practice',
-                          'data-icon': '',
-                        },
-                        class: {
-                          hidden: menuIsOpen || !!ctrl.retro,
-                          active: !!ctrl.practice,
-                        },
-                      })
-                    : null,
-                ]
-          ),
+      // ctrl.embed
+      //   ? null
+      //   : h(
+      //       'div.features',
+      //       ctrl.studyPractice
+      //         ? [
+      //             h('button.fbt', {
+      //               attrs: {
+      //                 title: noarg('analysis'),
+      //                 'data-act': 'analysis',
+      //                 'data-icon': '',
+      //               },
+      //             }),
+      //           ]
+      //         : [
+      //             // h('button.fbt', {
+      //             //   attrs: {
+      //             //     title: noarg('openingExplorerAndTablebase'),
+      //             //     'data-act': 'explorer',
+      //             //     'data-icon': '',
+      //             //   },
+      //             //   class: {
+      //             //     hidden: menuIsOpen || !ctrl.explorer.allowed() || !!ctrl.retro,
+      //             //     active: ctrl.explorer.enabled(),
+      //             //   },
+      //             // }),
+      //             ctrl.ceval.possible && ctrl.ceval.allowed() && !ctrl.isGamebook()
+      //               ? h('button.fbt', {
+      //                   attrs: {
+      //                     title: noarg('practiceWithComputer'),
+      //                     'data-act': 'practice',
+      //                     'data-icon': '',
+      //                   },
+      //                   class: {
+      //                     hidden: menuIsOpen || !!ctrl.retro,
+      //                     active: !!ctrl.practice,
+      //                   },
+      //                 })
+      //               : null,
+      //           ]
+      // ),
       h('div.jumps', [
         jumpButton('', 'first', canJumpPrev),
         jumpButton('', 'prev', canJumpPrev),
@@ -334,17 +261,13 @@ export function renderMaterialDiffs(ctrl: AnalyseCtrl): [VNode, VNode] {
 const renderPlayerStrip = (cls: string, materialDiff: VNode, clock?: VNode): VNode =>
   h('div.analyse__player_strip.' + cls, [materialDiff, clock]);
 
-function renderPlayerStrips(ctrl: AnalyseCtrl): [VNode, VNode] | undefined {
-  if (ctrl.embed) return;
-
-  const clocks = renderClocks(ctrl),
-    whitePov = ctrl.bottomIsWhite(),
-    materialDiffs = renderMaterialDiffs(ctrl);
-
-  return [
-    renderPlayerStrip('top', materialDiffs[0], clocks?.[whitePov ? 1 : 0]),
-    renderPlayerStrip('bottom', materialDiffs[1], clocks?.[whitePov ? 0 : 1]),
-  ];
+export function renderPlayer(ctrl: AnalyseCtrl, position: RoundPosition) {
+  const player = ctrl.playerAt(position);
+  return ctrl.nvui
+    ? undefined
+    : player.ai
+    ? h('div.user-link.online.ruser.ruser-' + position, [h('name', renderUser.aiName(ctrl, player.ai))])
+    : renderUser.userHtml(ctrl, player, position);
 }
 
 export default function (ctrl: AnalyseCtrl): VNode {
@@ -357,10 +280,12 @@ export default function (ctrl: AnalyseCtrl): VNode {
     gamebookPlayView = gamebookPlay && gbPlay.render(gamebookPlay),
     gamebookEditView = gbEdit.running(ctrl) ? gbEdit.render(ctrl) : undefined,
     playerBars = renderPlayerBars(ctrl),
-    playerStrips = !playerBars && renderPlayerStrips(ctrl),
     gaugeOn = ctrl.showEvalGauge(),
     needsInnerCoords = !!gaugeOn || !!playerBars,
-    tour = relayTour(ctrl);
+    tour = relayTour(ctrl),
+    materialDiffs = renderMaterialDiffs(ctrl),
+    clocks = renderClocks(ctrl),
+    whitePov = ctrl.bottomIsWhite();
 
   return h(
     'main.analyse.variant-' + ctrl.data.game.variant.key,
@@ -398,38 +323,43 @@ export default function (ctrl: AnalyseCtrl): VNode {
     [
       ctrl.keyboardHelp ? keyboardView(ctrl) : null,
       study ? studyView.overboard(study) : null,
-      tour ||
-        h(
-          addChapterId(study, 'div.analyse__board.main-board'),
-          {
-            hook:
-              'ontouchstart' in window || lichess.storage.get('scrollMoves') == '0'
-                ? undefined
-                : bindNonPassive(
-                    'wheel',
-                    stepwiseScroll((e: WheelEvent, scroll: boolean) => {
-                      if (ctrl.gamebookPlay()) return;
-                      const target = e.target as HTMLElement;
-                      if (target.tagName !== 'PIECE' && target.tagName !== 'SQUARE' && target.tagName !== 'CG-BOARD')
-                        return;
-                      e.preventDefault();
-                      if (e.deltaY > 0 && scroll) control.next(ctrl);
-                      else if (e.deltaY < 0 && scroll) control.prev(ctrl);
-                      ctrl.redraw();
-                    })
-                  ),
-          },
-          [
-            ...(playerStrips || []),
-            playerBars ? playerBars[ctrl.bottomIsWhite() ? 1 : 0] : null,
-            chessground.render(ctrl),
-            playerBars ? playerBars[ctrl.bottomIsWhite() ? 0 : 1] : null,
-            ctrl.promotion.view(ctrl.data.game.variant.key === 'antichess'),
-          ]
-        ),
-      gaugeOn && !tour ? cevalView.renderGauge(ctrl) : null,
-      h('div.analyse__table', [
+
+      h('div.left', [
+        h('div.user-info.user-info-top', [
+          renderPlayer(ctrl, 'top'),
+          renderPlayerStrip('top', materialDiffs[0], clocks?.[whitePov ? 1 : 0]),
+        ]),
+        tour ||
+          h(
+            addChapterId(study, 'div.analyse__board.main-board'),
+            {
+              hook:
+                'ontouchstart' in window || lichess.storage.get('scrollMoves') == '0'
+                  ? undefined
+                  : bindNonPassive(
+                      'wheel',
+                      stepwiseScroll((e: WheelEvent, scroll: boolean) => {
+                        if (ctrl.gamebookPlay()) return;
+                        const target = e.target as HTMLElement;
+                        if (target.tagName !== 'PIECE' && target.tagName !== 'SQUARE' && target.tagName !== 'CG-BOARD')
+                          return;
+                        e.preventDefault();
+                        if (e.deltaY > 0 && scroll) control.next(ctrl);
+                        else if (e.deltaY < 0 && scroll) control.prev(ctrl);
+                        ctrl.redraw();
+                      })
+                    ),
+            },
+            [chessground.render(ctrl), ctrl.promotion.view(ctrl.data.game.variant.key === 'antichess')]
+          ),
+        h('div.user-info.user-info-bottom', [
+          renderPlayer(ctrl, 'bottom'),
+          renderPlayerStrip('bottom', materialDiffs[1], clocks?.[whitePov ? 0 : 1]),
+        ]),
+      ]),
+      h('div.right.analyse__table', [
         menuIsOpen || tour ? null : crazyView(ctrl, ctrl.topColor(), 'top'),
+        gamebookPlayView || tour ? null : controls(ctrl),
         gamebookPlayView ||
           (tour
             ? null
@@ -437,15 +367,12 @@ export default function (ctrl: AnalyseCtrl): VNode {
                 ...(menuIsOpen
                   ? [actionMenu(ctrl)]
                   : [
-                      ctrl.showComputer() ? cevalView.renderCeval(ctrl) : analysisDisabled(ctrl),
-                      showCevalPvs ? cevalView.renderPvs(ctrl) : null,
                       renderAnalyse(ctrl, concealOf),
                       gamebookEditView || forkView(ctrl, concealOf),
                       retroView(ctrl) || practiceView(ctrl) || explorerView(ctrl),
                     ]),
               ])),
         menuIsOpen || tour ? null : crazyView(ctrl, ctrl.bottomColor(), 'bottom'),
-        gamebookPlayView || tour ? null : controls(ctrl),
       ]),
       study && study.relay && relayManager(study.relay),
     ]
