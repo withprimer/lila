@@ -14,6 +14,8 @@ export type Seconds = number;
 
 export { Key, Piece } from 'chessground/types';
 
+export type RoundPosition = 'top' | 'bottom';
+
 export interface NvuiPlugin {
   render(ctrl: AnalyseController): VNode;
 }

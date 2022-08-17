@@ -2,6 +2,8 @@
   &__tools {
     @extend %box-neat-force, %flex-column;
 
+    box-shadow: none;
+
     background: $c-bg-box;
 
     .ceval {
@@ -119,8 +121,11 @@
     .fbt {
       @extend %page-text;
 
-      flex: 0 0 2.5rem;
       transition: visibility 0s;
+
+      &::before {
+        font-size: 1em;
+      }
     }
 
     .active {

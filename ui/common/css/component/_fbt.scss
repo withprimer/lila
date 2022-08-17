@@ -1,7 +1,7 @@
 .fbt {
   @extend %button-none;
 
-  color: $c-primer-primary;
+  color: $c-primer-primary !important;
 
   text-transform: uppercase;
   line-height: 1.5;
