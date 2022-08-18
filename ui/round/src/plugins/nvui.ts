@@ -378,7 +378,7 @@ function renderMoves(steps: Step[], style: Style) {
 }
 
 function renderAi(ctrl: RoundController, level: number): string {
-  return ctrl.trans('aiNameLevelAiLevel', 'Stockfish', level);
+  return ctrl.trans('aiNameLevelAiLevel', 'Computer', level);
 }
 
 function playerHtml(ctrl: RoundController, player: game.Player) {
