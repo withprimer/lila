@@ -197,11 +197,12 @@ final class Api(
     }
 
   def currentTournaments =
-    ApiRequest { implicit req =>
+    AnonOrScoped() { implicit req => { me =>
       implicit val lang = reqLang
-      env.tournament.api.fetchVisibleTournaments flatMap
-        env.tournament.apiJsonView.apply map Data.apply
-    }
+      env.tournament.api.fetchVisibleTournaments flatMap (tour =>
+        env.tournament.apiJsonView.apply(tour, me) map (JsonOk(_))
+        )
+    } }
 
   def tournament(id: String) =
     AnonOrScoped() { implicit req => { me =>
@@ -220,7 +221,7 @@ final class Api(
             withScores = true
           )(reqLang) map some
         }
-      }map (JsonOk(_))
+      } map (JsonOk(_))
     } }
 
   def tournamentGames(id: String) =

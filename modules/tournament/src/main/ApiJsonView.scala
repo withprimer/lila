@@ -2,21 +2,29 @@ package lila.tournament
 
 import play.api.i18n.Lang
 import play.api.libs.json._
-
 import lila.common.Json.jodaWrites
+import lila.common.{Preload, Uptime}
+import lila.game.Game
 import lila.rating.PerfType
-import lila.user.LightUserApi
+import lila.user.{LightUserApi, User}
 
-final class ApiJsonView(lightUserApi: LightUserApi)(implicit ec: scala.concurrent.ExecutionContext) {
+final class ApiJsonView(cached: Cached,
+                        lightUserApi: LightUserApi,
+                        pairingRepo: PairingRepo,
+                        duelStore: DuelStore,
+                        pause: Pause,
+                        playerRepo: PlayerRepo)(implicit ec: scala.concurrent.ExecutionContext) {
 
   import JsonView._
   import Condition.JSONHandlers._
 
-  def apply(tournaments: VisibleTournaments)(implicit lang: Lang): Fu[JsObject] =
+  def apply(tournaments: VisibleTournaments)(implicit lang: Lang): Fu[JsObject] = this.apply(tournaments, None)
+
+  def apply(tournaments: VisibleTournaments, me: Option[User] = None)(implicit lang: Lang): Fu[JsObject] =
     for {
-      created  <- tournaments.created.map(fullJson).sequenceFu
-      started  <- tournaments.started.map(fullJson).sequenceFu
-      finished <- tournaments.finished.map(fullJson).sequenceFu
+      created  <- tournaments.created.map(tour => fullJson(tour, me)).sequenceFu
+      started  <- tournaments.started.map(tour => fullJson(tour, me)).sequenceFu
+      finished <- tournaments.finished.map(tour => fullJson(tour, me)).sequenceFu
     } yield Json.obj(
       "created"  -> created,
       "started"  -> started,
@@ -24,7 +32,7 @@ final class ApiJsonView(lightUserApi: LightUserApi)(implicit ec: scala.concurren
     )
 
   def featured(tournaments: List[Tournament])(implicit lang: Lang): Fu[JsObject] =
-    tournaments.map(fullJson).sequenceFu map { objs =>
+    tournaments.map(tour => fullJson(tour, None)).sequenceFu map { objs =>
       Json.obj("featured" -> objs)
     }
 
@@ -73,10 +81,23 @@ final class ApiJsonView(lightUserApi: LightUserApi)(implicit ec: scala.concurren
         }
       )
 
-  def fullJson(tour: Tournament)(implicit lang: Lang): Fu[JsObject] =
-    (tour.winnerId ?? lightUserApi.async) map { winner =>
-      baseJson(tour).add("winner" -> winner.map(userJson))
+  def fullJson(tour: Tournament)(implicit lang: Lang): Fu[JsObject] = this.fullJson(tour, None)
+
+  def fullJson(tour: Tournament, me: Option[User] = None)(implicit lang: Lang): Fu[JsObject] = {
+    for {
+      myInfo <- Preload.none.orLoad(me ?? {
+        fetchMyInfo(tour, _)
+      })
+      pauseDelay = me flatMap { u =>
+        pause.remainingDelay(u.id, tour)
+      }
+      winner <- (tour.winnerId ?? lightUserApi.async)
+    } yield {
+      baseJson(tour)
+        .add("me" -> myInfo.map(myInfoJson(me, pauseDelay)))
+        .add("winner" -> winner.map(userJson))
     }
+  }
 
   private def userJson(u: lila.common.LightUser) =
     Json.obj(
@@ -98,4 +119,39 @@ final class ApiJsonView(lightUserApi: LightUserApi)(implicit ec: scala.concurren
         "position" -> ~perfPositions.get(p)
       )
       .add("icon" -> mobileBcIcons.get(p)) // mobile BC only
+
+  // ----
+  // copied over from JsonView.scala
+  private def myInfoJson(u: Option[User], delay: Option[Pause.Delay])(i: MyInfo) =
+    Json
+      .obj("rank" -> i.rank)
+      .add("withdraw", i.withdraw)
+      .add("gameId", i.gameId)
+      .add("pauseDelay", delay.map(_.seconds))
+
+  def fetchMyInfo(tour: Tournament, me: User): Fu[Option[MyInfo]] =
+    playerRepo.find(tour.id, me.id) flatMap {
+      _ ?? { player =>
+        fetchCurrentGameId(tour, me) flatMap { gameId =>
+          getOrGuessRank(tour, player) dmap { rank =>
+            MyInfo(rank + 1, player.withdraw, gameId, player.team).some
+          }
+        }
+      }
+    }
+
+  private def fetchCurrentGameId(tour: Tournament, user: User): Fu[Option[Game.ID]] =
+    if (Uptime.startedSinceSeconds(60)) fuccess(duelStore.find(tour, user))
+    else pairingRepo.playingByTourAndUserId(tour.id, user.id)
+
+  // if the user is not yet in the cached ranking,
+  // guess its rank based on other players scores in the DB
+  private def getOrGuessRank(tour: Tournament, player: Player): Fu[Int] =
+    cached ranking tour flatMap {
+      _.ranking get player.userId match {
+        case Some(rank) => fuccess(rank)
+        case None       => playerRepo.computeRankOf(player)
+      }
+    }
+
 }
