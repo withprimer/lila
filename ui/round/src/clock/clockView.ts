@@ -56,7 +56,6 @@ export function renderClock(ctrl: RoundController, player: game.Player, position
           }),
           renderBerserk(ctrl, player.color, position),
           isPlayer ? goBerserk(ctrl) : button.moretime(ctrl),
-          tourRank(ctrl, player.color, position),
         ]
   );
 }
@@ -151,18 +150,4 @@ const goBerserk = (ctrl: RoundController) => {
     },
     hook: bind('click', ctrl.goBerserk),
   });
-};
-
-const tourRank = (ctrl: RoundController, color: Color, position: Position) => {
-  const d = ctrl.data,
-    ranks = d.tournament?.ranks || d.swiss?.ranks;
-  return ranks && !showBerserk(ctrl, color)
-    ? h(
-        'div.tour-rank.' + position,
-        {
-          attrs: { title: 'Current tournament rank' },
-        },
-        '#' + ranks[color]
-      )
-    : null;
 };
