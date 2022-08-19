@@ -350,7 +350,7 @@ function renderCurrentNode(node: Tree.Node, style: Style): string {
 }
 
 function renderPlayer(ctrl: AnalyseController, player: Player) {
-  return player.ai ? ctrl.trans('aiNameLevelAiLevel', 'Stockfish', player.ai) : userHtml(ctrl, player);
+  return player.ai ? ctrl.trans('aiNameLevelAiLevel', 'Computer', player.ai) : userHtml(ctrl, player);
 }
 
 function userHtml(ctrl: AnalyseController, player: Player) {
