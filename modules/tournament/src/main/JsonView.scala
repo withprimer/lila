@@ -88,7 +88,8 @@ final class JsonView(
       teamStanding <- getTeamStanding(tour)
       myTeam       <- myInfo.flatMap(_.teamId) ?? { getMyRankedTeam(tour, _) }
     } yield commonTournamentJson(tour, data, stats, teamStanding) ++ Json
-      .obj("standing" -> fullStanding)
+      .obj("standing" -> stand)
+      .add("fullStanding" -> Some(fullStanding))
       .add("me" -> myInfo.map(myInfoJson(me, pauseDelay)))
       .add("playerInfo" -> playerInfoJson)
       .add("socketVersion" -> socketVersion.map(_.value))
