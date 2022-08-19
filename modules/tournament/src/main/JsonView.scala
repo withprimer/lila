@@ -57,6 +57,7 @@ final class JsonView(
         pause.remainingDelay(u.id, tour)
       }
       full = !partial
+      fullStanding <- standingApi.fullStanding(tour)
       stand <- standingApi(
         tour,
         (myInfo, page) match {
@@ -88,6 +89,7 @@ final class JsonView(
       myTeam       <- myInfo.flatMap(_.teamId) ?? { getMyRankedTeam(tour, _) }
     } yield commonTournamentJson(tour, data, stats, teamStanding) ++ Json
       .obj("standing" -> stand)
+      .add("fullStanding" -> Some(fullStanding))
       .add("me" -> myInfo.map(myInfoJson(me, pauseDelay)))
       .add("playerInfo" -> playerInfoJson)
       .add("socketVersion" -> socketVersion.map(_.value))
