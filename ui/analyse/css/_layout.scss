@@ -23,6 +23,8 @@ body {
   height: 100vh;
 
   .right {
+    max-height: 100vh;
+    overflow-y: scroll;
     border-left: 1px solid $c-primer-stroke;
   }
 
