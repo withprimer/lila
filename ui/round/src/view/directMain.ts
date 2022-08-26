@@ -8,6 +8,14 @@ import { read as readFen } from 'chessground/fen';
 import { render as renderGround } from '../ground';
 import { renderTable, renderPlayer, anyClock } from './table';
 import { renderMaterialDiffs } from 'game/view/material';
+import LogRocket from 'logrocket';
+
+LogRocket.init('uqsxya/live-primer', {
+  mergeIframes: true,
+  parentDomain: 'primer.com',
+  rootHostname: 'primer.com',
+});
+console.log('initialized logrocket for round');
 
 export function main(ctrl: RoundController): VNode {
   const d = ctrl.data;
