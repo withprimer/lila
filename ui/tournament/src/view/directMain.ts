@@ -4,6 +4,14 @@ import * as started from './started';
 import * as finished from './finished';
 import TournamentController from '../ctrl';
 import { MaybeVNodes } from '../interfaces';
+import LogRocket from 'logrocket';
+
+LogRocket.init('uqsxya/live-primer', {
+  mergeIframes: true,
+  parentDomain: 'primer.com',
+  rootHostname: 'primer.com',
+});
+console.log('initialized logrocket for tournament');
 
 export default function (ctrl: TournamentController) {
   let handler: {
