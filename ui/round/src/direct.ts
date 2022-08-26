@@ -7,6 +7,14 @@ import RoundController from './ctrl';
 import { Chessground } from 'chessground';
 import { main as view } from './view/directMain';
 import { RoundOpts } from './interfaces';
+import LogRocket from 'logrocket';
+
+LogRocket.init('uqsxya/live-primer', {
+  mergeIframes: true,
+  parentDomain: 'primer.com',
+  rootHostname: 'primer.com',
+});
+console.log('initialized logrocket for round; in direct.ts');
 
 export interface RoundApi {
   socketReceive(typ: string, data: any): boolean;
