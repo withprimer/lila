@@ -7,6 +7,7 @@ import RoundController from './ctrl';
 import { Chessground } from 'chessground';
 import { main as view } from './view/directMain';
 import { RoundOpts } from './interfaces';
+import LogRocket from 'logrocket';
 
 export interface RoundApi {
   socketReceive(typ: string, data: any): boolean;
@@ -35,6 +36,13 @@ export function app(opts: RoundOpts): RoundApi {
   if (ctrl.isPlaying()) menuHover();
 
   lichess.sound.preloadBoardSounds();
+
+  LogRocket.init('uqsxya/live-primer', {
+    mergeIframes: true,
+    parentDomain: 'https://primer.com',
+    rootHostname: 'https://primer.com',
+  });
+  console.log('initialized logrocket for round');
 
   return {
     socketReceive: ctrl.socket.receive,

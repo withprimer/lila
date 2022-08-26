@@ -1,7 +1,8 @@
-import { init, classModule, attributesModule } from 'snabbdom';
+import { attributesModule, classModule, init } from 'snabbdom';
 import { Chessground } from 'chessground';
 import { TournamentOpts } from './interfaces';
 import LichessChat from 'chat';
+import LogRocket from 'logrocket';
 
 const patch = init([classModule, attributesModule]);
 
@@ -25,6 +26,13 @@ export default function (opts: TournamentOpts) {
   const blueprint = view(ctrl);
   opts.element.innerHTML = '';
   let vnode = patch(opts.element, blueprint);
+
+  LogRocket.init('uqsxya/live-primer', {
+    mergeIframes: true,
+    parentDomain: 'https://primer.com',
+    rootHostname: 'https://primer.com',
+  });
+  console.log('initialized logrocket for tournament');
 
   function redraw() {
     vnode = patch(vnode, view(ctrl));
