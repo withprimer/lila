@@ -276,6 +276,12 @@ object layout {
           piecesPreload,
           manifests,
           jsLicense,
+//          raw(
+//            s"""<script src="https://cdn.lr-in-prod.com/LogRocket.min.js" crossorigin="anonymous"></script>"""
+//          ),
+//          raw(
+//            s"""<script>window.LogRocket && window.LogRocket.init('uqsxya/live-primer', { mergeIframes: true, parentDomain: 'primer.com', rootHostname: 'primer.com' });console.info('initialized logrocket from script');</script>""".stripMargin
+//          ),
           withHrefLangs.map(hrefLangs)
         ),
         st.body(
