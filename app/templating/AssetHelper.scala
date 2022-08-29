@@ -81,15 +81,29 @@ trait AssetHelper { self: I18nHelper with SecurityHelper =>
       s"$protocol$socketDomain"
     }
     val localDev = !req.secure ?? List("http://127.0.0.1:3000")
+    /*
     ContentSecurityPolicy(
       defaultSrc = List("'self'", assets),
       connectSrc =
-        "'self'" :: assets :: sockets ::: env.explorerEndpoint :: env.tablebaseEndpoint :: localDev,
+        "'self'" :: assets :: "*.logrocket.io" :: "*.lr-ingest.io" :: "*.lr-in-prod.com" :: sockets ::: env.explorerEndpoint :: env.tablebaseEndpoint :: localDev,
       styleSrc = List("'self'", "'unsafe-inline'", assets),
       frameSrc = List("'self'", assets, "www.youtube.com", "player.twitch.tv"),
-      workerSrc = List("'self'", assets),
+      workerSrc = List("'self'", "*", "blob:", assets),
       imgSrc = List("data:", "*"),
-      scriptSrc = List("'self'", assets),
+      scriptSrc = List("'self'", assets, "cdn.lr-in-prod.com", "cdn.logrocket.io", "cdn.lr-ingest.io", "; child-src 'self' blob:"),
+      baseUri = List("'none'"),
+    )
+     */
+
+    ContentSecurityPolicy(
+      defaultSrc = List("'self'", assets),
+      connectSrc =
+        "'self'" :: assets :: "*.logrocket.io" :: "*.logrocket.com" :: "*.lr-ingest.io" :: "*.lr-in-prod.com" :: sockets ::: env.explorerEndpoint :: env.tablebaseEndpoint :: localDev,
+      styleSrc = List("'self'", "'unsafe-inline'", assets),
+      frameSrc = List("'self'", assets, "www.youtube.com", "player.twitch.tv"),
+      workerSrc = List("'self'", "blob:", "data:", assets),
+      imgSrc = List("data:", "*"),
+      scriptSrc = List("'self'", "cdn.lr-in-prod.com", "cdn.logrocket.io", "cdn.lr-ingest.io", assets),
       baseUri = List("'none'")
     )
   }
