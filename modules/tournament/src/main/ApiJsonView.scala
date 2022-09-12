@@ -62,7 +62,9 @@ final class ApiJsonView(cached: Cached,
         "startsAt"   -> tour.startsAt,
         "finishesAt" -> tour.finishesAt,
         "status"     -> tour.status.id,
-        "perf"       -> perfJson(tour.perfType)
+        "perf"       -> perfJson(tour.perfType),
+        "description" -> tour.description,
+        "isFinished" -> tour.isFinished
       )
       .add("secondsToStart", tour.secondsToStart.some.filter(0 <))
       .add("hasMaxRating", tour.conditions.maxRating.isDefined) // BC
