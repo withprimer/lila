@@ -13,6 +13,7 @@ final class ApiJsonView(cached: Cached,
                         pairingRepo: PairingRepo,
                         duelStore: DuelStore,
                         pause: Pause,
+                        standingApi: TournamentStandingApi,
                         playerRepo: PlayerRepo)(implicit ec: scala.concurrent.ExecutionContext) {
 
   import JsonView._
@@ -94,10 +95,12 @@ final class ApiJsonView(cached: Cached,
         pause.remainingDelay(u.id, tour)
       }
       winner <- (tour.winnerId ?? lightUserApi.async)
+      fullStanding <- standingApi.fullStanding(tour)
     } yield {
       baseJson(tour)
         .add("me" -> myInfo.map(myInfoJson(me, pauseDelay)))
         .add("winner" -> winner.map(userJson))
+        .add("fullStanding" -> Some(fullStanding))
     }
   }
 
