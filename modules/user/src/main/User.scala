@@ -239,9 +239,9 @@ object User {
   implicit def playTimeHandler = reactivemongo.api.bson.Macros.handler[PlayTime]
 
   // what existing usernames are like
-  val historicalUsernameRegex = "(?i)[a-z0-9][a-z0-9_-]{0,28}[a-z0-9]".r
+  val historicalUsernameRegex = "^[a-zA-Z0-9]+$".r
   // what new usernames should be like -- now split into further parts for clearer error messages
-  val newUsernameRegex   = "(?i)[a-z][a-z0-9_-]{0,28}[a-z0-9]".r
+  val newUsernameRegex   = "^[a-zA-Z0-9]+$".r
   val newUsernamePrefix  = "(?i)^[a-z].*".r
   val newUsernameSuffix  = "(?i).*[a-z0-9]$".r
   val newUsernameChars   = "(?i)^[a-z0-9_-]*$".r
