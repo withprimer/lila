@@ -19,11 +19,15 @@ case class Glicko(
   def intervalMax = (rating + deviation * 2).toInt
   def interval    = intervalMin -> intervalMax
 
-  def rankable(variant: chess.variant.Variant) =
-    deviation <= {
-      if (variant.standard) Glicko.standardRankableDeviation
-      else Glicko.variantRankableDeviation
-    }
+  def rankable(variant: chess.variant.Variant) = {
+//    true
+    deviation < Glicko.provisionalDeviation
+//    deviation <= {
+//      if (variant.standard) Glicko.standardRankableDeviation
+//      else Glicko.variantRankableDeviation
+//    }
+  }
+
   def provisional          = deviation >= Glicko.provisionalDeviation
   def established          = !provisional
   def establishedIntRating = established option intRating
