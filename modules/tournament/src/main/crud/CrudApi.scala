@@ -35,7 +35,8 @@ final class CrudApi(tournamentRepo: TournamentRepo, crudForm: CrudForm) {
       berserkable = !tour.noBerserk,
       streakable = tour.streakable,
       teamBattle = tour.isTeamBattle,
-      hasChat = tour.hasChat
+      hasChat = tour.hasChat,
+      ranked = tour.ranked
     )
 
   def update(old: Tournament, data: CrudForm.Data) =
@@ -82,7 +83,8 @@ final class CrudApi(tournamentRepo: TournamentRepo, crudForm: CrudForm) {
       streakable = true,
       teamBattle = none,
       description = none,
-      hasChat = true
+      hasChat = true,
+      ranked = true
     )
 
   private def updateTour(tour: Tournament, data: CrudForm.Data) = {
@@ -112,7 +114,8 @@ final class CrudApi(tournamentRepo: TournamentRepo, crudForm: CrudForm) {
       noBerserk = !data.berserkable,
       noStreak = !data.streakable,
       teamBattle = data.teamBattle option (tour.teamBattle | TeamBattle(Set.empty, 10)),
-      hasChat = data.hasChat
+      hasChat = data.hasChat,
+      ranked = data.ranked
     ) pipe { tour =>
       tour.copy(conditions =
         data.conditions.convert(tour.perfType, Map.empty)

@@ -129,6 +129,8 @@ final class JsonView(
               .add("joinWith" -> me.isDefined.option(teamsToJoinWith.sorted))
           })
           .add("description" -> tour.description)
+          .add("ranked" -> tour.ranked)
+          .add("rated" -> tour.mode.rated)
           .add("myUsername" -> me.map(_.username))
       }
 

@@ -121,7 +121,7 @@ final class RankingApi(
       }
 
     private val cache = cacheApi.unit[Map[PerfType, Map[User.ID, Rank]]] {
-      _.refreshAfterWrite(15 minutes)
+      _.refreshAfterWrite(1 minutes)
         .buildAsyncFuture { _ =>
           lila.common.Future
             .linear(PerfType.leaderboardable) { pt =>

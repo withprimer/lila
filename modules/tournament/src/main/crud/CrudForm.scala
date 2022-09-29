@@ -33,7 +33,8 @@ final class CrudForm(repo: TournamentRepo) {
       "berserkable"    -> boolean,
       "streakable"     -> boolean,
       "teamBattle"     -> boolean,
-      "hasChat"        -> boolean
+      "hasChat"        -> boolean,
+      "ranked" -> boolean
     )(Data.apply)(Data.unapply)
       .verifying("Invalid clock", _.validClock)
       .verifying("Increase tournament duration, or decrease game clock", _.validTiming)
@@ -54,7 +55,8 @@ final class CrudForm(repo: TournamentRepo) {
     berserkable = true,
     streakable = true,
     teamBattle = false,
-    hasChat = true
+    hasChat = true,
+    ranked = true
   )
 }
 
@@ -79,7 +81,8 @@ object CrudForm {
       berserkable: Boolean,
       streakable: Boolean,
       teamBattle: Boolean,
-      hasChat: Boolean
+      hasChat: Boolean,
+      ranked: Boolean
   ) {
 
     def realVariant = Variant orDefault variant
