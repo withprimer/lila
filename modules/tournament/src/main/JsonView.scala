@@ -105,7 +105,9 @@ final class JsonView(
             "minutes"   -> tour.minutes,
             "perf"      -> tour.perfType,
             "clock"     -> tour.clock,
-            "variant"   -> tour.variant.key
+            "variant"   -> tour.variant.key,
+            "rated"     -> tour.isRated,
+            "ranked"    -> tour.ranked
           )
           .add("spotlight" -> tour.spotlight)
           .add("berserkable" -> tour.berserkable)
@@ -129,8 +131,6 @@ final class JsonView(
               .add("joinWith" -> me.isDefined.option(teamsToJoinWith.sorted))
           })
           .add("description" -> tour.description)
-          .add("ranked" -> tour.ranked)
-          .add("rated" -> tour.mode.rated)
           .add("myUsername" -> me.map(_.username))
       }
 

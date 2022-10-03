@@ -205,14 +205,14 @@ final class Api(
     } }
 
   def tournament(id: String) =
-    AnonOrScoped() { implicit req => { me =>
+    ApiRequest { implicit req =>
       env.tournament.tournamentRepo byId id flatMap {
         _ ?? { tour =>
           val page = (getInt("page", req) | 1) atLeast 1 atMost 200
           env.tournament.jsonView(
             tour = tour,
             page = page.some,
-            me = me,
+            me = none,
             getUserTeamIds = _ => fuccess(Nil),
             getTeamName = env.team.getTeamName.apply,
             playerInfoExt = none,
@@ -221,8 +221,8 @@ final class Api(
             withScores = true
           )(reqLang) map some
         }
-      } map (JsonOk(_))
-    } }
+      } map toApiResult
+    }
 
   def tournamentGames(id: String) =
     Action.async { req =>

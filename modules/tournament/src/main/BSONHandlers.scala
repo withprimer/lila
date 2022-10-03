@@ -96,7 +96,8 @@ object BSONHandlers {
         featuredId = r strO "featured",
         spotlight = r.getO[Spotlight]("spotlight"),
         description = r strO "description",
-        hasChat = r boolO "chat" getOrElse true
+        hasChat = r boolO "chat" getOrElse true,
+        ranked = r boolO "ranked" getOrElse true
       )
     }
     def writes(w: BSON.Writer, o: Tournament) =
