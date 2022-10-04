@@ -53,6 +53,7 @@ final class ApiJsonView(cached: Cached,
         "minutes"   -> tour.minutes,
         "clock"     -> tour.clock,
         "rated"     -> tour.mode.rated,
+        "ranked"    -> tour.ranked,
         "fullName"  -> tour.name(),
         "nbPlayers" -> tour.nbPlayers,
         "variant" -> Json.obj(
