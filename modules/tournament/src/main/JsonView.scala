@@ -58,15 +58,15 @@ final class JsonView(
       }
       full = !partial
       fullStanding <- standingApi.fullStanding(tour)
-      stand <- standingApi(
-        tour,
-        (myInfo, page) match {
-          case (_, Some(p)) => p
-          case (Some(i), _) => i.page
-          case _            => 1
-        },
-        withScores = withScores
-      )
+//      stand <- standingApi(
+//        tour,
+//        (myInfo, page) match {
+//          case (_, Some(p)) => p
+//          case (Some(i), _) => i.page
+//          case _            => 1
+//        },
+//        withScores = withScores
+//      )
       playerInfoJson <- playerInfoExt ?? { pie =>
         playerInfoExtended(tour, pie).map(_.some)
       }
@@ -88,8 +88,8 @@ final class JsonView(
       teamStanding <- getTeamStanding(tour)
       myTeam       <- myInfo.flatMap(_.teamId) ?? { getMyRankedTeam(tour, _) }
     } yield commonTournamentJson(tour, data, stats, teamStanding) ++ Json
-      .obj("standing" -> stand)
-      .add("fullStanding" -> Some(fullStanding))
+//      .obj("standing" -> stand)
+      .obj("fullStanding" -> Some(fullStanding))
       .add("me" -> myInfo.map(myInfoJson(me, pauseDelay)))
       .add("playerInfo" -> playerInfoJson)
       .add("socketVersion" -> socketVersion.map(_.value))
