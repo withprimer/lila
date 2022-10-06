@@ -36,7 +36,8 @@ case class Tournament(
     featuredId: Option[String] = None,
     spotlight: Option[Spotlight] = None,
     description: Option[String] = None,
-    hasChat: Boolean = true
+    hasChat: Boolean = true,
+    ranked: Boolean,
 ) {
 
   def isCreated   = status == Status.Created
@@ -169,7 +170,8 @@ object Tournament {
       streakable: Boolean,
       teamBattle: Option[TeamBattle],
       description: Option[String],
-      hasChat: Boolean
+      hasChat: Boolean,
+      ranked: Boolean
   ) =
     Tournament(
       id = makeId,
@@ -194,7 +196,8 @@ object Tournament {
       schedule = None,
       startsAt = startDate | DateTime.now.plusMinutes(waitMinutes),
       description = description,
-      hasChat = hasChat
+      hasChat = hasChat,
+      ranked = ranked
     )
 
   def scheduleAs(sched: Schedule, minutes: Int) =
@@ -212,7 +215,8 @@ object Tournament {
       mode = Mode.Rated,
       conditions = sched.conditions,
       schedule = Some(sched),
-      startsAt = sched.at plusSeconds ThreadLocalRandom.nextInt(60)
+      startsAt = sched.at plusSeconds ThreadLocalRandom.nextInt(60),
+      ranked = false
     )
 
   def tournamentUrl(tourId: String): String = s"https://lichess.org/tournament/$tourId"
