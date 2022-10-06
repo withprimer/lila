@@ -37,10 +37,10 @@ final class Cached(
   val top200Perf = mongoCache[Perf.ID, List[User.LightPerf]](
     PerfType.leaderboardable.size,
     "user:top200:perf",
-    10 seconds,
+    19 minutes,
     _.toString
   ) { loader =>
-    _.refreshAfterWrite(10 seconds)
+    _.refreshAfterWrite(20 minutes)
       .buildAsyncFuture {
         loader {
           rankingApi.topPerf(_, 200)

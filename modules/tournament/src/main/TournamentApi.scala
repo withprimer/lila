@@ -73,7 +73,7 @@ final class TournamentApi(
       teamBattle = setup.teamBattleByTeam map TeamBattle.init,
       description = setup.description,
       hasChat = setup.hasChat | true,
-      ranked = setup.ranked | true
+      ranked = setup.ranked | false,
     ) pipe { tour =>
       tour.copy(conditions = setup.conditions.convert(tour.perfType, leaderTeams.view.map(_.pair).toMap))
     }

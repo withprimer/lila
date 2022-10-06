@@ -216,7 +216,7 @@ object Tournament {
       conditions = sched.conditions,
       schedule = Some(sched),
       startsAt = sched.at plusSeconds ThreadLocalRandom.nextInt(60),
-      ranked = true
+      ranked = false
     )
 
   def tournamentUrl(tourId: String): String = s"https://lichess.org/tournament/$tourId"
