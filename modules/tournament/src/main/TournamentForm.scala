@@ -38,7 +38,9 @@ final class TournamentForm {
       streakable = true.some,
       description = none,
       hasChat = true.some,
-      ranked = true.some
+      ranked = true.some,
+      isInviteOnly = false.some,
+      hostTag = None
     )
 
   def edit(user: User, leaderTeams: List[LeaderTeam], tour: Tournament) =
@@ -60,7 +62,9 @@ final class TournamentForm {
       streakable = tour.streakable.some,
       description = tour.description,
       hasChat = tour.hasChat.some,
-      ranked = tour.ranked.some
+      ranked = tour.ranked.some,
+      isInviteOnly = tour.isInviteOnly.some,
+      hostTag = tour.hostTag
     )
 
   private val blockList = List("lichess", "liсhess")
@@ -104,7 +108,9 @@ final class TournamentForm {
       "streakable"       -> optional(boolean),
       "description"      -> optional(cleanNonEmptyText),
       "hasChat"          -> optional(boolean),
-      "ranked"          -> optional(boolean)
+      "ranked"           -> optional(boolean),
+      "isInviteOnly"     -> optional(boolean),
+      "hostTag"          -> optional(text)
     )(TournamentSetup.apply)(TournamentSetup.unapply)
       .verifying("Invalid clock", _.validClock)
       .verifying("15s and 0+1 variant games cannot be rated", _.validRatedVariant)
@@ -181,7 +187,9 @@ private[tournament] case class TournamentSetup(
     streakable: Option[Boolean],
     description: Option[String],
     hasChat: Option[Boolean],
-    ranked: Option[Boolean]
+    ranked: Option[Boolean],
+    isInviteOnly: Option[Boolean],
+    hostTag: Option[String]
 ) {
 
   def validClock = (clockTime + clockIncrement) > 0

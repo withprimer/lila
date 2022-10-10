@@ -38,6 +38,8 @@ case class Tournament(
     description: Option[String] = None,
     hasChat: Boolean = true,
     ranked: Boolean,
+    isInviteOnly: Boolean = false,
+    hostTag: Option[String] = None
 ) {
 
   def isCreated   = status == Status.Created
@@ -171,7 +173,9 @@ object Tournament {
       teamBattle: Option[TeamBattle],
       description: Option[String],
       hasChat: Boolean,
-      ranked: Boolean
+      ranked: Boolean,
+      isInviteOnly: Boolean,
+      hostTag: Option[String]
   ) =
     Tournament(
       id = makeId,
@@ -197,7 +201,9 @@ object Tournament {
       startsAt = startDate | DateTime.now.plusMinutes(waitMinutes),
       description = description,
       hasChat = hasChat,
-      ranked = ranked
+      ranked = ranked,
+      isInviteOnly = isInviteOnly,
+      hostTag = hostTag
     )
 
   def scheduleAs(sched: Schedule, minutes: Int) =
