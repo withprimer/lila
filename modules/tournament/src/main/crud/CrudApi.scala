@@ -36,7 +36,9 @@ final class CrudApi(tournamentRepo: TournamentRepo, crudForm: CrudForm) {
       streakable = tour.streakable,
       teamBattle = tour.isTeamBattle,
       hasChat = tour.hasChat,
-      ranked = tour.ranked
+      ranked = tour.ranked,
+      isInviteOnly = tour.isInviteOnly,
+      hostTag = tour.hostTag.getOrElse("")
     )
 
   def update(old: Tournament, data: CrudForm.Data) =
@@ -84,7 +86,9 @@ final class CrudApi(tournamentRepo: TournamentRepo, crudForm: CrudForm) {
       teamBattle = none,
       description = none,
       hasChat = true,
-      ranked = true
+      ranked = true,
+      isInviteOnly = false,
+      hostTag = none
     )
 
   private def updateTour(tour: Tournament, data: CrudForm.Data) = {

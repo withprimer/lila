@@ -54,6 +54,8 @@ final class ApiJsonView(cached: Cached,
         "clock"     -> tour.clock,
         "rated"     -> tour.mode.rated,
         "ranked"    -> tour.ranked,
+        "isInviteOnly" -> tour.isInviteOnly,
+        "hostTag"   -> tour.hostTag,
         "fullName"  -> tour.name(),
         "nbPlayers" -> tour.nbPlayers,
         "variant" -> Json.obj(

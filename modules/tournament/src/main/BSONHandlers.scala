@@ -97,7 +97,9 @@ object BSONHandlers {
         spotlight = r.getO[Spotlight]("spotlight"),
         description = r strO "description",
         hasChat = r boolO "chat" getOrElse true,
-        ranked = r boolD "ranked"
+        ranked = r boolD "ranked",
+        isInviteOnly = r boolO "isInviteOnly" getOrElse false,
+        hostTag = r strO "hostTag"
       )
     }
     def writes(w: BSON.Writer, o: Tournament) =
@@ -125,7 +127,9 @@ object BSONHandlers {
         "spotlight"   -> o.spotlight,
         "description" -> o.description,
         "chat"        -> (!o.hasChat).option(false),
-        "ranked"      -> o.ranked
+        "ranked"      -> o.ranked,
+        "isInviteOnly"-> o.isInviteOnly,
+        "hostTag"     -> o.hostTag
       )
   }
 
