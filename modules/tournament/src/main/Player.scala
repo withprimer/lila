@@ -55,6 +55,7 @@ private[tournament] object Player {
       userId = user.id,
       rating = user.perfs(perfType).intRating,
       provisional = user.perfs(perfType).provisional,
-      team = team
+      team = team,
+      played = false
     )
 }

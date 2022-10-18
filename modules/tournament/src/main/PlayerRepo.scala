@@ -21,7 +21,7 @@ final class PlayerRepo(coll: Coll)(implicit ec: scala.concurrent.ExecutionContex
   private val selectActive   = $doc("w" $ne true)
   private val selectWithdraw = $doc("w" -> true)
   private val bestSort       = $doc("m" -> -1)
-  private val selectPlayed       = $doc("pl" -> true)
+  private val selectPlayed   = $doc("pl" -> true)
 
   def byId(id: Tournament.ID): Fu[Option[Player]] = coll.one[Player]($id(id))
 
