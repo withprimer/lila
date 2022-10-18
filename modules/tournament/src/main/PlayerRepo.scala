@@ -21,6 +21,7 @@ final class PlayerRepo(coll: Coll)(implicit ec: scala.concurrent.ExecutionContex
   private val selectActive   = $doc("w" $ne true)
   private val selectWithdraw = $doc("w" -> true)
   private val bestSort       = $doc("m" -> -1)
+  private val selectPlayed       = $doc("pl" -> true)
 
   def byId(id: Tournament.ID): Fu[Option[Player]] = coll.one[Player]($id(id))
 
@@ -36,7 +37,7 @@ final class PlayerRepo(coll: Coll)(implicit ec: scala.concurrent.ExecutionContex
     }
 
   private[tournament] def bestByTour(tourId: Tournament.ID, nb: Int, skip: Int = 0): Fu[List[Player]] =
-    coll.find(selectTour(tourId)).sort(bestSort).skip(skip).cursor[Player]().list(nb)
+    coll.find(selectTour(tourId) ++ selectPlayed).sort(bestSort).skip(skip).cursor[Player]().list(nb)
 
   private[tournament] def bestByTourWithRank(
       tourId: Tournament.ID,

@@ -15,7 +15,8 @@ private[tournament] case class Player(
     score: Int = 0,
     fire: Boolean = false,
     performance: Int = 0,
-    team: Option[TeamID] = None
+    team: Option[TeamID] = None,
+    played: Boolean = false,
 ) {
 
   def id = _id

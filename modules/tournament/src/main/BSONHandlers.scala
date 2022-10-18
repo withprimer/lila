@@ -145,7 +145,8 @@ object BSONHandlers {
         score = r intD "s",
         fire = r boolD "f",
         performance = r intD "e",
-        team = r strO "t"
+        team = r strO "t",
+        played = r boolD "f"
       )
     def writes(w: BSON.Writer, o: Player) =
       $doc(
@@ -159,7 +160,8 @@ object BSONHandlers {
         "m"   -> o.magicScore,
         "f"   -> w.boolO(o.fire),
         "e"   -> o.performance,
-        "t"   -> o.team
+        "t"   -> o.team,
+        "pl"  -> o.played
       )
   }
 
