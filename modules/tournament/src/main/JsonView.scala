@@ -547,7 +547,8 @@ object JsonView {
         .obj(
           "name"   -> light.fold(p.userId)(_.name),
           "rank"   -> rankedPlayer.rank,
-          "rating" -> p.rating
+          "rating" -> p.rating,
+          "score" -> p.score
         )
         .add("sheet", sheet.map(sheetJson(streakable = streakable, withScores = withScores)))
         .add("title" -> light.flatMap(_.title))
