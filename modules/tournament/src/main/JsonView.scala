@@ -6,19 +6,17 @@ import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import play.api.i18n.Lang
 import play.api.libs.json._
-
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext
 import lila.common.Json._
-import lila.common.{GreatPlayer, LightUser, Preload, Uptime}
-import lila.game.{Game, LightPov}
+import lila.common.{ GreatPlayer, LightUser, Preload, Uptime }
+import lila.game.{ Game, LightPov }
 import lila.hub.LightTeam.TeamID
 import lila.memo.CacheApi._
 import lila.memo.SettingStore
 import lila.rating.PerfType
 import lila.socket.Socket.SocketVersion
-import lila.tournament.arena.Sheet
-import lila.user.{LightUserApi, User}
+import lila.user.{ LightUserApi, User }
 
 final class JsonView(
     lightUserApi: LightUserApi,
@@ -522,13 +520,6 @@ object JsonView {
         .add("team" -> player.team)
   }
 
-  private def sheetNbs(s: arena.Sheet) =
-    Json.obj(
-      "game" -> s.scores.size,
-      "berserk" -> s.scores.count(_.isBerserk),
-      "win" -> s.scores.count(_.res == arena.Sheet.Result.Win)
-    )
-
   def playerJson(
       lightUserApi: LightUserApi,
       sheets: Map[User.ID, arena.Sheet],
@@ -556,16 +547,13 @@ object JsonView {
         .obj(
           "name"   -> light.fold(p.userId)(_.name),
           "rank"   -> rankedPlayer.rank,
-          "rating" -> p.rating,
-          "score"  -> p.score,
-          "nb"     -> sheetNbs(sheet.getOrElse(Sheet(Nil, 0)))
+          "rating" -> p.rating
         )
         .add("sheet", sheet.map(sheetJson(streakable = streakable, withScores = withScores)))
         .add("title" -> light.flatMap(_.title))
         .add("provisional" -> p.provisional)
         .add("withdraw" -> p.withdraw)
         .add("team" -> p.team)
-        .add("performance" -> p.performanceOption)
     }
   }
 
