@@ -496,19 +496,19 @@ case class Game(
     Centis ofSeconds {
       import Speed._
       val base = if (isTournament) speed match {
-        case UltraBullet => 11
-        case Bullet      => 16
-        case Blitz       => 21
-        case Rapid       => 25
-        case _           => 30
+        case UltraBullet => 5000
+        case Bullet      => 5000
+        case Blitz       => 5000
+        case Rapid       => 5000
+        case _           => 5000
       }
       else
         speed match {
-          case UltraBullet => 15
-          case Bullet      => 20
-          case Blitz       => 25
-          case Rapid       => 30
-          case _           => 35
+          case UltraBullet => 5000
+          case Bullet      => 5000
+          case Blitz       => 5000
+          case Rapid       => 5000
+          case _           => 5000
         }
       if (variant.chess960) base * 5 / 4
       else base
