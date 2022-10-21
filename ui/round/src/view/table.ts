@@ -108,34 +108,35 @@ export function anyClock(ctrl: RoundController, position: Position) {
 }
 
 export const renderTable = (ctrl: RoundController): MaybeVNodes => [
-  isPlayerTurn(ctrl.data)
-    ? h('div.round__app__table', [
-        !ctrl.isInitialMobile ? anyClock(ctrl, 'top') : undefined,
-        ...(ctrl.data.player.spectator
-          ? renderTableWatch(ctrl)
-          : game.playable(ctrl.data)
-          ? renderTablePlay(ctrl)
-          : renderTableEnd(ctrl)),
-        !ctrl.isInitialMobile ? anyClock(ctrl, 'bottom') : undefined,
-        renderExpiration(ctrl, 'bottom'),
-      ])
-    : h('div.round__app__table', [
-        renderExpiration(ctrl, 'top'),
-        !ctrl.isInitialMobile ? anyClock(ctrl, 'top') : undefined,
-        ...(ctrl.data.player.spectator
-          ? renderTableWatch(ctrl)
-          : game.playable(ctrl.data)
-          ? renderTablePlay(ctrl)
-          : renderTableEnd(ctrl)),
-        !ctrl.isInitialMobile ? anyClock(ctrl, 'bottom') : undefined,
-      ]),
-  // h('div.round__app__table'),
-  // renderExpiration(ctrl),
-  // !ctrl.isInitialMobile ? anyClock(ctrl, 'top') : undefined,
-  // ...(ctrl.data.player.spectator
-  //   ? renderTableWatch(ctrl)
-  //   : game.playable(ctrl.data)
-  //   ? renderTablePlay(ctrl)
-  //   : renderTableEnd(ctrl)),
-  // !ctrl.isInitialMobile ? anyClock(ctrl, 'bottom') : undefined,
+  // isPlayerTurn(ctrl.data)
+  //   ? h('div.round__app__table', [
+  //       !ctrl.isInitialMobile ? anyClock(ctrl, 'top') : undefined,
+  //       ...(ctrl.data.player.spectator
+  //         ? renderTableWatch(ctrl)
+  //         : game.playable(ctrl.data)
+  //         ? renderTablePlay(ctrl)
+  //         : renderTableEnd(ctrl)),
+  //       !ctrl.isInitialMobile ? anyClock(ctrl, 'bottom') : undefined,
+  //       renderExpiration(ctrl, 'bottom'),
+  //     ])
+  //   : h('div.round__app__table', [
+  //       renderExpiration(ctrl, 'top'),
+  //       !ctrl.isInitialMobile ? anyClock(ctrl, 'top') : undefined,
+  //       ...(ctrl.data.player.spectator
+  //         ? renderTableWatch(ctrl)
+  //         : game.playable(ctrl.data)
+  //         ? renderTablePlay(ctrl)
+  //         : renderTableEnd(ctrl)),
+  //       !ctrl.isInitialMobile ? anyClock(ctrl, 'bottom') : undefined,
+  //     ]),
+  h('div.round__app__table', [
+    renderExpiration(ctrl),
+    !ctrl.isInitialMobile ? anyClock(ctrl, 'top') : undefined,
+    ...(ctrl.data.player.spectator
+      ? renderTableWatch(ctrl)
+      : game.playable(ctrl.data)
+      ? renderTablePlay(ctrl)
+      : renderTableEnd(ctrl)),
+    !ctrl.isInitialMobile ? anyClock(ctrl, 'bottom') : undefined,
+  ]),
 ];

@@ -16,7 +16,7 @@
 
 .expiration {
   @extend %flex-center;
-
+  min-height: 26px;
   font-size: 0.9rem;
   justify-content: center;
   line-height: 2;
