@@ -34,6 +34,11 @@
     align-self: start;
   }
 
+
+  .direct-board {
+    min-width: 500px;
+  }
+
   .eval-gauge {
     grid-area: gauge;
   }

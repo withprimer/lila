@@ -72,6 +72,7 @@ export default function (ctrl: Controller): VNode {
     if (!cevalShown) ctrl.vm.autoScrollNow = true;
     cevalShown = showCeval;
   }
+  window.ctrl = ctrl;
   return h(
     `main.puzzle.puzzle-${ctrl.getData().replay ? 'replay' : 'play'}${ctrl.streak ? '.puzzle--streak' : ''}`,
     {
@@ -89,34 +90,38 @@ export default function (ctrl: Controller): VNode {
       },
     },
     [
-      h('aside.puzzle__side', [
-        side.replay(ctrl),
-        side.puzzleBox(ctrl),
-        ctrl.streak ? side.streakBox(ctrl) : side.userBox(ctrl),
-        side.config(ctrl),
-        theme(ctrl),
+      h('div.puzzle__session.wrapper', [session(ctrl)]),
+      // h('aside.puzzle__side', [
+      //   side.replay(ctrl),
+      //   side.puzzleBox(ctrl),
+      //   ctrl.streak ? side.streakBox(ctrl) : side.userBox(ctrl),
+      //   side.config(ctrl),
+      //   theme(ctrl),
+      // ]),
+      h('div.puzzle__board-wrap', [
+        h(
+          'div.puzzle__board.main-board.direct-board' + (ctrl.pref.blindfold ? '.blindfold' : ''),
+          {
+            hook:
+              'ontouchstart' in window || lichess.storage.get('scrollMoves') == '0'
+                ? undefined
+                : bindNonPassive(
+                    'wheel',
+                    stepwiseScroll((e: WheelEvent, scroll: boolean) => {
+                      const target = e.target as HTMLElement;
+                      if (target.tagName !== 'PIECE' && target.tagName !== 'SQUARE' && target.tagName !== 'CG-BOARD')
+                        return;
+                      e.preventDefault();
+                      if (e.deltaY > 0 && scroll) control.next(ctrl);
+                      else if (e.deltaY < 0 && scroll) control.prev(ctrl);
+                      ctrl.redraw();
+                    })
+                  ),
+          },
+          [chessground(ctrl), ctrl.promotion.view()]
+        ),
       ]),
-      h(
-        'div.puzzle__board.main-board' + (ctrl.pref.blindfold ? '.blindfold' : ''),
-        {
-          hook:
-            'ontouchstart' in window || lichess.storage.get('scrollMoves') == '0'
-              ? undefined
-              : bindNonPassive(
-                  'wheel',
-                  stepwiseScroll((e: WheelEvent, scroll: boolean) => {
-                    const target = e.target as HTMLElement;
-                    if (target.tagName !== 'PIECE' && target.tagName !== 'SQUARE' && target.tagName !== 'CG-BOARD')
-                      return;
-                    e.preventDefault();
-                    if (e.deltaY > 0 && scroll) control.next(ctrl);
-                    else if (e.deltaY < 0 && scroll) control.prev(ctrl);
-                    ctrl.redraw();
-                  })
-                ),
-        },
-        [chessground(ctrl), ctrl.promotion.view()]
-      ),
+
       cevalView.renderGauge(ctrl),
       h('div.puzzle__tools', [
         // we need the wrapping div here
@@ -128,12 +133,13 @@ export default function (ctrl: Controller): VNode {
           },
           showCeval ? [cevalView.renderCeval(ctrl), cevalView.renderPvs(ctrl)] : []
         ),
+
         renderAnalyse(ctrl),
+        controls(ctrl),
         feedbackView(ctrl),
       ]),
-      controls(ctrl),
+
       ctrl.keyboardMove ? renderKeyboardMove(ctrl.keyboardMove) : null,
-      session(ctrl),
     ]
   );
 }

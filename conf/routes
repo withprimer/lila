@@ -119,6 +119,7 @@ POST  /training/coordinate/score       controllers.Coordinate.score
 
 # Training - Puzzle
 GET   /training                        controllers.Puzzle.home
+GET   /training/embed                 controllers.Puzzle.embedHome
 GET   /training/daily                  controllers.Puzzle.daily
 GET   /training/frame                  controllers.Puzzle.frame
 GET   /training/export/gif/thumbnail/:id.gif controllers.Export.puzzleThumbnail(id: String)
