@@ -12,13 +12,14 @@
     margin: 0.4em 0.5em 0 0;
     color: #fff;
     opacity: 0.85;
-    font-size: 0.85em;
+    font-size: 1em;
     font-weight: bold;
     justify-content: center;
+    padding: 4px;
 
     &.result-empty::before {
-      @extend %data-icon;
-      content: '';
+      // @extend %data-icon;
+      // content: '';
       font-size: 0.9em;
     }
 
@@ -29,9 +30,9 @@
     &.result-false {
       background: $c-bad;
 
-      &.result-empty::before {
-        content: '';
-      }
+      // &.result-empty::before {
+      //   content: '';
+      // }
     }
 
     &.current {
