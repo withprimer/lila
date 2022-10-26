@@ -43,13 +43,26 @@
 
   &__divider {
     width: 100vw;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     margin-top: 0px;
+  }
+
+  &__board-wrap {
+    margin: 15px;
   }
 
 
   .direct-board {
     min-width: 500px;
+    
+  }
+
+  .direct-board > div > cg-container {
+    width:auto;
+  }
+
+  .direct-board > div > cg-container > cg-board {
+    box-shadow: none;
   }
 
   .eval-gauge {

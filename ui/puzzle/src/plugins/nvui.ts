@@ -374,7 +374,7 @@ function playActions(ctrl: Controller): VNode {
       ctrl.trans.noarg('streakSkipExplanation'),
       !ctrl.streak.data.skip
     );
-  else return h('div.actions_play', button('View the solution', ctrl.viewSolution));
+  else return h('div.actions_play', button('Reveal Solution', ctrl.viewSolution));
 }
 
 function afterActions(ctrl: Controller): VNode {

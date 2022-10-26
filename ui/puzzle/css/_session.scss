@@ -8,7 +8,7 @@
     @extend %box-radius, %flex-center;
 
     flex: 0 0 2.3em;
-    height: 1.6em;
+    // height: 1.6em;
     margin: 0.4em 0.5em 0 0;
     color: #fff;
     opacity: 0.85;
@@ -16,6 +16,12 @@
     font-weight: bold;
     justify-content: center;
     padding: 4px;
+
+    border: 1px #0000003d solid;
+    color: black;
+    border-radius: 10px;
+    padding: 5px;
+    font-weight: normal;
 
     &.result-empty::before {
       // @extend %data-icon;
@@ -28,7 +34,7 @@
     }
 
     &.result-false {
-      background: $c-bad;
+      //background: $c-bad;
 
       // &.result-empty::before {
       //   content: '';
