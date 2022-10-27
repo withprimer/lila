@@ -7,8 +7,8 @@
 }
 
 .puzzle {
-  grid-area: main;
-  display: grid;
+  display: flex;
+
 
   &__side {
     @extend %zen;
@@ -21,6 +21,7 @@
 
   &__tools {
     grid-area: tools;
+    max-width:40%;
   }
 
   &__controls {
@@ -49,13 +50,11 @@
 
   &__board-wrap {
     margin: 15px;
+    width:60%;
+    min-width:400px;
+
   }
 
-
-  .direct-board {
-    min-width: 500px;
-    
-  }
 
   .direct-board > div > cg-container {
     width:auto;
@@ -94,14 +93,14 @@
     }
   }
 
-  @include breakpoint($mq-col3) {
-    grid-template-areas:
-      'side    . board   gauge tools'
-      'side    . session .     controls'
-      'side    . kb-move .     controls'
-      'side    . .       .     .';
-    grid-template-columns: $col3-uniboard-side $block-gap $col3-uniboard-width var(--gauge-gap) $col3-uniboard-table;
-  }
+  // @include breakpoint($mq-col3) {
+  //   grid-template-areas:
+  //     'side    . board   gauge tools'
+  //     'side    . session .     controls'
+  //     'side    . kb-move .     controls'
+  //     'side    . .       .     .';
+  //   grid-template-columns: $col3-uniboard-side $block-gap $col3-uniboard-width var(--gauge-gap) $col3-uniboard-table;
+  // }
 
   &__side {
     display: grid;
@@ -112,28 +111,28 @@
       grid-template-areas: 'replay' 'user' 'theme' 'metas' 'config';
     }
 
-    @include breakpoint($mq-xx-small) {
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas: 'metas user' 'metas theme' 'config theme' '. theme';
-      grid-template-rows: min-content min-content min-content;
+    // @include breakpoint($mq-xx-small) {
+    //   grid-template-columns: 1fr 1fr;
+    //   grid-template-areas: 'metas user' 'metas theme' 'config theme' '. theme';
+    //   grid-template-rows: min-content min-content min-content;
 
-      .puzzle-replay & {
-        grid-template-areas: 'metas replay' 'metas user' 'config user' 'config theme';
-      }
-    }
+    //   .puzzle-replay & {
+    //     grid-template-areas: 'metas replay' 'metas user' 'config user' 'config theme';
+    //   }
+    // }
 
-    @include breakpoint($mq-x-large) {
-      grid-template-columns: 1fr;
-      grid-template-areas: 'metas' 'user' 'theme' 'config';
-      grid-template-rows: min-content min-content min-content;
-      justify-self: end;
-      min-width: 250px;
-      max-width: 350px;
+    // @include breakpoint($mq-x-large) {
+    //   grid-template-columns: 1fr;
+    //   grid-template-areas: 'metas' 'user' 'theme' 'config';
+    //   grid-template-rows: min-content min-content min-content;
+    //   justify-self: end;
+    //   min-width: 250px;
+    //   max-width: 350px;
 
-      .puzzle-replay & {
-        grid-template-areas: 'metas' 'replay' 'user' 'theme' 'config';
-      }
-    }
+    //   .puzzle-replay & {
+    //     grid-template-areas: 'metas' 'replay' 'user' 'theme' 'config';
+    //   }
+    // }
 
     &__metas {
       grid-area: metas;
