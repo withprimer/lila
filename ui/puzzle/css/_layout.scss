@@ -1,9 +1,11 @@
 #main-wrap {
-  --main-max-width: calc(100vh - #{$site-header-outer-height} - #{$col1-uniboard-controls});
+  display: flex;
+  //   --main-max-width: calc(100vh - #{$site-header-outer-height} - #{$col1-uniboard-controls});
 
-  @include breakpoint($mq-col2) {
-    --main-max-width: auto;
-  }
+  //   @include breakpoint($mq-col2) {
+  //     --main-max-width: auto;
+  //   }
+  // }
 }
 
 .puzzle {
@@ -11,26 +13,27 @@
 
   &__side {
     @extend %zen;
-    grid-area: side;
+    // grid-area: side;
   }
 
   &__board {
-    grid-area: board;
+    // grid-area: board;
   }
 
   &__tools {
-    grid-area: tools;
-    max-width: 40%;
+    // grid-area: tools;
+    min-width: 300px;
+    max-height: 515px;
   }
 
   &__controls {
     @extend %zen;
-    grid-area: controls;
+    // grid-area: controls;
   }
 
   &__session {
     @extend %zen;
-    grid-area: session;
+    // grid-area: session;
     align-self: start;
     padding: 10px;
     margin-top: 0px;
@@ -48,8 +51,8 @@
 
   &__board-wrap {
     margin: 15px;
-    width: 60%;
-    min-width: 400px;
+    min-width: 500px;
+    max-height: 500px;
   }
 
   .direct-board > div > cg-container {
