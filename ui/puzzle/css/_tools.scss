@@ -3,6 +3,15 @@
 
   background: $c-bg-box;
 
+  box-shadow: none;
+  border-left: #0000003b;
+  border-style: solid;
+  border-right: none;
+  border-width: 0.1rem;
+  border-radius: 0px;
+  border-top: none;
+  border-bottom: none;
+
   .ceval-wrap {
     flex: 0 0 38px;
   }
@@ -17,6 +26,8 @@
   overflow: auto;
   border-bottom: $border;
   position: relative;
+
+  max-height: 50%;
 
   /* required by line::before */
 
@@ -47,19 +58,21 @@
 .puzzle__feedback {
   @extend %flex-column;
 
-  flex: 1 0 9rem;
+  // flex: 1 0 9rem;
 
   @include breakpoint($mq-col2) {
     @include breakpoint($mq-tall) {
-      flex: 1 0 17rem;
+      //flex: 1 0 17rem;
     }
   }
-
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
   background: $c-bg-high;
-  justify-content: center;
+  // justify-content: center;
 
   &:not(.after) {
-    padding: 2em;
+    padding: 1em;
   }
 
   .player {
@@ -104,6 +117,11 @@
 
   .instruction > * {
     display: block;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #00000045;
+    padding: 10px;
+    border-radius: 100px;
   }
 
   .instruction strong {
@@ -115,11 +133,23 @@
     text-align: center;
     visibility: hidden;
     opacity: 0;
+    margin-right: 10px;
+
+    // background: #EEE6FF;
+    // border-radius: 24px;
+  }
+
+  .view_solution > a {
+    background: #eee6ff;
+    border-radius: 24px;
   }
 
   .view_solution.show {
     visibility: visible;
     opacity: 0.8;
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
 
     @include transition(opacity, 1.5s);
   }
@@ -128,12 +158,21 @@
 .puzzle__controls {
   @extend %flex-center;
 
-  height: $col3-uniboard-controls;
+  //height: $col3-uniboard-controls;
   margin-top: #{-$block-gap};
 
   @include breakpoint($mq-col1) {
     height: $col1-uniboard-controls;
   }
+
+  margin-top: 0px;
+  font-size: inherit;
+  padding: 10px;
+  border-style: solid;
+  border-width: 1px;
+  border-left: none;
+  border-right: none;
+  border-color: #00000045;
 
   // height: calc(#{$puzzle-history-height} + #{$block-gap});
   .jumps {

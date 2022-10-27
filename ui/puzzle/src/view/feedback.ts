@@ -34,18 +34,25 @@ const viewSolution = (ctrl: Controller): VNode =>
             {
               hook: bind('click', ctrl.viewSolution),
             },
-            ctrl.trans.noarg('viewTheSolution')
+            'Reveal Solution'
           ),
+          // h(
+          //   'a.button.button-empty',
+          //   {
+          //     hook: bind('click', ctrl.skip),
+          //   },
+          //   'Skip'
+          // ),
         ]
       );
 
 const initial = (ctrl: Controller): VNode =>
   h('div.puzzle__feedback.play', [
     h('div.player', [
-      h('div.no-square', h('piece.king.' + ctrl.vm.pov)),
+      // h('div.no-square', h('piece.king.' + ctrl.vm.pov)),
       h('div.instruction', [
-        h('strong', ctrl.trans.noarg('yourTurn')),
-        h('em', ctrl.trans.noarg(ctrl.vm.pov === 'white' ? 'findTheBestMoveForWhite' : 'findTheBestMoveForBlack')),
+        // h('strong', ctrl.trans.noarg('yourTurn')),
+        h('em', ctrl.vm.pov === 'white' ? 'White to move.' : 'Black to move.'),
       ]),
     ]),
     viewSolution(ctrl),
