@@ -72,7 +72,9 @@ export default function (ctrl: Controller): VNode {
     if (!cevalShown) ctrl.vm.autoScrollNow = true;
     cevalShown = showCeval;
   }
-  return h('div.puzzle__wrapper', [session(ctrl),h('hr.puzzle__divider', []),
+  return h('div.puzzle__wrapper', [
+    session(ctrl),
+    h('hr.puzzle__divider', []),
     h(
       `main.puzzle.puzzle-${ctrl.getData().replay ? 'replay' : 'play'}${ctrl.streak ? '.puzzle--streak' : ''}`,
       {

@@ -9,7 +9,6 @@
 .puzzle {
   display: flex;
 
-
   &__side {
     @extend %zen;
     grid-area: side;
@@ -21,7 +20,7 @@
 
   &__tools {
     grid-area: tools;
-    max-width:40%;
+    max-width: 40%;
   }
 
   &__controls {
@@ -41,7 +40,6 @@
     width: 100vw;
   }
 
-
   &__divider {
     width: 100vw;
     margin-bottom: 0px;
@@ -50,14 +48,12 @@
 
   &__board-wrap {
     margin: 15px;
-    width:60%;
-    min-width:400px;
-
+    width: 60%;
+    min-width: 400px;
   }
 
-
   .direct-board > div > cg-container {
-    width:auto;
+    width: auto;
   }
 
   .direct-board > div > cg-container > cg-board {
