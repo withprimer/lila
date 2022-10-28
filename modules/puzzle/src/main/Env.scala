@@ -4,6 +4,7 @@ import com.softwaremill.macwire._
 import io.methvin.play.autoconfig._
 import play.api.Configuration
 import scala.concurrent.duration._
+import play.api.libs.ws.StandaloneWSClient
 
 import lila.common.config._
 import lila.db.AsyncColl
@@ -19,6 +20,7 @@ private class PuzzleConfig(
 @Module
 final class Env(
     appConfig: Configuration,
+    ws: StandaloneWSClient,
     renderer: lila.hub.actors.Renderer,
     historyApi: lila.history.HistoryApi,
     lightUserApi: lila.user.LightUserApi,
@@ -46,7 +48,7 @@ final class Env(
 
   lazy val jsonView = wire[JsonView]
 
-  lazy val retrieveGameApi = wire[RetrieveGameApi]
+  lazy val retrieveGameApi: RetrieveGameApi = wire[RetrieveGameApi]
 
   private lazy val pathApi = wire[PuzzlePathApi]
 

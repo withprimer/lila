@@ -11,9 +11,8 @@ import lila.common.Domain
 import lila.db.dsl._
 import lila.game.Game
 
-final private class RetrieveGameApi(
+final class RetrieveGameApi(
     ws: StandaloneWSClient,
-    mongoCache: lila.memo.MongoCache.Api
 )(implicit
     ec: scala.concurrent.ExecutionContext
 ) {

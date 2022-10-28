@@ -11,7 +11,8 @@ import lila.i18n.defaultLang
 final private class GameJson(
     gameRepo: GameRepo,
     cacheApi: lila.memo.CacheApi,
-    lightUserApi: lila.user.LightUserApi
+    lightUserApi: lila.user.LightUserApi,
+    retrieveGameApi: lila.puzzle.RetrieveGameApi
 )(implicit ec: scala.concurrent.ExecutionContext) {
 
   def apply(gameId: Game.ID, plies: Int, bc: Boolean): Fu[JsObject] =
