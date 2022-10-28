@@ -25,7 +25,7 @@ final class RetrieveGameApi(
       .get()
       .map {
         case res if res.status == 200 =>
-          (res.body[JsValue] \ "pgn").as[String]
+          (res.body[JsValue] \ "moves").as[String]
         case res => throw new RuntimeException(s"Error fetching game ${res}")
       }
 }

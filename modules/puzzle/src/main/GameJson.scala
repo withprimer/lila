@@ -3,10 +3,13 @@ package lila.puzzle
 import chess.format.Forsyth
 import chess.format.UciCharPair
 import play.api.libs.json._
-import scala.concurrent.duration._
 
-import lila.game.{ Game, GameRepo, PerfPicker }
+import scala.concurrent.duration._
+import lila.game.{Game, GameRepo, PerfPicker}
 import lila.i18n.defaultLang
+import play.api.mvc.Results
+
+import scala.concurrent.Future
 
 final private class GameJson(
     gameRepo: GameRepo,
@@ -63,13 +66,27 @@ final private class GameJson(
 //      headers = Seq()
 //    );
 //    }
-  private def generate(gameId: Game.ID, plies: Int, bc: Boolean): Fu[JsObject] =
+  private def generate(gameId: Game.ID, plies: Int, bc: Boolean): Fu[JsObject] = {
+    printf("!!! TESTING")
+//    printf(retrieveGameApi.retrieveGames(gameId))
+    // .dmap { pgn =>
+    //   printf("!!! PGN %s", pgn)
+    // }
+
+//  val pgn: Future[String] = for {
+//    pgn <-
+//  } yield pgn
+  val pgn = retrieveGameApi.retrieveGames(gameId).await(3 seconds, "gameRetrieved")
+  printf("!!! PGN %s", pgn)
+
+    printf("!!! END OF FUNC")
     gameRepo gameFromSecondary gameId orFail s"Missing puzzle game $gameId!" flatMap { game =>
       lightUserApi preloadMany game.userIds map { _ =>
         if (bc) generateBc(game, plies)
         else generate(game, plies)
       }
     }
+  }
 
   private def generate(game: Game, plies: Int): JsObject =
     Json
