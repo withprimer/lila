@@ -36,14 +36,19 @@ final class Puzzle(
   private def renderShow(
       puzzle: Puz,
       theme: PuzzleTheme,
-      replay: Option[PuzzleReplay] = None
+      replay: Option[PuzzleReplay] = None,
+      isDirect: Boolean = false
   )(implicit ctx: Context) =
     renderJson(puzzle, theme, replay) zip
       ctx.me.??(u => env.puzzle.session.getDifficulty(u) dmap some) map { case (json, difficulty) =>
         EnableSharedArrayBuffer(
           Ok(
-            views.html.puzzle
-              .show(puzzle, json, env.puzzle.jsonView.pref(ctx.pref), difficulty)
+            if (!isDirect)
+              views.html.puzzle
+                .show(puzzle, json, env.puzzle.jsonView.pref(ctx.pref), difficulty)
+            else
+              views.html.puzzle
+                .direct(puzzle, json, env.puzzle.jsonView.pref(ctx.pref), difficulty)
           )
         )
       }
@@ -75,6 +80,16 @@ final class Puzzle(
         val theme = PuzzleTheme.mix
         nextPuzzleForMe(theme.key) flatMap {
           renderShow(_, theme)
+        }
+      }
+    }
+
+    def embedHome =
+    Open { implicit ctx =>
+      NoBot {
+        val theme = PuzzleTheme.mix
+        nextPuzzleForMe(theme.key) flatMap {
+          renderShow(_, theme,None,true)
         }
       }
     }
@@ -273,16 +288,25 @@ final class Puzzle(
     }
   }
 
-  def embedPuzzle(id: String) = Open { implicit ctx =>
-    OptionFuResult(env.puzzle.api.puzzle find Puz.Id(id)) { puzzle =>
-      renderJson(puzzle, PuzzleTheme.mix, None) zip
-        ctx.me.??(u => env.puzzle.session.getDifficulty(u) dmap some) map { case (json, difficulty) =>
-        EnableSharedArrayBuffer(
-          Ok(
-            views.html.puzzle
-              .direct(puzzle, json, env.puzzle.jsonView.pref(ctx.pref), difficulty)
-          )
-        )
+  def embedPuzzle(themeOrId: String) = Open { implicit ctx =>
+    NoBot {
+      PuzzleTheme.find(themeOrId) match {
+        case Some(theme) =>
+          nextPuzzleForMe(theme.key) flatMap {
+            renderShow(_, theme,null,true)
+          }
+        case None if themeOrId.size == Puz.idSize =>
+          OptionFuResult(env.puzzle.api.puzzle find Puz.Id(themeOrId)) { puzzle =>
+            ctx.me.?? { env.puzzle.api.casual.setCasualIfNotYetPlayed(_, puzzle) } >>
+              renderShow(puzzle, PuzzleTheme.mix,null,true)
+          }
+        case None =>
+          themeOrId.toLongOption
+            .flatMap(Puz.numericalId.apply)
+            .??(env.puzzle.api.puzzle.find) map {
+            case None      => Redirect(routes.Puzzle.home)
+            case Some(puz) => Redirect(routes.Puzzle.show(puz.id.value))
+          }
       }
     }
   }

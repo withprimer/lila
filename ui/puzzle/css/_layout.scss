@@ -1,37 +1,66 @@
 #main-wrap {
-  --main-max-width: calc(100vh - #{$site-header-outer-height} - #{$col1-uniboard-controls});
+  display: flex;
+  //   --main-max-width: calc(100vh - #{$site-header-outer-height} - #{$col1-uniboard-controls});
 
-  @include breakpoint($mq-col2) {
-    --main-max-width: auto;
-  }
+  //   @include breakpoint($mq-col2) {
+  //     --main-max-width: auto;
+  //   }
+  // }
 }
 
 .puzzle {
-  grid-area: main;
-  display: grid;
+  display: flex;
 
   &__side {
     @extend %zen;
-    grid-area: side;
+    // grid-area: side;
   }
 
   &__board {
-    grid-area: board;
+    // grid-area: board;
   }
 
   &__tools {
-    grid-area: tools;
+    // grid-area: tools;
+    min-width: 300px;
+    max-height: 515px;
   }
 
   &__controls {
     @extend %zen;
-    grid-area: controls;
+    // grid-area: controls;
   }
 
   &__session {
     @extend %zen;
-    grid-area: session;
+    // grid-area: session;
     align-self: start;
+    padding: 10px;
+    margin-top: 0px;
+  }
+
+  &__wrapper {
+    width: 100vw;
+  }
+
+  &__divider {
+    width: 100vw;
+    margin-bottom: 0px;
+    margin-top: 0px;
+  }
+
+  &__board-wrap {
+    margin: 15px;
+    min-width: 500px;
+    max-height: 500px;
+  }
+
+  .direct-board > div > cg-container {
+    width: auto;
+  }
+
+  .direct-board > div > cg-container > cg-board {
+    box-shadow: none;
   }
 
   .eval-gauge {
@@ -63,14 +92,14 @@
     }
   }
 
-  @include breakpoint($mq-col3) {
-    grid-template-areas:
-      'side    . board   gauge tools'
-      'side    . session .     controls'
-      'side    . kb-move .     controls'
-      'side    . .       .     .';
-    grid-template-columns: $col3-uniboard-side $block-gap $col3-uniboard-width var(--gauge-gap) $col3-uniboard-table;
-  }
+  // @include breakpoint($mq-col3) {
+  //   grid-template-areas:
+  //     'side    . board   gauge tools'
+  //     'side    . session .     controls'
+  //     'side    . kb-move .     controls'
+  //     'side    . .       .     .';
+  //   grid-template-columns: $col3-uniboard-side $block-gap $col3-uniboard-width var(--gauge-gap) $col3-uniboard-table;
+  // }
 
   &__side {
     display: grid;
@@ -81,28 +110,28 @@
       grid-template-areas: 'replay' 'user' 'theme' 'metas' 'config';
     }
 
-    @include breakpoint($mq-xx-small) {
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas: 'metas user' 'metas theme' 'config theme' '. theme';
-      grid-template-rows: min-content min-content min-content;
+    // @include breakpoint($mq-xx-small) {
+    //   grid-template-columns: 1fr 1fr;
+    //   grid-template-areas: 'metas user' 'metas theme' 'config theme' '. theme';
+    //   grid-template-rows: min-content min-content min-content;
 
-      .puzzle-replay & {
-        grid-template-areas: 'metas replay' 'metas user' 'config user' 'config theme';
-      }
-    }
+    //   .puzzle-replay & {
+    //     grid-template-areas: 'metas replay' 'metas user' 'config user' 'config theme';
+    //   }
+    // }
 
-    @include breakpoint($mq-x-large) {
-      grid-template-columns: 1fr;
-      grid-template-areas: 'metas' 'user' 'theme' 'config';
-      grid-template-rows: min-content min-content min-content;
-      justify-self: end;
-      min-width: 250px;
-      max-width: 350px;
+    // @include breakpoint($mq-x-large) {
+    //   grid-template-columns: 1fr;
+    //   grid-template-areas: 'metas' 'user' 'theme' 'config';
+    //   grid-template-rows: min-content min-content min-content;
+    //   justify-self: end;
+    //   min-width: 250px;
+    //   max-width: 350px;
 
-      .puzzle-replay & {
-        grid-template-areas: 'metas' 'replay' 'user' 'theme' 'config';
-      }
-    }
+    //   .puzzle-replay & {
+    //     grid-template-areas: 'metas' 'replay' 'user' 'theme' 'config';
+    //   }
+    // }
 
     &__metas {
       grid-area: metas;

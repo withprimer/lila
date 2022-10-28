@@ -67,6 +67,11 @@ function renderBoard(ctrl: Controller, sendMsg: (msg: any) => void) {
   {
     const controlData = ctrl.getData();
     console.log(ctrl.vm.nodeList);
+    console.log(ctrl);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    window.ctrl = ctrl;
 
     sendMsg({
       type: 'puzzle-state',

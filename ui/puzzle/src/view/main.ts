@@ -72,70 +72,78 @@ export default function (ctrl: Controller): VNode {
     if (!cevalShown) ctrl.vm.autoScrollNow = true;
     cevalShown = showCeval;
   }
-  return h(
-    `main.puzzle.puzzle-${ctrl.getData().replay ? 'replay' : 'play'}${ctrl.streak ? '.puzzle--streak' : ''}`,
-    {
-      class: { 'gauge-on': gaugeOn },
-      hook: {
-        postpatch(old, vnode) {
-          if (old.data!.gaugeOn !== gaugeOn) {
-            if (ctrl.pref.coords === Prefs.Coords.Outside) {
-              $('body').toggleClass('coords-in', gaugeOn).toggleClass('coords-out', !gaugeOn);
+  return h('div.puzzle__wrapper', [
+    session(ctrl),
+    h('hr.puzzle__divider', []),
+    h(
+      `main.puzzle.puzzle-${ctrl.getData().replay ? 'replay' : 'play'}${ctrl.streak ? '.puzzle--streak' : ''}`,
+      {
+        class: { 'gauge-on': gaugeOn },
+        hook: {
+          postpatch(old, vnode) {
+            if (old.data!.gaugeOn !== gaugeOn) {
+              if (ctrl.pref.coords === Prefs.Coords.Outside) {
+                $('body').toggleClass('coords-in', gaugeOn).toggleClass('coords-out', !gaugeOn);
+              }
+              document.body.dispatchEvent(new Event('chessground.resize'));
             }
-            document.body.dispatchEvent(new Event('chessground.resize'));
-          }
-          vnode.data!.gaugeOn = gaugeOn;
+            vnode.data!.gaugeOn = gaugeOn;
+          },
         },
       },
-    },
-    [
-      h('aside.puzzle__side', [
-        side.replay(ctrl),
-        side.puzzleBox(ctrl),
-        ctrl.streak ? side.streakBox(ctrl) : side.userBox(ctrl),
-        side.config(ctrl),
-        theme(ctrl),
-      ]),
-      h(
-        'div.puzzle__board.main-board' + (ctrl.pref.blindfold ? '.blindfold' : ''),
-        {
-          hook:
-            'ontouchstart' in window || lichess.storage.get('scrollMoves') == '0'
-              ? undefined
-              : bindNonPassive(
-                  'wheel',
-                  stepwiseScroll((e: WheelEvent, scroll: boolean) => {
-                    const target = e.target as HTMLElement;
-                    if (target.tagName !== 'PIECE' && target.tagName !== 'SQUARE' && target.tagName !== 'CG-BOARD')
-                      return;
-                    e.preventDefault();
-                    if (e.deltaY > 0 && scroll) control.next(ctrl);
-                    else if (e.deltaY < 0 && scroll) control.prev(ctrl);
-                    ctrl.redraw();
-                  })
-                ),
-        },
-        [chessground(ctrl), ctrl.promotion.view()]
-      ),
-      cevalView.renderGauge(ctrl),
-      h('div.puzzle__tools', [
-        // we need the wrapping div here
-        // so the siblings are only updated when ceval is added
-        h(
-          'div.ceval-wrap',
-          {
-            class: { none: !showCeval },
-          },
-          showCeval ? [cevalView.renderCeval(ctrl), cevalView.renderPvs(ctrl)] : []
-        ),
-        renderAnalyse(ctrl),
-        feedbackView(ctrl),
-      ]),
-      controls(ctrl),
-      ctrl.keyboardMove ? renderKeyboardMove(ctrl.keyboardMove) : null,
-      session(ctrl),
-    ]
-  );
+      [
+        // h('aside.puzzle__side', [
+        //   side.replay(ctrl),
+        //   side.puzzleBox(ctrl),
+        //   ctrl.streak ? side.streakBox(ctrl) : side.userBox(ctrl),
+        //   side.config(ctrl),
+        //   theme(ctrl),
+        // ]),
+        h('div.puzzle__board-wrap', [
+          h(
+            'div.puzzle__board.main-board.direct-board' + (ctrl.pref.blindfold ? '.blindfold' : ''),
+            {
+              hook:
+                'ontouchstart' in window || lichess.storage.get('scrollMoves') == '0'
+                  ? undefined
+                  : bindNonPassive(
+                      'wheel',
+                      stepwiseScroll((e: WheelEvent, scroll: boolean) => {
+                        const target = e.target as HTMLElement;
+                        if (target.tagName !== 'PIECE' && target.tagName !== 'SQUARE' && target.tagName !== 'CG-BOARD')
+                          return;
+                        e.preventDefault();
+                        if (e.deltaY > 0 && scroll) control.next(ctrl);
+                        else if (e.deltaY < 0 && scroll) control.prev(ctrl);
+                        ctrl.redraw();
+                      })
+                    ),
+            },
+            [chessground(ctrl), ctrl.promotion.view()]
+          ),
+        ]),
+
+        cevalView.renderGauge(ctrl),
+        h('div.puzzle__tools', [
+          // we need the wrapping div here
+          // so the siblings are only updated when ceval is added
+          h(
+            'div.ceval-wrap',
+            {
+              class: { none: !showCeval },
+            },
+            showCeval ? [cevalView.renderCeval(ctrl), cevalView.renderPvs(ctrl)] : []
+          ),
+
+          renderAnalyse(ctrl),
+          controls(ctrl),
+          feedbackView(ctrl),
+        ]),
+
+        ctrl.keyboardMove ? renderKeyboardMove(ctrl.keyboardMove) : null,
+      ]
+    ),
+  ]);
 }
 
 function session(ctrl: Controller) {
@@ -161,7 +169,7 @@ function session(ctrl: Controller) {
             ...(ctrl.streak ? { target: '_blank', rel: 'noopener' } : {}),
           },
         },
-        rd
+        [round.id]
       );
     }),
     rounds.find(r => r.id == current)
