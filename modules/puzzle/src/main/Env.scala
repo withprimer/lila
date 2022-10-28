@@ -46,6 +46,8 @@ final class Env(
 
   lazy val jsonView = wire[JsonView]
 
+  lazy val retrieveGameApi = wire[RetrieveGameApi]
+
   private lazy val pathApi = wire[PuzzlePathApi]
 
   private lazy val trustApi = wire[PuzzleTrustApi]

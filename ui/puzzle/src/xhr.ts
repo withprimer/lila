@@ -4,6 +4,8 @@ import throttle from 'common/throttle';
 import { defined } from 'common';
 import { PuzzleReplay, PuzzleResult, ThemeKey } from './interfaces';
 import { StoredBooleanProp } from 'common/storage';
+import { readNdJson, CancellableStream } from 'common/ndjson';
+import { sync } from 'common/sync';
 
 export const complete = (
   puzzleId: string,
@@ -41,12 +43,36 @@ export const setZen = throttle(1000, zen =>
     body: xhr.form({ zen: zen ? 1 : 0 }),
   })
 );
+const explorerError = (err: Error) => ({
+  cancel() {},
+  end: sync(Promise.resolve(err)),
+});
 
 export const getPuzzleGame = async (gameId: string): Promise<void> => {
-  const response = xhr.json(`https://lichess.org/game/export/${gameId}`, {
-    method: 'GET',
-  });
-  console.log('!!! game RETRIEVED', response);
+  try {
+    const res = await fetch(`https://lichess.org/game/export/${gameId}`, {
+      method: 'GET',
+      headers: { accept: 'application/json' },
+      cache: 'default',
+    });
+    // const saveAndShow = (html: string) => {
+    //   cache.set(path, html);
+    //   show(html);
+    // };
+    if (res.ok) {
+      const json = await res.json();
+      // const page = json.query.pages[0];
+      // if (page.missing) saveAndShow('');
+      // else if (page.invalid) show('invalid request: ' + page.invalidreason);
+      // else if (!page.extract) show('error: unexpected API response:<br><pre>' + JSON.stringify(page) + '</pre>');
+      // else saveAndShow(transform(page.extract, title));
+      console.log('!!! game RETRIEVED', res);
+      console.log('!!! json RETRIEVED', json);
+    } //else saveAndShow('');
+  } catch (err) {
+    console.log('error: ' + err);
+  }
+
   // const data = await response.json();
   // console.log('retrieved', data);
   // if (data) {
