@@ -41,3 +41,20 @@ export const setZen = throttle(1000, zen =>
     body: xhr.form({ zen: zen ? 1 : 0 }),
   })
 );
+
+export const getPuzzleGame = async (gameId: string): Promise<void> => {
+  const response = xhr.json(`https://lichess.org/game/export/${gameId}`, {
+    method: 'GET',
+  });
+  console.log('!!! game RETRIEVED', response);
+  // const data = await response.json();
+  // console.log('retrieved', data);
+  // if (data) {
+  //   const puzzleGame: PuzzleGame = {
+  //     id: data.id;
+  //   };
+  //   }
+  // }
+  // return data || PuzzleGame;
+  // return data;
+};

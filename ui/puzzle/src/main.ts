@@ -8,6 +8,7 @@ import { PuzzleOpts } from './interfaces';
 const patch = init([classModule, attributesModule]);
 
 export default function (opts: PuzzleOpts): void {
+  console.log('!!! original game data', opts.data.game);
   const element = document.querySelector('main.puzzle') as HTMLElement;
   const ctrl = makeCtrl(opts, redraw);
 

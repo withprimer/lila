@@ -46,6 +46,9 @@ export default function (opts: PuzzleOpts, redraw: Redraw): Controller {
     streakFailStorage.listen(_ => failStreak(streak));
   }
   const session = new PuzzleSession(opts.data.theme.key, opts.data.user?.id, hasStreak);
+  console.log('!!! game data', opts.data.game);
+
+  xhr.getPuzzleGame(opts.data.game.id);
 
   // required by ceval
   vm.showComputer = () => vm.mode === 'view';

@@ -48,7 +48,20 @@ final private class GameJson(
         }
       )
   }
-
+//
+//  /**
+//    * Returns the text (content) from a URL as a String.
+//    * Warning: This method does not time out when the service is non-responsive.
+//    */
+//  def get(url: String): String = scala.io.Source.fromURL(url).mkString
+//  private def generateFromLichessAPI(gameId: Game.ID, plies: Int, bc: Boolean): Fu[JsObject] =
+//    HttpRequest(
+//      method = HttpMethods.POST,
+//      uri = endpoint,
+//      entity = HttpEntity(ContentTypes.`application/json`, example.toJson.toString),
+//      headers = Seq()
+//    );
+//    }
   private def generate(gameId: Game.ID, plies: Int, bc: Boolean): Fu[JsObject] =
     gameRepo gameFromSecondary gameId orFail s"Missing puzzle game $gameId!" flatMap { game =>
       lightUserApi preloadMany game.userIds map { _ =>

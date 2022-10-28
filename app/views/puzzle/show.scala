@@ -39,7 +39,7 @@ object show {
               .add("difficulty" -> difficulty.map(_.key))
           )})""")
       ),
-      csp = defaultCsp.withWebAssembly.withAnyWs.some,
+      csp = defaultCspNoSelf.some,
       chessground = false,
       openGraph = lila.app.ui
         .OpenGraph(

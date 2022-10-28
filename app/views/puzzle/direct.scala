@@ -19,7 +19,7 @@ object direct {
     views.html.base.layout(
       title = if (isStreak) "Puzzle Streak" else trans.puzzles.txt(),
       moreCss = frag(
-        cssTag("puzzle.direct"),
+        cssTag("puzzle.direct")
       ),
       moreJs = frag(
         jsModule("puzzle.direct"),
@@ -35,13 +35,13 @@ object direct {
               .add("difficulty" -> difficulty.map(_.key))
           )})""")
       ),
-      csp = defaultCsp.withWebAssembly.withAnyWs.some,
+      csp = defaultCspNoSelf.some,
       chessground = false,
       zoomable = false,
       playing = true
     ) {
       main(cls := "puzzle")(
-        div(cls := "puzzle__board main-board")(chessgroundBoard),
+        div(cls := "puzzle__board main-board")(chessgroundBoard)
       )
     }
   }
