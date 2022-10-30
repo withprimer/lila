@@ -326,7 +326,7 @@ export default function (opts: PuzzleOpts, redraw: Redraw): Controller {
         puzzleId: data.puzzle.id,
         puzzleRound: res.round,
       };
-  
+
       window.parent.postMessage(msg, '*');
     }
   }
