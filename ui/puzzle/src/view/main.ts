@@ -34,6 +34,8 @@ export function controls(ctrl: Controller): VNode {
   const node = ctrl.vm.node;
   const nextNode = node.children[0];
   const goNext = ctrl.vm.mode == 'play' && nextNode && nextNode.puzzle != 'fail';
+
+  window.ctrl = ctrl;
   return h(
     'div.puzzle__controls.analyse-controls',
     {
@@ -169,7 +171,7 @@ function session(ctrl: Controller) {
             ...(ctrl.streak ? { target: '_blank', rel: 'noopener' } : {}),
           },
         },
-        [round.id]
+        [round.ratingDiff]
       );
     }),
     rounds.find(r => r.id == current)

@@ -320,6 +320,15 @@ export default function (opts: PuzzleOpts, redraw: Redraw): Controller {
     vm.next.resolve(res.next);
     if (streak && win) streak.onComplete(true, res.next);
     redraw();
+    if (window.parent !== window) {
+      const msg = {
+        type: 'puzzle-round',
+        puzzleId: data.puzzle.id,
+        puzzleRound: res.round,
+      };
+
+      window.parent.postMessage(msg, '*');
+    }
   }
 
   function nextPuzzle(): void {
