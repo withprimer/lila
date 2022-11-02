@@ -8,6 +8,11 @@
   // }
 }
 
+//body override
+body.fixed-scroll {
+  overflow-y: hidden;
+}
+
 .puzzle {
   display: flex;
 
@@ -49,12 +54,42 @@
     margin-top: 0px;
   }
 
+  &__vert-divider {
+    height: 100vh;
+    width:1px;
+    background: #0000003b
+  }
+
   &__board-wrap {
     margin: 15px;
     min-width: 500px;
     max-height: 500px;
   }
 
+  .info-wrap {
+    margin-bottom: 15px;
+  }
+
+  &__info {
+    font-size: 16px;
+    font-family: 'Inter';
+    font-style: normal;
+    line-height: 22px;
+    color: #1c212e;
+    .header {
+      font-weight: 700;
+    }
+
+    .id {
+      font-weight: 400;
+    }
+
+    .rating {
+      font-weight: 400;
+      font-feature-settings: 'pnum' on, 'lnum' on;
+      line-height: 162%;
+    }
+  }
   .direct-board > div > cg-container {
     width: auto;
   }
