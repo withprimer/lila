@@ -20,6 +20,10 @@ function dataAct(e: Event): string | null {
   return target.getAttribute('data-act') || (target.parentNode as HTMLElement).getAttribute('data-act');
 }
 
+function capFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 function jumpButton(icon: string, effect: string, disabled: boolean, glowing = false): VNode {
   return h('button.fbt', {
     class: { disabled, glowing },
@@ -35,7 +39,6 @@ export function controls(ctrl: Controller): VNode {
   const nextNode = node.children[0];
   const goNext = ctrl.vm.mode == 'play' && nextNode && nextNode.puzzle != 'fail';
 
-  window.ctrl = ctrl;
   return h(
     'div.puzzle__controls.analyse-controls',
     {
@@ -74,6 +77,11 @@ export default function (ctrl: Controller): VNode {
     if (!cevalShown) ctrl.vm.autoScrollNow = true;
     cevalShown = showCeval;
   }
+  const data = ctrl.getData();
+  const puzzleData = data.puzzle;
+  const themeData = data.theme;
+  const puzzleTheme = capFirstLetter(themeData.key === 'mix' ? 'variety' : themeData.key);
+
   return h('div.puzzle__wrapper', [
     session(ctrl),
     h('hr.puzzle__divider', []),
@@ -101,7 +109,13 @@ export default function (ctrl: Controller): VNode {
         //   side.config(ctrl),
         //   theme(ctrl),
         // ]),
+
         h('div.puzzle__board-wrap', [
+          h('div.puzzle__info.info-wrap', [
+            h('div.puzzle__info.header', puzzleTheme),
+            h('div.puzzle__info.id', `Puzzle #${puzzleData.id}`),
+            h('div.puzzle__info.rating', `Rating: ${puzzleData.rating}`),
+          ]),
           h(
             'div.puzzle__board.main-board.direct-board' + (ctrl.pref.blindfold ? '.blindfold' : ''),
             {
@@ -124,6 +138,7 @@ export default function (ctrl: Controller): VNode {
             [chessground(ctrl), ctrl.promotion.view()]
           ),
         ]),
+        h('div.puzzle__vert-divider', []),
 
         cevalView.renderGauge(ctrl),
         h('div.puzzle__tools', [
@@ -149,7 +164,9 @@ export default function (ctrl: Controller): VNode {
 }
 
 function session(ctrl: Controller) {
-  const rounds = ctrl.session.get().rounds,
+  const maxRounds = 5;
+  const originalRounds = ctrl.session.get().rounds;
+  const rounds = originalRounds.slice(-maxRounds),
     current = ctrl.getData().puzzle.id;
   return h('div.puzzle__session', [
     ...rounds.map(round => {
@@ -171,18 +188,28 @@ function session(ctrl: Controller) {
             ...(ctrl.streak ? { target: '_blank', rel: 'noopener' } : {}),
           },
         },
-        [round.ratingDiff]
+        [
+          `#${round.id} `,
+          h(
+            `span.rating-${round.result ? 'success' : 'failed'}`,
+            `${round.result ? '+' : ''}${round.ratingDiff !== undefined ? round.ratingDiff : ''}`
+          ),
+        ]
       );
     }),
     rounds.find(r => r.id == current)
       ? ctrl.streak
         ? null
-        : h('a.session-new', {
-            key: 'new',
-            attrs: {
-              href: `/training/${ctrl.session.theme}`,
+        : h(
+            'a.session-new',
+            {
+              key: 'new',
+              attrs: {
+                href: `/training/${ctrl.session.theme}`,
+              },
             },
-          })
+            [`next puzzle`]
+          )
       : h(
           'a.result-cursor.current',
           {
@@ -193,7 +220,7 @@ function session(ctrl: Controller) {
                   href: `/training/${ctrl.session.theme}/${current}`,
                 },
           },
-          ctrl.streak?.data.index
+          `#${current}`
         ),
   ]);
 }

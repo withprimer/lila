@@ -44,26 +44,38 @@
 }
 
 .round__app {
-  display: grid;
-  grid-template-columns: $col2-uniboard-squeeze-width 1fr;
-  grid-template-rows: auto;
+  display: flex;
 
   position: absolute;
   top: 0;
   right: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  flex-direction: column;
+
+  @media screen and (min-width: 800px) {
+    flex-direction: row;
+    height: 100%;
+  }
 
   .right {
+    width: 50%;
+    @media screen and (max-width: 800px) {
+      width: 100%;
+    }
     border-left: 1px solid $c-primer-stroke;
+    height: 100%;
   }
 
   .left {
+    width: 50%;
+    max-width: 95vh;
+    @media screen and (max-width: 800px) {
+      width: 100%;
+      max-width: 75vh;
+    }
     display: flex;
     flex-direction: column;
-    justify-content: center;
-
-    height: 100%;
     padding: 0 24px;
   }
 

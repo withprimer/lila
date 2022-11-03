@@ -8,8 +8,14 @@
   // }
 }
 
+//body override
+body.fixed-scroll {
+  overflow-y: hidden;
+}
+
 .puzzle {
   display: flex;
+  flex-direction: column;
 
   &__side {
     @extend %zen;
@@ -22,8 +28,13 @@
 
   &__tools {
     // grid-area: tools;
-    min-width: 300px;
-    max-height: 515px;
+    width: 100%;
+    max-height: 85vh;
+
+    @media screen and (max-width: 600px) {
+      max-height: 150px;
+      width: 100%;
+    }
   }
 
   &__controls {
@@ -49,12 +60,57 @@
     margin-top: 0px;
   }
 
-  &__board-wrap {
-    margin: 15px;
-    min-width: 500px;
-    max-height: 500px;
+  &__vert-divider {
+    height: 100vh;
+    width: 2px;
+    background: #0000003b;
+    @media screen and (max-width: 600px) {
+      display: none;
+    }
   }
 
+  &__board-wrap {
+    margin: 15px;
+    max-width: 80vw;
+    width: 100%;
+    @media screen and (min-width: 600px) {
+      max-width: 70vh;
+    }
+  }
+
+  &.puzzle-play {
+    align-items: center;
+    @media screen and (min-width: 600px) {
+      flex-direction: row;
+      height: 100%;
+      align-items: inherit;
+    }
+  }
+
+  .info-wrap {
+    margin-bottom: 15px;
+  }
+
+  &__info {
+    font-size: 16px;
+    font-family: 'Inter';
+    font-style: normal;
+    line-height: 22px;
+    color: #1c212e;
+    .header {
+      font-weight: 700;
+    }
+
+    .id {
+      font-weight: 400;
+    }
+
+    .rating {
+      font-weight: 400;
+      font-feature-settings: 'pnum' on, 'lnum' on;
+      line-height: 162%;
+    }
+  }
   .direct-board > div > cg-container {
     width: auto;
   }
