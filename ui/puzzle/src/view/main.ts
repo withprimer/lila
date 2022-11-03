@@ -164,7 +164,9 @@ export default function (ctrl: Controller): VNode {
 }
 
 function session(ctrl: Controller) {
-  const rounds = ctrl.session.get().rounds,
+  const maxRounds = 5;
+  const originalRounds = ctrl.session.get().rounds;
+  const rounds = originalRounds.slice(-maxRounds),
     current = ctrl.getData().puzzle.id;
   return h('div.puzzle__session', [
     ...rounds.map(round => {
@@ -188,7 +190,10 @@ function session(ctrl: Controller) {
         },
         [
           `#${round.id} `,
-          h(`span.rating-${round.result ? 'success' : 'failed'}`, `${round.result ? '+' : ''}${round.ratingDiff}`),
+          h(
+            `span.rating-${round.result ? 'success' : 'failed'}`,
+            `${round.result ? '+' : ''}${round.ratingDiff !== undefined ? round.ratingDiff : ''}`
+          ),
         ]
       );
     }),
