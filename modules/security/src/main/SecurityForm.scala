@@ -45,7 +45,7 @@ final class SecurityForm(
 
     val username = LilaForm.cleanNonEmptyText
       .verifying(
-        Constraints minLength 5,
+        Constraints minLength 3,
         Constraints maxLength 20,
         Constraints.pattern(
           regex = User.newUsernameRegex,
