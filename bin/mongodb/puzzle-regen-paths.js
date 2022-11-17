@@ -26,12 +26,12 @@ const maxPuzzlesPerTheme = 2 * 1000 * 1000; // reduce to 500000 to avoid memory 
 const generation = Date.now();
 
 const tiers = [
-  ["top", 20 / 100],
-  ["good", 50 / 100],
-  ["all", 95 / 100],
+  ['top', 20 / 100],
+  ['good', 50 / 100],
+  ['all', 95 / 100],
 ];
 
-const themes = db.puzzle2_puzzle.distinct("themes", {});
+const themes = db.puzzle2_puzzle.distinct('themes', {});
 
 function chunkify(a, n) {
   let len = a.length,
@@ -50,42 +50,33 @@ function chunkify(a, n) {
     }
   return out;
 }
-const padRating = (r) => (r < 1000 ? "0" : "") + r;
+const padRating = r => (r < 1000 ? '0' : '') + r;
 
-themes.concat(["mix"]).forEach((theme) => {
+themes.concat(['mix']).forEach(theme => {
   const selector = {
     themes:
-      theme == "mix"
+      theme == 'mix'
         ? {
-            $ne: "equality",
+            $ne: 'equality',
           }
-        : theme == "equality"
-        ? "equality"
+        : theme == 'equality'
+        ? 'equality'
         : {
             $eq: theme,
-            $ne: "equality",
+            $ne: 'equality',
           },
   };
 
   const nbPuzzles = puzzleColl.count(selector);
 
-  if (!nbPuzzles) print("no puzzles!");
+  if (!nbPuzzles) print('no puzzles!');
   if (!nbPuzzles) return [];
 
-  const themeMaxPathLength = Math.max(
-    10,
-    Math.min(maxPathLength, Math.round(nbPuzzles / 200))
-  );
+  const themeMaxPathLength = Math.max(10, Math.min(maxPathLength, Math.round(nbPuzzles / 200)));
   const nbRatingBuckets =
-    theme == "mix"
+    theme == 'mix'
       ? mixRatingBuckets
-      : Math.max(
-          3,
-          Math.min(
-            maxRatingBuckets,
-            Math.round(nbPuzzles / themeMaxPathLength / 20)
-          )
-        );
+      : Math.max(3, Math.min(maxRatingBuckets, Math.round(nbPuzzles / themeMaxPathLength / 20)));
 
   // if (true || verbose)
   print(
@@ -106,33 +97,33 @@ themes.concat(["mix"]).forEach((theme) => {
         {
           $bucketAuto: {
             buckets: nbRatingBuckets,
-            groupBy: "$glicko.r",
+            groupBy: '$glicko.r',
             output: {
               puzzle: {
                 $push: {
-                  id: "$_id",
-                  vote: "$vote",
+                  id: '$_id',
+                  vote: '$vote',
                 },
               },
             },
           },
         },
         {
-          $unwind: "$puzzle",
+          $unwind: '$puzzle',
         },
         {
           $sort: {
-            "puzzle.vote": -1,
+            'puzzle.vote': -1,
           },
         },
         {
           $group: {
-            _id: "$_id",
+            _id: '$_id',
             total: {
               $sum: 1,
             },
             puzzles: {
-              $push: "$puzzle.id",
+              $push: '$puzzle.id',
             },
           },
         },
@@ -147,10 +138,10 @@ themes.concat(["mix"]).forEach((theme) => {
                       total: 1,
                       puzzles: {
                         $slice: [
-                          "$puzzles",
+                          '$puzzles',
                           {
                             $round: {
-                              $multiply: ["$total", ratio],
+                              $multiply: ['$total', ratio],
                             },
                           },
                         ],
@@ -158,7 +149,7 @@ themes.concat(["mix"]).forEach((theme) => {
                     },
                   },
                   {
-                    $unwind: "$puzzles",
+                    $unwind: '$puzzles',
                   },
                   {
                     $sample: {
@@ -168,15 +159,15 @@ themes.concat(["mix"]).forEach((theme) => {
                   },
                   {
                     $group: {
-                      _id: "$_id",
+                      _id: '$_id',
                       puzzles: {
-                        $addToSet: "$puzzles",
+                        $addToSet: '$puzzles',
                       },
                     },
                   },
                   {
                     $sort: {
-                      "_id.min": 1,
+                      '_id.min': 1,
                     },
                   },
                   {
@@ -193,45 +184,37 @@ themes.concat(["mix"]).forEach((theme) => {
         {
           $project: {
             bucket: {
-              $concatArrays: tiers.map((t) => "$" + t[0]),
+              $concatArrays: tiers.map(t => '$' + t[0]),
             },
           },
         },
         {
-          $unwind: "$bucket",
+          $unwind: '$bucket',
         },
         {
           $replaceRoot: {
-            newRoot: "$bucket",
+            newRoot: '$bucket',
           },
         },
       ],
       {
         allowDiskUse: true,
-        comment: "regen-paths",
+        comment: 'regen-paths',
       }
     )
-    .forEach((bucket) => {
+    .forEach(bucket => {
       const isFirstOfTier = bucketIndex % nbRatingBuckets == 0;
       const isLastOfTier = bucketIndex % nbRatingBuckets == nbRatingBuckets - 1;
-      const pathLength = Math.max(
-        10,
-        Math.min(maxPathLength, Math.round(bucket.puzzles.length / 30))
-      );
+      const pathLength = Math.max(10, Math.min(maxPathLength, Math.round(bucket.puzzles.length / 30)));
       const ratingMin = isFirstOfTier ? 100 : Math.ceil(bucket._id.min);
       const ratingMax = isLastOfTier ? 9999 : Math.floor(bucket._id.max);
-      const nbPaths = Math.max(
-        1,
-        Math.floor(bucket.puzzles.length / pathLength)
-      );
+      const nbPaths = Math.max(1, Math.floor(bucket.puzzles.length / pathLength));
       const paths = chunkify(bucket.puzzles, nbPaths);
       // print(`  ${theme} ${bucket.tier} ${ratingMin}->${ratingMax} puzzles: ${bucket.puzzles.length} pathLength: ${pathLength} paths: ${paths.length}`);
 
       pathColl.insert(
         paths.map((ids, j) => ({
-          _id: `${theme}_${bucket.tier}_${padRating(ratingMin)}-${padRating(
-            ratingMax
-          )}_${generation}_${j}`,
+          _id: `${theme}_${bucket.tier}_${padRating(ratingMin)}-${padRating(ratingMax)}_${generation}_${j}`,
           min: `${theme}_${bucket.tier}_${padRating(ratingMin)}`,
           max: `${theme}_${bucket.tier}_${padRating(ratingMax)}`,
           ids,
