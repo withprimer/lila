@@ -197,32 +197,38 @@ final class Api(
     }
 
   def currentTournaments =
-    AnonOrScoped() { implicit req => { me =>
-      implicit val lang = reqLang
-      env.tournament.api.fetchVisibleTournaments flatMap (tour =>
-        env.tournament.apiJsonView.apply(tour, me) map (JsonOk(_))
-        )
-    } }
+    AnonOrScoped() {
+      implicit req =>
+        { me =>
+          implicit val lang = reqLang
+          env.tournament.api.fetchVisibleTournaments flatMap (tour =>
+            env.tournament.apiJsonView.apply(tour, me) map (JsonOk(_))
+          )
+        }
+    }
 
   def tournament(id: String) =
-    AnonOrScoped() { implicit req => { me =>
-      env.tournament.tournamentRepo byId id flatMap {
-        _ ?? { tour =>
-          val page = (getInt("page", req) | 1) atLeast 1 atMost 200
-          env.tournament.jsonView(
-            tour = tour,
-            page = page.some,
-            me = me,
-            getUserTeamIds = _ => fuccess(Nil),
-            getTeamName = env.team.getTeamName.apply,
-            playerInfoExt = none,
-            socketVersion = none,
-            partial = false,
-            withScores = true
-          )(reqLang) map some
+    AnonOrScoped() {
+      implicit req =>
+        { me =>
+          env.tournament.tournamentRepo byId id flatMap {
+            _ ?? { tour =>
+              val page = (getInt("page", req) | 1) atLeast 1 atMost 200
+              env.tournament.jsonView(
+                tour = tour,
+                page = page.some,
+                me = me,
+                getUserTeamIds = _ => fuccess(Nil),
+                getTeamName = env.team.getTeamName.apply,
+                playerInfoExt = none,
+                socketVersion = none,
+                partial = false,
+                withScores = true
+              )(reqLang) map some
+            }
+          } map (JsonOk(_))
         }
-      } map (JsonOk(_))
-    } }
+    }
 
   def tournamentGames(id: String) =
     Action.async { req =>

@@ -12,7 +12,6 @@ import lila.common.config._
 
 final private class GameConfig(
     @ConfigName("collection.game") val gameColl: CollName,
-    @ConfigName("collection.gamesForPuzzle") val gamesForPuzzleColl: CollName,
     @ConfigName("collection.crosstable") val crosstableColl: CollName,
     @ConfigName("collection.matchup") val matchupColl: CollName,
     @ConfigName("captcher.name") val captcherName: String,
@@ -40,8 +39,6 @@ final class Env(
   private val config = appConfig.get[GameConfig]("game")(AutoConfig.loader)
 
   lazy val gameRepo = new GameRepo(db(config.gameColl))
-
-  lazy val gamesForPuzzleRepo = new GameRepo(db(config.gamesForPuzzleColl))
 
   lazy val idGenerator = wire[IdGenerator]
 
