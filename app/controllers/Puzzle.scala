@@ -467,18 +467,18 @@ final class Puzzle(
     }
 
   /* Mobile API: select a bunch of puzzles for offline use */
-  def mobileBcBatchSelect =
-    Auth { implicit ctx => me =>
-      negotiate(
-        html = notFound,
-        api = v => {
-          val nb = getInt("nb") getOrElse 15 atLeast 1 atMost 30
-          env.puzzle.batch.nextFor(ctx.me, nb) flatMap { puzzles =>
-            env.puzzle.jsonView.bc.batch(puzzles, ctx.me)
-          } dmap { Ok(_) }
-        }
-      )
-    }
+//  def mobileBcBatchSelect =
+//    Auth { implicit ctx => me =>
+//      negotiate(
+//        html = notFound,
+//        api = v => {
+//          val nb = getInt("nb") getOrElse 15 atLeast 1 atMost 30
+//          env.puzzle.batch.nextFor(ctx.me, nb) flatMap { puzzles =>
+//            env.puzzle.jsonView.bc.batch(puzzles, ctx.me)
+//          } dmap { Ok(_) }
+//        }
+//      )
+//    }
 
   /* Mobile API: tell the server about puzzles solved while offline */
   def mobileBcBatchSolve =

@@ -5,15 +5,15 @@ import play.api.libs.json._
 
 import lila.common.Json._
 import lila.common.paginator.{ Paginator, PaginatorJson }
-import lila.game.GameRepo
+import lila.gamesForPuzzle.GamesForPuzzleRepo
 import lila.rating.Perf
 import lila.tree
 import lila.tree.Node.defaultNodeJsonWriter
 import lila.user.User
 
 final class JsonView(
-    gameJson: GameJson,
-    gameRepo: GameRepo
+    gameJson: GamesForPuzzleJson,
+    gameRepo: GamesForPuzzleRepo
 )(implicit ec: scala.concurrent.ExecutionContext) {
 
   import JsonView._
@@ -133,21 +133,21 @@ final class JsonView(
       }
     }
 
-    def batch(puzzles: Seq[Puzzle], user: Option[User])(implicit
-        lang: Lang
-    ): Fu[JsObject] = for {
-      games <- gameRepo.gameOptionsFromSecondary(puzzles.map(_.gameId))
-      jsons <- (puzzles zip games).collect { case (puzzle, Some(game)) =>
-        gameJson.noCacheBc(game, puzzle.initialPly) map { gameJson =>
-          Json.obj(
-            "game"   -> gameJson,
-            "puzzle" -> puzzleJson(puzzle)
-          )
-        }
-      }.sequenceFu
-    } yield Json
-      .obj("puzzles" -> jsons)
-      .add("user" -> user.map(_.perfs.puzzle.intRating).map(userJson))
+//    def batch(puzzles: Seq[Puzzle], user: Option[User])(implicit
+//        lang: Lang
+//    ): Fu[JsObject] = for {
+//      games <- gameRepo.gameOptionsFromSecondary(puzzles.map(_.gameId))
+//      jsons <- (puzzles zip games).collect { case (puzzle, Some(game)) =>
+//        gameJson.noCacheBc(game, puzzle.initialPly) map { gameJson =>
+//          Json.obj(
+//            "game"   -> gameJson,
+//            "puzzle" -> puzzleJson(puzzle)
+//          )
+//        }
+//      }.sequenceFu
+//    } yield Json
+//      .obj("puzzles" -> jsons)
+//      .add("user" -> user.map(_.perfs.puzzle.intRating).map(userJson))
 
     def userJson(rating: Int) = Json.obj(
       "rating" -> rating,

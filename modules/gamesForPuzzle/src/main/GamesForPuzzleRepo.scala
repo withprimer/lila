@@ -19,4 +19,7 @@ final class GamesForPuzzleRepo(val coll: Coll)(implicit ec: scala.concurrent.Exe
   import GameForPuzzle.{ BSONFields => F, ID }
 
   def game(gameId: ID): Fu[Option[GameForPuzzle]] = coll.byId[GameForPuzzle](gameId)
+
+  def gameFromSecondary(gameId: ID): Fu[Option[GameForPuzzle]] =
+    coll.secondaryPreferred.byId[GameForPuzzle](gameId)
 }
