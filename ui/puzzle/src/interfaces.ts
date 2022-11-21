@@ -163,14 +163,7 @@ export interface PuzzleReplay {
 
 export interface PuzzleGame {
   id: string;
-  perf: {
-    icon: string;
-    name: string;
-  };
-  rated: boolean;
-  players: [PuzzlePlayer, PuzzlePlayer];
-  pgn: string;
-  clock: string;
+  moves: string;
 }
 
 export interface PuzzlePlayer {

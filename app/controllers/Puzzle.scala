@@ -479,54 +479,54 @@ final class Puzzle(
 //        }
 //      )
 //    }
-
-  /* Mobile API: tell the server about puzzles solved while offline */
-  def mobileBcBatchSolve =
-    AuthBody(parse.json) { implicit ctx => me =>
-      negotiate(
-        html = notFound,
-        api = v => {
-          import lila.puzzle.PuzzleForm.bc._
-          ctx.body.body
-            .validate[SolveData]
-            .fold(
-              err => BadRequest(err.toString).fuccess,
-              data =>
-                data.solutions.lastOption
-                  .flatMap { solution =>
-                    Puz
-                      .numericalId(solution.id)
-                      .map(_ -> Result(solution.win))
-                  }
-                  .?? { case (id, solution) =>
-                    env.puzzle.finisher(id, PuzzleTheme.mix.key, me, Result(solution.win), chess.Mode.Rated)
-                  } map {
-                  case None => Ok(env.puzzle.jsonView.bc.userJson(me.perfs.puzzle.intRating))
-                  case Some((round, perf)) =>
-                    env.puzzle.session.onComplete(round, PuzzleTheme.mix.key)
-                    Ok(env.puzzle.jsonView.bc.userJson(perf.intRating))
-                }
-            )
-        }
-      )
-    }
-
-  def mobileBcVote(nid: Long) =
-    AuthBody { implicit ctx => me =>
-      negotiate(
-        html = notFound,
-        api = v => {
-          implicit val req = ctx.body
-          env.puzzle.forms.bc.vote
-            .bindFromRequest()
-            .fold(
-              jsonFormError,
-              intVote =>
-                Puz.numericalId(nid) ?? {
-                  env.puzzle.api.vote.update(_, me, intVote == 1) inject jsonOkResult
-                }
-            )
-        }
-      )
-    }
+//
+//  /* Mobile API: tell the server about puzzles solved while offline */
+//  def mobileBcBatchSolve =
+//    AuthBody(parse.json) { implicit ctx => me =>
+//      negotiate(
+//        html = notFound,
+//        api = v => {
+//          import lila.puzzle.PuzzleForm.bc._
+//          ctx.body.body
+//            .validate[SolveData]
+//            .fold(
+//              err => BadRequest(err.toString).fuccess,
+//              data =>
+//                data.solutions.lastOption
+//                  .flatMap { solution =>
+//                    Puz
+//                      .numericalId(solution.id)
+//                      .map(_ -> Result(solution.win))
+//                  }
+//                  .?? { case (id, solution) =>
+//                    env.puzzle.finisher(id, PuzzleTheme.mix.key, me, Result(solution.win), chess.Mode.Rated)
+//                  } map {
+//                  case None => Ok(env.puzzle.jsonView.bc.userJson(me.perfs.puzzle.intRating))
+//                  case Some((round, perf)) =>
+//                    env.puzzle.session.onComplete(round, PuzzleTheme.mix.key)
+//                    Ok(env.puzzle.jsonView.bc.userJson(perf.intRating))
+//                }
+//            )
+//        }
+//      )
+//    }
+//
+//  def mobileBcVote(nid: Long) =
+//    AuthBody { implicit ctx => me =>
+//      negotiate(
+//        html = notFound,
+//        api = v => {
+//          implicit val req = ctx.body
+//          env.puzzle.forms.bc.vote
+//            .bindFromRequest()
+//            .fold(
+//              jsonFormError,
+//              intVote =>
+//                Puz.numericalId(nid) ?? {
+//                  env.puzzle.api.vote.update(_, me, intVote == 1) inject jsonOkResult
+//                }
+//            )
+//        }
+//      )
+//    }
 }

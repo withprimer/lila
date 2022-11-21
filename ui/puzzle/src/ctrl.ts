@@ -103,7 +103,7 @@ export default function (opts: PuzzleOpts, redraw: Redraw): Controller {
 
   function initiate(fromData: PuzzleData): void {
     data = fromData;
-    tree = treeBuild(pgnToTree(data.game.pgn.split(' ')));
+    tree = treeBuild(pgnToTree(data.game.moves.split(' ')));
     const initialPath = treePath.fromNodeList(treeOps.mainlineNodeList(tree.root));
     vm.mode = 'play';
     vm.next = defer();

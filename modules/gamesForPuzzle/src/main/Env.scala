@@ -8,15 +8,15 @@ import lila.common.config.CollName
 @Module
 final class Env(
     appConfig: Configuration,
-    reporter: lila.hub.actors.Report,
     userRepo: lila.user.UserRepo,
-    noteApi: lila.user.NoteApi,
-    lightUser: lila.common.LightUser.Getter,
+//    gamesForPuzzleRepo: lila.gamesForPuzzle.GamesForPuzzleRepo,
     db: lila.db.Db,
     cacheApi: lila.memo.CacheApi
 )(implicit ec: scala.concurrent.ExecutionContext, mode: play.api.Mode) {
 
-  lazy val gamesForPuzzle = db(
-    CollName(appConfig.get[String]("gamesForPuzzle.collection.games_for_puzzle"))
-  )
+//  lazy val gamesForPuzzle = db(
+//    CollName(appConfig.get[String]("gamesForPuzzle.collection.games_for_puzzle"))
+//  )
+
+  lazy val gamesForPuzzleRepo = new GamesForPuzzleRepo(db(CollName("games_for_puzzle")))
 }

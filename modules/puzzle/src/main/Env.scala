@@ -45,13 +45,11 @@ final class Env(
 //    gamesForPuzzle = db(config.gamesForPuzzleColl)
   )
 
-  private lazy val gameJson: GameJson = wire[GameJson]
+  private lazy val gameJson: GamesForPuzzleJson = wire[GamesForPuzzleJson]
 
   lazy val jsonView = wire[JsonView]
 
   private lazy val pathApi = wire[PuzzlePathApi]
-
-  private lazy val gameForPuzzleApi = wire[GameForPuzzleApi]
 
   private lazy val trustApi = wire[PuzzleTrustApi]
 

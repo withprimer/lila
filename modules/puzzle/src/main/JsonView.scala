@@ -12,7 +12,7 @@ import lila.tree.Node.defaultNodeJsonWriter
 import lila.user.User
 
 final class JsonView(
-    gameJson: GamesForPuzzleJson,
+    gamesForPuzzleJson: GamesForPuzzleJson,
     gameRepo: GamesForPuzzleRepo
 )(implicit ec: scala.concurrent.ExecutionContext) {
 
@@ -26,7 +26,7 @@ final class JsonView(
   )(implicit
       lang: Lang
   ): Fu[JsObject] = {
-    gameJson(
+    gamesForPuzzleJson(
       gameId = puzzle.gameId,
       plies = puzzle.initialPly,
       bc = false
@@ -119,7 +119,7 @@ final class JsonView(
     def apply(puzzle: Puzzle, user: Option[User])(implicit
         lang: Lang
     ): Fu[JsObject] = {
-      gameJson(
+      gamesForPuzzleJson(
         gameId = puzzle.gameId,
         plies = puzzle.initialPly,
         bc = true
