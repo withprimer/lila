@@ -25,6 +25,7 @@ final class Env(
     lightUserApi: lila.user.LightUserApi,
     cacheApi: lila.memo.CacheApi,
     gameRepo: lila.game.GameRepo,
+    gamesForPuzzleRepo: lila.gamesForPuzzle.GamesForPuzzleRepo,
     userRepo: lila.user.UserRepo,
     mongo: lila.db.Env
 )(implicit
