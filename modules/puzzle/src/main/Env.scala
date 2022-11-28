@@ -14,6 +14,7 @@ private class PuzzleConfig(
     @ConfigName("collection.puzzle") val puzzleColl: CollName,
     @ConfigName("collection.round") val roundColl: CollName,
     @ConfigName("collection.path") val pathColl: CollName
+//    @ConfigName("collection.games_for_puzzle") val gamesForPuzzleColl: CollName
 )
 
 @Module
@@ -24,6 +25,7 @@ final class Env(
     lightUserApi: lila.user.LightUserApi,
     cacheApi: lila.memo.CacheApi,
     gameRepo: lila.game.GameRepo,
+    gamesForPuzzleRepo: lila.gamesForPuzzle.GamesForPuzzleRepo,
     userRepo: lila.user.UserRepo,
     mongo: lila.db.Env
 )(implicit
@@ -40,9 +42,10 @@ final class Env(
     puzzle = db(config.puzzleColl),
     round = db(config.roundColl),
     path = db(config.pathColl)
+//    gamesForPuzzle = db(config.gamesForPuzzleColl)
   )
 
-  private lazy val gameJson: GameJson = wire[GameJson]
+  private lazy val gameJson: GamesForPuzzleJson = wire[GamesForPuzzleJson]
 
   lazy val jsonView = wire[JsonView]
 
@@ -88,4 +91,5 @@ final class PuzzleColls(
     val puzzle: AsyncColl,
     val round: AsyncColl,
     val path: AsyncColl
+//    val gamesForPuzzle: AsyncColl
 )

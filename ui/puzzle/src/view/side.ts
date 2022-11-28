@@ -6,7 +6,7 @@ import PuzzleStreak from '../streak';
 
 export function puzzleBox(ctrl: Controller): VNode {
   const data = ctrl.getData();
-  return h('div.puzzle__side__metas', [puzzleInfos(ctrl, data.puzzle), gameInfos(ctrl, data.game, data.puzzle)]);
+  return h('div.puzzle__side__metas', [puzzleInfos(ctrl, data.puzzle)]);
 }
 
 function puzzleInfos(ctrl: Controller, puzzle: Puzzle): VNode {
@@ -52,46 +52,46 @@ function puzzleInfos(ctrl: Controller, puzzle: Puzzle): VNode {
   );
 }
 
-function gameInfos(ctrl: Controller, game: PuzzleGame, puzzle: Puzzle): VNode {
-  const gameName = `${game.clock} • ${game.perf.name}`;
-  return h('div.infos', { attrs: dataIcon(game.perf.icon) }, [
-    h('div', [
-      h(
-        'p',
-        ctrl.trans.vdom(
-          'fromGameLink',
-          ctrl.vm.mode == 'play'
-            ? h('span', gameName)
-            : h(
-                'a',
-                {
-                  attrs: { href: `/${game.id}/${ctrl.vm.pov}#${puzzle.initialPly}` },
-                },
-                gameName
-              )
-        )
-      ),
-      h(
-        'div.players',
-        game.players.map(p => {
-          const name = ctrl.showRatings ? p.name : p.name.split(' ')[0];
-          return h(
-            'div.player.color-icon.is.text.' + p.color,
-            p.userId != 'anon'
-              ? h(
-                  'a.user-link.ulpt',
-                  {
-                    attrs: { href: '/@/' + p.userId },
-                  },
-                  p.title && p.title != 'BOT' ? [h('span.utitle', p.title), ' ' + name] : name
-                )
-              : name
-          );
-        })
-      ),
-    ]),
-  ]);
-}
+// function gameInfos(ctrl: Controller, game: PuzzleGame, puzzle: Puzzle): VNode {
+//   const gameName = `${game.clock} • ${game.perf.name}`;
+//   return h('div.infos', { attrs: dataIcon(game.perf.icon) }, [
+//     h('div', [
+//       h(
+//         'p',
+//         ctrl.trans.vdom(
+//           'fromGameLink',
+//           ctrl.vm.mode == 'play'
+//             ? h('span', gameName)
+//             : h(
+//                 'a',
+//                 {
+//                   attrs: { href: `/${game.id}/${ctrl.vm.pov}#${puzzle.initialPly}` },
+//                 },
+//                 gameName
+//               )
+//         )
+//       ),
+//       h(
+//         'div.players',
+//         game.players.map(p => {
+//           const name = ctrl.showRatings ? p.name : p.name.split(' ')[0];
+//           return h(
+//             'div.player.color-icon.is.text.' + p.color,
+//             p.userId != 'anon'
+//               ? h(
+//                   'a.user-link.ulpt',
+//                   {
+//                     attrs: { href: '/@/' + p.userId },
+//                   },
+//                   p.title && p.title != 'BOT' ? [h('span.utitle', p.title), ' ' + name] : name
+//                 )
+//               : name
+//           );
+//         })
+//       ),
+//     ]),
+//   ]);
+// }
 
 const renderStreak = (streak: PuzzleStreak, noarg: TransNoArg) =>
   h(

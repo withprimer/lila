@@ -84,12 +84,12 @@ final class Puzzle(
       }
     }
 
-    def embedHome =
+  def embedHome =
     Open { implicit ctx =>
       NoBot {
         val theme = PuzzleTheme.mix
         nextPuzzleForMe(theme.key) flatMap {
-          renderShow(_, theme,None,true)
+          renderShow(_, theme, None, true)
         }
       }
     }
@@ -293,12 +293,12 @@ final class Puzzle(
       PuzzleTheme.find(themeOrId) match {
         case Some(theme) =>
           nextPuzzleForMe(theme.key) flatMap {
-            renderShow(_, theme,null,true)
+            renderShow(_, theme, null, true)
           }
         case None if themeOrId.size == Puz.idSize =>
           OptionFuResult(env.puzzle.api.puzzle find Puz.Id(themeOrId)) { puzzle =>
             ctx.me.?? { env.puzzle.api.casual.setCasualIfNotYetPlayed(_, puzzle) } >>
-              renderShow(puzzle, PuzzleTheme.mix,null,true)
+              renderShow(puzzle, PuzzleTheme.mix, null, true)
           }
         case None =>
           themeOrId.toLongOption
@@ -480,7 +480,7 @@ final class Puzzle(
       )
     }
 
-  /* Mobile API: tell the server about puzzles solved while offline */
+//  /* Mobile API: tell the server about puzzles solved while offline */
   def mobileBcBatchSolve =
     AuthBody(parse.json) { implicit ctx => me =>
       negotiate(
@@ -510,7 +510,7 @@ final class Puzzle(
         }
       )
     }
-
+//
   def mobileBcVote(nid: Long) =
     AuthBody { implicit ctx => me =>
       negotiate(

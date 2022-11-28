@@ -7,7 +7,7 @@ import lila.rating.Glicko
 
 case class Puzzle(
     id: Puzzle.Id,
-    gameId: lila.game.Game.ID,
+    gameId: lila.gamesForPuzzle.GameForPuzzle.ID,
     fen: FEN,
     line: NonEmptyList[Uci.Move],
     glicko: Glicko,

@@ -5,15 +5,15 @@ import play.api.libs.json._
 
 import lila.common.Json._
 import lila.common.paginator.{ Paginator, PaginatorJson }
-import lila.game.GameRepo
+import lila.gamesForPuzzle.GamesForPuzzleRepo
 import lila.rating.Perf
 import lila.tree
 import lila.tree.Node.defaultNodeJsonWriter
 import lila.user.User
 
 final class JsonView(
-    gameJson: GameJson,
-    gameRepo: GameRepo
+    gamesForPuzzleJson: GamesForPuzzleJson,
+    gameRepo: GamesForPuzzleRepo
 )(implicit ec: scala.concurrent.ExecutionContext) {
 
   import JsonView._
@@ -26,7 +26,7 @@ final class JsonView(
   )(implicit
       lang: Lang
   ): Fu[JsObject] = {
-    gameJson(
+    gamesForPuzzleJson(
       gameId = puzzle.gameId,
       plies = puzzle.initialPly,
       bc = false
@@ -119,7 +119,7 @@ final class JsonView(
     def apply(puzzle: Puzzle, user: Option[User])(implicit
         lang: Lang
     ): Fu[JsObject] = {
-      gameJson(
+      gamesForPuzzleJson(
         gameId = puzzle.gameId,
         plies = puzzle.initialPly,
         bc = true
@@ -138,9 +138,9 @@ final class JsonView(
     ): Fu[JsObject] = for {
       games <- gameRepo.gameOptionsFromSecondary(puzzles.map(_.gameId))
       jsons <- (puzzles zip games).collect { case (puzzle, Some(game)) =>
-        gameJson.noCacheBc(game, puzzle.initialPly) map { gameJson =>
+        gamesForPuzzleJson.noCacheBc(game, puzzle.initialPly) map { gamesJson =>
           Json.obj(
-            "game"   -> gameJson,
+            "game"   -> gamesJson,
             "puzzle" -> puzzleJson(puzzle)
           )
         }

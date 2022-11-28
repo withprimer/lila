@@ -15,8 +15,8 @@ lazy val root = Project("lila", file("."))
   .settings(buildSettings)
 
 // shorter prod classpath
-scriptClasspath := Seq("*")
-maintainer := "contact@lichess.org"
+scriptClasspath             := Seq("*")
+maintainer                  := "contact@lichess.org"
 Compile / resourceDirectory := baseDirectory.value / "conf"
 
 // format: off
@@ -43,7 +43,7 @@ lazy val modules = Seq(
   study, studySearch, fishnet, explorer, learn, plan,
   event, coach, practice, evalCache, irwin,
   activity, relay, streamer, bot, clas, swiss, storm, racer,
-  ublog
+  ublog, gamesForPuzzle
 )
 
 lazy val moduleRefs = modules map projectToRef
@@ -72,7 +72,7 @@ lazy val i18n = smallModule("i18n",
 )
 
 lazy val puzzle = module("puzzle",
-  Seq(common, memo, hub, history, db, user, rating, pref, tree, game),
+  Seq(common, memo, hub, history, db, user, rating, pref, tree, gamesForPuzzle),
   reactivemongo.bundle
 )
 
@@ -197,6 +197,11 @@ lazy val user = smallModule("user",
 lazy val game = module("game",
   Seq(common, memo, db, hub, user, chat),
   Seq(compression) ++ specs2Bundle ++ reactivemongo.bundle
+)
+
+lazy val gamesForPuzzle = module("gamesForPuzzle",
+  Seq(common, memo, db, hub, user),
+  reactivemongo.bundle
 )
 
 lazy val gameSearch = module("gameSearch",
