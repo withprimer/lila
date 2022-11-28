@@ -133,21 +133,21 @@ final class JsonView(
       }
     }
 
-//    def batch(puzzles: Seq[Puzzle], user: Option[User])(implicit
-//        lang: Lang
-//    ): Fu[JsObject] = for {
-//      games <- gameRepo.gameOptionsFromSecondary(puzzles.map(_.gameId))
-//      jsons <- (puzzles zip games).collect { case (puzzle, Some(game)) =>
-//        gameJson.noCacheBc(game, puzzle.initialPly) map { gameJson =>
-//          Json.obj(
-//            "game"   -> gameJson,
-//            "puzzle" -> puzzleJson(puzzle)
-//          )
-//        }
-//      }.sequenceFu
-//    } yield Json
-//      .obj("puzzles" -> jsons)
-//      .add("user" -> user.map(_.perfs.puzzle.intRating).map(userJson))
+    def batch(puzzles: Seq[Puzzle], user: Option[User])(implicit
+        lang: Lang
+    ): Fu[JsObject] = for {
+      games <- gameRepo.gameOptionsFromSecondary(puzzles.map(_.gameId))
+      jsons <- (puzzles zip games).collect { case (puzzle, Some(game)) =>
+        gamesForPuzzleJson.noCacheBc(game, puzzle.initialPly) map { gamesJson =>
+          Json.obj(
+            "game"   -> gamesJson,
+            "puzzle" -> puzzleJson(puzzle)
+          )
+        }
+      }.sequenceFu
+    } yield Json
+      .obj("puzzles" -> jsons)
+      .add("user" -> user.map(_.perfs.puzzle.intRating).map(userJson))
 
     def userJson(rating: Int) = Json.obj(
       "rating" -> rating,

@@ -22,4 +22,8 @@ final class GamesForPuzzleRepo(val coll: Coll)(implicit ec: scala.concurrent.Exe
 
   def gameFromSecondary(gameId: ID): Fu[Option[GameForPuzzle]] =
     coll.secondaryPreferred.byId[GameForPuzzle](gameId)
+
+  def gameOptionsFromSecondary(gameIds: Seq[ID]): Fu[List[Option[GameForPuzzle]]] =
+    coll.optionsByOrderedIds[GameForPuzzle, ID](gameIds, none, ReadPreference.secondaryPreferred)(_.id)
+
 }

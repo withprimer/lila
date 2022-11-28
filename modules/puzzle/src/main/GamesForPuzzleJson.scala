@@ -3,10 +3,12 @@ package lila.puzzle
 import chess.format.Forsyth
 import chess.format.UciCharPair
 import play.api.libs.json._
-import scala.concurrent.duration._
 
+import scala.concurrent.duration._
 import lila.gamesForPuzzle.{ GameForPuzzle, GamesForPuzzleRepo }
 import lila.i18n.defaultLang
+
+import scala.collection.immutable.ArraySeq
 
 final private class GamesForPuzzleJson(
     gamesForPuzzleRepo: GamesForPuzzleRepo,
@@ -16,6 +18,11 @@ final private class GamesForPuzzleJson(
 
   def apply(gameId: GameForPuzzle.ID, plies: Int, bc: Boolean): Fu[JsObject] =
     cache get writeKey(gameId)
+
+  def noCacheBc(game: GameForPuzzle, plies: Int): Fu[JsObject] =
+    lightUserApi preloadMany ArraySeq("example") map { _ =>
+      generate(game, plies)
+    }
 
   private def readKey(k: String): (GameForPuzzle.ID, Int) =
     k.drop(GameForPuzzle.gameIdSize).toIntOption match {
